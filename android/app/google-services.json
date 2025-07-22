@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "508692960976",
+    "project_id": "open-source-by-vivek",
+    "storage_bucket": "open-source-by-vivek.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508692960976:android:ce6a756d5741bca246f0d5",
+        "android_client_info": {
+          "package_name": "com.groovix.vivek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfcQiceCiU7EkMCk00OblMfmVNAE1Mp-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
