@@ -15,7 +15,7 @@ FlavorConfig flavorProdConfig = FlavorConfig(
   baseUrl: "https://api.groovix.com",
 );
 
-FlavorConfig getFlavorConfig(Flavor flavor) {
+FlavorConfig initFlavorConfig(Flavor flavor) {
   switch (flavor) {
     case Flavor.dev:
       return flavorDevConfig;

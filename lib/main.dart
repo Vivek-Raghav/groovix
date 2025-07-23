@@ -2,7 +2,7 @@
 import 'package:groovix/main/main_index.dart';
 
 Future<void> main() async {
-  FlavorConfig.isInitialized ? null : getFlavorConfig(Flavor.dev);
+  FlavorConfig.isInitialized ? null : initFlavorConfig(Flavor.dev);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await injectionInit();

@@ -2,6 +2,6 @@ import 'package:groovix/main/main_index.dart';
 import 'package:groovix/main.dart' as run;
 
 void main() async {
-  getFlavorConfig(Flavor.dev);
+  initFlavorConfig(Flavor.dev);
   await run.main();
 }
