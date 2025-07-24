@@ -11,6 +11,7 @@ class ThemeColors {
   static const Color clrProfileSettingsFacebookColor = Color(0xFF4276D7);
   static const Color clrBorderColor = Color(0xFFD5D0FF);
   static const Color clrPrimaryColor20 = Color(0xFFD5D0FF);
+  static const Color darkAppColor = Color(0xFF0D0E25);
 
   static const Color primaryColor = Color(0xFFB0BEC5);
   static const Color secondaryColor = Color(0xFF90A4AE);

@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+
+/// UserAvatar - reusable widget for displaying a user's avatar
+class UserAvatar extends StatelessWidget {
+  final String? imageUrl;
+  final double radius;
+  final IconData fallbackIcon;
+
+  const UserAvatar({
+    super.key,
+    this.imageUrl,
+    this.radius = 24,
+    this.fallbackIcon = Icons.person,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: Colors.deepPurple[100],
+      backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
+          ? NetworkImage(imageUrl!)
+          : null,
+      child: imageUrl == null || imageUrl!.isEmpty
+          ? Icon(fallbackIcon, color: Colors.deepPurple, size: radius)
+          : null,
+    );
+  }
+}
+
+/// ArtistAvatar - reusable widget for displaying an artist's avatar
+class ArtistAvatar extends StatelessWidget {
+  final String? imageUrl;
+  final double radius;
+  final IconData fallbackIcon;
+
+  const ArtistAvatar({
+    super.key,
+    this.imageUrl,
+    this.radius = 20,
+    this.fallbackIcon = Icons.music_note,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: Colors.deepPurple[50],
+      backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
+          ? NetworkImage(imageUrl!)
+          : null,
+      child: imageUrl == null || imageUrl!.isEmpty
+          ? Icon(fallbackIcon, color: Colors.deepPurple, size: radius)
+          : null,
+    );
+  }
+}
