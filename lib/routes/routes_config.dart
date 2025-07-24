@@ -1,6 +1,7 @@
 // Project imports:
 import 'package:groovix/features/auth/presentation/login_screen.dart';
 import 'package:groovix/features/auth/presentation/signup_screen.dart';
+import 'package:groovix/main/entry/splash.dart';
 import 'package:groovix/routes/routes_index.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -8,6 +9,14 @@ final GoRouter appRouter = GoRouter(
   routes: [
     GoRoute(
       path: AppRoutes.initial,
+      pageBuilder: (context, state) => customTransitionPage(
+        context: context,
+        state: state,
+        child: const SplashScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.bottomNav,
       pageBuilder: (context, state) => customTransitionPage(
         context: context,
         state: state,
