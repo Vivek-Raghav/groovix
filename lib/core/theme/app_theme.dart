@@ -14,8 +14,8 @@ class ThemeColors {
   static const Color clrPrimaryColor20 = Color(0xFFD5D0FF);
   static const Color darkAppColor = Color(0xFF0D0E25);
 
-  static const Color primaryColor = Color(0xFFB0BEC5);
-  static const Color secondaryColor = Color(0xFF90A4AE);
+  static const Color primaryColor = Color(0xFF7D3CFF);
+  static const Color secondaryColor = Color(0xFF00CFFF);
 
   // Added Flutter Material Colors
   static const Color deepPurple = Color(0xFF673AB7);
