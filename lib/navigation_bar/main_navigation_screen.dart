@@ -1,10 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:groovix/home/home_screen.dart';
+
+// Project imports:
 import 'package:groovix/explore/explore_screen.dart';
+import 'package:groovix/home/home_screen.dart';
 import 'package:groovix/library/library_screen.dart';
+import 'package:groovix/navigation_bar/navigation_bar.dart';
 import 'package:groovix/playlist/playlist_screen.dart';
 import 'package:groovix/settings/settings_screen.dart';
-import 'package:groovix/navigation_bar/navigation_bar.dart';
 
 /// MainNavigationScreen - Main screen with bottom navigation
 /// This screen manages navigation between different sections of the app

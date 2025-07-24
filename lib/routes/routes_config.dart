@@ -1,6 +1,7 @@
-import 'package:groovix/routes/routes_index.dart';
+// Project imports:
 import 'package:groovix/auth/login_screen.dart';
 import 'package:groovix/auth/signup_screen.dart';
+import 'package:groovix/routes/routes_index.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.initial,

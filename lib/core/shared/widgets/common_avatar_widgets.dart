@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
 
 /// UserAvatar - reusable widget for displaying a user's avatar

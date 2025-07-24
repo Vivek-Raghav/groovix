@@ -1,7 +1,11 @@
+// Dart imports:
 import 'dart:ui';
 
-import 'package:groovix/core/constants/global_const.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
+import 'package:groovix/core/constants/global_const.dart';
 
 bool _isSnackbarClosing = false;
 Future<void> showToast({

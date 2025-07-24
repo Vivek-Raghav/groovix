@@ -1,9 +1,14 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
-import 'package:groovix/routes/app_routes.dart';
+
+// Project imports:
 import 'package:groovix/auth/login_screen.dart';
 import 'package:groovix/auth/signup_screen.dart';
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/routes/app_routes.dart';
 
 /// SettingsScreen - Figma-inspired UI only (no logic)
 class SettingsScreen extends StatelessWidget {

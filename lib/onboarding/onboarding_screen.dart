@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
 
 /// OnboardingScreen - Figma-inspired UI only (no logic)
