@@ -39,14 +39,14 @@ class PlaylistScreen extends StatelessWidget {
               color: ThemeColors.deepPurple50,
               margin: const EdgeInsets.only(bottom: 16),
               child: ListTile(
-                leading: CircleAvatar(
+                leading: const CircleAvatar(
                   backgroundColor: ThemeColors.deepPurple100,
                   child: Icon(Icons.album, color: ThemeColors.deepPurple),
                 ),
                 title: Text('Playlist ${i + 1}',
                     style: const TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: const Text('X songs'),
-                trailing: Icon(Icons.arrow_forward_ios,
+                trailing: const Icon(Icons.arrow_forward_ios,
                     color: ThemeColors.deepPurple),
                 onTap: () {},
               ),

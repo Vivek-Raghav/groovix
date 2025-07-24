@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: const Icon(Icons.email),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
@@ -45,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: const Icon(Icons.lock),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
@@ -73,8 +73,8 @@ class LoginScreen extends StatelessWidget {
                 child: const Text('Login'),
               ),
               const SizedBox(height: 24),
-              Row(
-                children: const [
+              const Row(
+                children: [
                   Expanded(child: Divider()),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
@@ -86,10 +86,11 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 24),
               OutlinedButton.icon(
                 onPressed: () {},
-                icon: Icon(Icons.g_mobiledata, color: ThemeColors.deepPurple),
+                icon: const Icon(Icons.g_mobiledata,
+                    color: ThemeColors.deepPurple),
                 label: const Text('Continue with Google'),
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: ThemeColors.deepPurple),
+                  side: const BorderSide(color: ThemeColors.deepPurple),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                   padding: const EdgeInsets.symmetric(vertical: 16),

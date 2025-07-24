@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
-import 'package:groovix/auth/login_screen.dart';
-import 'package:groovix/auth/signup_screen.dart';
 import 'package:groovix/core/theme/app_theme.dart';
 import 'package:groovix/routes/app_routes.dart';
 
@@ -25,20 +23,20 @@ class SettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         children: [
           // Profile section
-          Center(
+          const Center(
             child: Column(
               children: [
                 CircleAvatar(
                   radius: 40,
                   backgroundColor: ThemeColors.deepPurple100,
-                  child: const Icon(Icons.person,
+                  child: Icon(Icons.person,
                       size: 48, color: ThemeColors.deepPurple),
                 ),
-                const SizedBox(height: 12),
-                const Text('Your Name',
+                SizedBox(height: 12),
+                Text('Your Name',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                const Text('user@email.com',
+                Text('user@email.com',
                     style: TextStyle(color: ThemeColors.grey)),
               ],
             ),

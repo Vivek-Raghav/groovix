@@ -1,31 +1,27 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import 'package:groovix/core/theme/app_theme.dart';
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ThemeColors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: ThemeColors.white,
+        backgroundColor: Colors.white,
         title: Row(
           children: [
             CircleAvatar(
-              backgroundColor: ThemeColors.grey200,
-              child:
-                  const Icon(Icons.music_note, color: ThemeColors.deepPurple),
+              backgroundColor: Colors.grey[200],
+              child: const Icon(Icons.music_note, color: Colors.deepPurple),
             ),
             const SizedBox(width: 12),
             const Text(
               'Groovix',
               style: TextStyle(
-                color: ThemeColors.black,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
               ),
@@ -34,12 +30,11 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: ThemeColors.black),
+            icon: const Icon(Icons.search, color: Colors.black),
             onPressed: () {},
           ),
           IconButton(
-            icon:
-                const Icon(Icons.notifications_none, color: ThemeColors.black),
+            icon: const Icon(Icons.notifications_none, color: Colors.black),
             onPressed: () {},
           ),
         ],
@@ -51,23 +46,23 @@ class HomeScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: ThemeColors.deepPurple50,
+              color: Colors.deepPurple[50],
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Row(
               children: [
-                Icon(Icons.headphones, size: 48, color: ThemeColors.deepPurple),
+                Icon(Icons.headphones, size: 48, color: Colors.deepPurple),
                 SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text('Welcome to Groovix!',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18)),
                       SizedBox(height: 4),
                       Text('Discover and enjoy your favorite music.',
-                          style: TextStyle(color: ThemeColors.grey)),
+                          style: TextStyle(color: Colors.grey)),
                     ],
                   ),
                 ),
@@ -93,13 +88,10 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8),
                     child: Chip(
                       label: Text(cat),
-                      backgroundColor: cat == 'All'
-                          ? ThemeColors.deepPurple
-                          : ThemeColors.grey200,
+                      backgroundColor:
+                          cat == 'All' ? Colors.deepPurple : Colors.grey[200],
                       labelStyle: TextStyle(
-                          color: cat == 'All'
-                              ? ThemeColors.white
-                              : ThemeColors.black),
+                          color: cat == 'All' ? Colors.white : Colors.black),
                     ),
                   ),
               ],
@@ -116,20 +108,20 @@ class HomeScreen extends StatelessWidget {
                     width: 140,
                     margin: const EdgeInsets.only(right: 16),
                     decoration: BoxDecoration(
-                      color: ThemeColors.deepPurple100,
+                      color: Colors.deepPurple[100],
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(Icons.album,
-                            size: 48, color: ThemeColors.deepPurple),
+                            size: 48, color: Colors.deepPurple),
                         const SizedBox(height: 12),
                         Text('Playlist ${i + 1}',
                             style:
                                 const TextStyle(fontWeight: FontWeight.bold)),
                         const Text('Subtitle',
-                            style: TextStyle(color: ThemeColors.grey)),
+                            style: TextStyle(color: Colors.grey)),
                       ],
                     ),
                   ),
@@ -146,14 +138,12 @@ class HomeScreen extends StatelessWidget {
           for (int i = 0; i < 4; i++)
             ListTile(
               leading: CircleAvatar(
-                backgroundColor: ThemeColors.deepPurple100,
-                child:
-                    const Icon(Icons.music_note, color: ThemeColors.deepPurple),
+                backgroundColor: Colors.deepPurple[100],
+                child: const Icon(Icons.music_note, color: Colors.deepPurple),
               ),
               title: Text('Track ${i + 1}'),
               subtitle: const Text('Artist Name'),
-              trailing:
-                  const Icon(Icons.play_arrow, color: ThemeColors.deepPurple),
+              trailing: const Icon(Icons.play_arrow, color: Colors.deepPurple),
               onTap: () {},
             ),
         ],

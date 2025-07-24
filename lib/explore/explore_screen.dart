@@ -22,7 +22,7 @@ class ExploreScreen extends StatelessWidget {
           TextField(
             decoration: InputDecoration(
               hintText: 'Search music, artists, albums...',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
@@ -55,13 +55,13 @@ class ExploreScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.trending_up,
+                        const Icon(Icons.trending_up,
                             size: 40, color: ThemeColors.deepPurple),
                         const SizedBox(height: 8),
                         Text('Song ${i + 1}',
                             style:
                                 const TextStyle(fontWeight: FontWeight.bold)),
-                        Text('Artist',
+                        const Text('Artist',
                             style: TextStyle(color: ThemeColors.grey)),
                       ],
                     ),

@@ -19,8 +19,8 @@ class SignupScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // TODO: Replace with Figma logo asset
-              Icon(Icons.music_note, size: 64, color: ThemeColors.deepPurple),
+              const Icon(Icons.music_note,
+                  size: 64, color: ThemeColors.deepPurple),
               const SizedBox(height: 24),
               Text('Create Account',
                   style: Theme.of(context)
@@ -34,7 +34,7 @@ class SignupScreen extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Name',
-                  prefixIcon: Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
@@ -45,7 +45,7 @@ class SignupScreen extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: const Icon(Icons.email),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
@@ -57,7 +57,7 @@ class SignupScreen extends StatelessWidget {
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: const Icon(Icons.lock),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
@@ -69,7 +69,7 @@ class SignupScreen extends StatelessWidget {
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Confirm Password',
-                  prefixIcon: Icon(Icons.lock_outline),
+                  prefixIcon: const Icon(Icons.lock_outline),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
@@ -89,8 +89,8 @@ class SignupScreen extends StatelessWidget {
                 child: const Text('Sign Up'),
               ),
               const SizedBox(height: 24),
-              Row(
-                children: const [
+              const Row(
+                children: [
                   Expanded(child: Divider()),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
@@ -102,10 +102,11 @@ class SignupScreen extends StatelessWidget {
               const SizedBox(height: 24),
               OutlinedButton.icon(
                 onPressed: () {},
-                icon: Icon(Icons.g_mobiledata, color: ThemeColors.deepPurple),
+                icon: const Icon(Icons.g_mobiledata,
+                    color: ThemeColors.deepPurple),
                 label: const Text('Continue with Google'),
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: ThemeColors.deepPurple),
+                  side: const BorderSide(color: ThemeColors.deepPurple),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                   padding: const EdgeInsets.symmetric(vertical: 16),

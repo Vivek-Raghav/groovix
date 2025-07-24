@@ -20,7 +20,7 @@ class OnboardingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // TODO: Replace with Figma illustration asset
-              Icon(Icons.headphones, size: 100, color: ThemeColors.white),
+              const Icon(Icons.headphones, size: 100, color: ThemeColors.white),
               const SizedBox(height: 32),
               Text(
                 'Welcome to Groovix',
