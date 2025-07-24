@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// GroovixTextField - reusable styled text field
 class GroovixTextField extends StatelessWidget {
@@ -31,7 +32,7 @@ class GroovixTextField extends StatelessWidget {
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
-        fillColor: Colors.deepPurple[50],
+        fillColor: ThemeColors.deepPurple50,
       ),
     );
   }
@@ -60,7 +61,7 @@ class GroovixSearchBar extends StatelessWidget {
         prefixIcon: const Icon(Icons.search),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
-        fillColor: Colors.deepPurple[50],
+        fillColor: ThemeColors.deepPurple50,
       ),
     );
   }

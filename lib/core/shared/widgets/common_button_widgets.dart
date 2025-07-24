@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// PrimaryButton - reusable elevated button for main actions
 class PrimaryButton extends StatelessWidget {
@@ -22,8 +23,8 @@ class PrimaryButton extends StatelessWidget {
       icon: icon != null ? Icon(icon, size: 20) : const SizedBox.shrink(),
       label: Text(text),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
+        backgroundColor: ThemeColors.deepPurple,
+        foregroundColor: ThemeColors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -55,12 +56,12 @@ class SecondaryButton extends StatelessWidget {
     final button = OutlinedButton.icon(
       onPressed: onPressed,
       icon: icon != null
-          ? Icon(icon, size: 20, color: Colors.deepPurple)
+          ? Icon(icon, size: 20, color: ThemeColors.deepPurple)
           : const SizedBox.shrink(),
       label: Text(text),
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: Colors.deepPurple),
-        foregroundColor: Colors.deepPurple,
+        side: const BorderSide(color: ThemeColors.deepPurple),
+        foregroundColor: ThemeColors.deepPurple,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

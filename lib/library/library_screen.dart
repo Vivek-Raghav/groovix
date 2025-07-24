@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// LibraryScreen - Figma-inspired UI only (no logic)
 class LibraryScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class LibraryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Library'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: ThemeColors.deepPurple,
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
@@ -18,13 +19,14 @@ class LibraryScreen extends StatelessWidget {
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            color: Colors.deepPurple[50],
+            color: ThemeColors.deepPurple50,
             child: ListTile(
-              leading: Icon(Icons.favorite, color: Colors.pink, size: 32),
+              leading: Icon(Icons.favorite, color: ThemeColors.pink, size: 32),
               title: const Text('Liked Songs',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               subtitle: const Text('Your favorite tracks'),
-              trailing: Icon(Icons.arrow_forward_ios, color: Colors.deepPurple),
+              trailing:
+                  Icon(Icons.arrow_forward_ios, color: ThemeColors.deepPurple),
               onTap: () {},
             ),
           ),
@@ -33,13 +35,14 @@ class LibraryScreen extends StatelessWidget {
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            color: Colors.deepPurple[50],
+            color: ThemeColors.deepPurple50,
             child: ListTile(
-              leading: Icon(Icons.download, color: Colors.blue, size: 32),
+              leading: Icon(Icons.download, color: ThemeColors.blue, size: 32),
               title: const Text('Downloads',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               subtitle: const Text('Offline albums & tracks'),
-              trailing: Icon(Icons.arrow_forward_ios, color: Colors.deepPurple),
+              trailing:
+                  Icon(Icons.arrow_forward_ios, color: ThemeColors.deepPurple),
               onTap: () {},
             ),
           ),
@@ -54,12 +57,12 @@ class LibraryScreen extends StatelessWidget {
           for (int i = 0; i < 3; i++)
             ListTile(
               leading: CircleAvatar(
-                backgroundColor: Colors.deepPurple[100],
-                child: Icon(Icons.music_note, color: Colors.deepPurple),
+                backgroundColor: ThemeColors.deepPurple100,
+                child: Icon(Icons.music_note, color: ThemeColors.deepPurple),
               ),
               title: Text('Track ${i + 1}'),
               subtitle: const Text('Artist Name'),
-              trailing: Icon(Icons.play_arrow, color: Colors.deepPurple),
+              trailing: Icon(Icons.play_arrow, color: ThemeColors.deepPurple),
               onTap: () {},
             ),
         ],

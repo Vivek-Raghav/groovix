@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// ExploreScreen - Figma-inspired UI only (no logic)
 class ExploreScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class ExploreScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Explore'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: ThemeColors.deepPurple,
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
@@ -24,7 +25,7 @@ class ExploreScreen extends StatelessWidget {
                 borderSide: BorderSide.none,
               ),
               filled: true,
-              fillColor: Colors.deepPurple[50],
+              fillColor: ThemeColors.deepPurple50,
             ),
           ),
           const SizedBox(height: 24),
@@ -45,20 +46,20 @@ class ExploreScreen extends StatelessWidget {
                     width: 120,
                     margin: const EdgeInsets.only(right: 16),
                     decoration: BoxDecoration(
-                      color: Colors.deepPurple[100],
+                      color: ThemeColors.deepPurple100,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.trending_up,
-                            size: 40, color: Colors.deepPurple),
+                            size: 40, color: ThemeColors.deepPurple),
                         const SizedBox(height: 8),
                         Text('Song ${i + 1}',
                             style:
                                 const TextStyle(fontWeight: FontWeight.bold)),
-                        const Text('Artist',
-                            style: TextStyle(color: Colors.grey)),
+                        Text('Artist',
+                            style: TextStyle(color: ThemeColors.grey)),
                       ],
                     ),
                   ),
@@ -88,8 +89,8 @@ class ExploreScreen extends StatelessWidget {
               ])
                 Chip(
                   label: Text(genre),
-                  backgroundColor: Colors.deepPurple[50],
-                  labelStyle: const TextStyle(color: Colors.deepPurple),
+                  backgroundColor: ThemeColors.deepPurple50,
+                  labelStyle: const TextStyle(color: ThemeColors.deepPurple),
                 ),
             ],
           ),

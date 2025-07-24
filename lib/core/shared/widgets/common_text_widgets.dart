@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// SectionHeader - reusable widget for section titles
 class SectionHeader extends StatelessWidget {
@@ -24,7 +25,7 @@ class SectionHeader extends StatelessWidget {
             text,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: ThemeColors.black,
                 ),
           ),
           if (trailing != null) trailing!,
@@ -53,7 +54,7 @@ class SubtitleText extends StatelessWidget {
       text,
       textAlign: textAlign,
       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: color ?? Colors.grey[600],
+            color: color ?? ThemeColors.grey600,
           ),
     );
   }

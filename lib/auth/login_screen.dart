@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:groovix/gen/assets.gen.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// LoginScreen - Figma-inspired UI only (no logic)
 class LoginScreen extends StatelessWidget {
@@ -8,7 +9,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ThemeColors.white,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32),
@@ -24,7 +25,7 @@ class LoginScreen extends StatelessWidget {
                       ?.copyWith(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               const Text('Login to your account',
-                  style: TextStyle(color: Colors.grey)),
+                  style: TextStyle(color: ThemeColors.grey)),
               const SizedBox(height: 32),
               TextField(
                 decoration: InputDecoration(
@@ -33,7 +34,7 @@ class LoginScreen extends StatelessWidget {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
-                  fillColor: Colors.deepPurple[50],
+                  fillColor: ThemeColors.deepPurple50,
                 ),
               ),
               const SizedBox(height: 16),
@@ -45,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
-                  fillColor: Colors.deepPurple[50],
+                  fillColor: ThemeColors.deepPurple50,
                 ),
               ),
               const SizedBox(height: 16),
@@ -60,8 +61,8 @@ class LoginScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  foregroundColor: Colors.white,
+                  backgroundColor: ThemeColors.deepPurple,
+                  foregroundColor: ThemeColors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -82,10 +83,10 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 24),
               OutlinedButton.icon(
                 onPressed: () {},
-                icon: Icon(Icons.g_mobiledata, color: Colors.deepPurple),
+                icon: Icon(Icons.g_mobiledata, color: ThemeColors.deepPurple),
                 label: const Text('Continue with Google'),
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.deepPurple),
+                  side: BorderSide(color: ThemeColors.deepPurple),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                   padding: const EdgeInsets.symmetric(vertical: 16),

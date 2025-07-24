@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// MusicCard - reusable card for displaying a music track or album
 class MusicCard extends StatelessWidget {
@@ -13,7 +14,7 @@ class MusicCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.icon = Icons.music_note,
-    this.color = Colors.deepPurple,
+    this.color = ThemeColors.deepPurple,
     this.onTap,
   });
 
@@ -50,7 +51,7 @@ class PlaylistCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.icon = Icons.album,
-    this.color = Colors.deepPurple,
+    this.color = ThemeColors.deepPurple,
     this.onTap,
   });
 

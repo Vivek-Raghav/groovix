@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// PlaylistScreen - Figma-inspired UI only (no logic)
 class PlaylistScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class PlaylistScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Playlists'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: ThemeColors.deepPurple,
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
@@ -20,8 +21,8 @@ class PlaylistScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
             label: const Text('Create New Playlist'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,
-              foregroundColor: Colors.white,
+              backgroundColor: ThemeColors.deepPurple,
+              foregroundColor: ThemeColors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
@@ -32,18 +33,18 @@ class PlaylistScreen extends StatelessWidget {
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
-              color: Colors.deepPurple[50],
+              color: ThemeColors.deepPurple50,
               margin: const EdgeInsets.only(bottom: 16),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.deepPurple[100],
-                  child: Icon(Icons.album, color: Colors.deepPurple),
+                  backgroundColor: ThemeColors.deepPurple100,
+                  child: Icon(Icons.album, color: ThemeColors.deepPurple),
                 ),
                 title: Text('Playlist ${i + 1}',
                     style: const TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: const Text('X songs'),
-                trailing:
-                    Icon(Icons.arrow_forward_ios, color: Colors.deepPurple),
+                trailing: Icon(Icons.arrow_forward_ios,
+                    color: ThemeColors.deepPurple),
                 onTap: () {},
               ),
             ),

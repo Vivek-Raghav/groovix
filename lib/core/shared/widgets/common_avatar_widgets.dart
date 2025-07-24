@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// UserAvatar - reusable widget for displaying a user's avatar
 class UserAvatar extends StatelessWidget {
@@ -17,12 +18,12 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: radius,
-      backgroundColor: Colors.deepPurple[100],
+      backgroundColor: ThemeColors.deepPurple100,
       backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
           ? NetworkImage(imageUrl!)
           : null,
       child: imageUrl == null || imageUrl!.isEmpty
-          ? Icon(fallbackIcon, color: Colors.deepPurple, size: radius)
+          ? Icon(fallbackIcon, color: ThemeColors.deepPurple, size: radius)
           : null,
     );
   }
@@ -45,12 +46,12 @@ class ArtistAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: radius,
-      backgroundColor: Colors.deepPurple[50],
+      backgroundColor: ThemeColors.deepPurple50,
       backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
           ? NetworkImage(imageUrl!)
           : null,
       child: imageUrl == null || imageUrl!.isEmpty
-          ? Icon(fallbackIcon, color: Colors.deepPurple, size: radius)
+          ? Icon(fallbackIcon, color: ThemeColors.deepPurple, size: radius)
           : null,
     );
   }

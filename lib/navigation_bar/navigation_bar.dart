@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// GroovixBottomNavigationBar - Figma-inspired UI only (no logic)
 /// Place this widget in your Scaffold's bottomNavigationBar property.
@@ -17,8 +18,8 @@ class GroovixBottomNavigationBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: onTap,
-      selectedItemColor: Colors.deepPurple,
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: ThemeColors.deepPurple,
+      unselectedItemColor: ThemeColors.grey,
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(

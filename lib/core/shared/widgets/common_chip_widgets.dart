@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 /// GenreChip - reusable chip for displaying a music genre or category
 class GenreChip extends StatelessWidget {
@@ -19,9 +20,10 @@ class GenreChip extends StatelessWidget {
       onTap: onTap,
       child: Chip(
         label: Text(label),
-        backgroundColor: selected ? Colors.deepPurple : Colors.grey[200],
+        backgroundColor:
+            selected ? ThemeColors.deepPurple : ThemeColors.grey200,
         labelStyle: TextStyle(
-          color: selected ? Colors.white : Colors.black,
+          color: selected ? ThemeColors.white : ThemeColors.black,
           fontWeight: selected ? FontWeight.bold : FontWeight.normal,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -49,10 +51,10 @@ class SelectableChip extends StatelessWidget {
       label: Text(label),
       selected: selected,
       onSelected: (_) => onTap?.call(),
-      selectedColor: Colors.deepPurple,
-      backgroundColor: Colors.grey[200],
+      selectedColor: ThemeColors.deepPurple,
+      backgroundColor: ThemeColors.grey200,
       labelStyle: TextStyle(
-        color: selected ? Colors.white : Colors.black,
+        color: selected ? ThemeColors.white : ThemeColors.black,
         fontWeight: selected ? FontWeight.bold : FontWeight.normal,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
