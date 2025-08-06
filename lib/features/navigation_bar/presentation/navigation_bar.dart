@@ -18,34 +18,60 @@ class GroovixBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      onTap: onTap,
-      selectedItemColor: ThemeColors.deepPurple,
-      unselectedItemColor: ThemeColors.grey,
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: ThemeColors.primaryColor.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      child: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: onTap,
+        selectedItemColor: ThemeColors.primaryColor,
+        unselectedItemColor: ThemeColors.grey,
+        backgroundColor: ThemeColors.white,
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+        selectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Explore',
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 12,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.library_music),
-          label: 'Library',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.playlist_play),
-          label: 'Playlists',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_rounded),
+            activeIcon: Icon(Icons.home_rounded),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore_rounded),
+            activeIcon: Icon(Icons.explore_rounded),
+            label: 'Explore',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_music_rounded),
+            activeIcon: Icon(Icons.library_music_rounded),
+            label: 'Library',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.playlist_play_rounded),
+            activeIcon: Icon(Icons.playlist_play_rounded),
+            label: 'Playlists',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_rounded),
+            activeIcon: Icon(Icons.person_rounded),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 }

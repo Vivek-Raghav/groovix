@@ -1,27 +1,39 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
+import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/gen/assets.gen.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ThemeColors.white,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: ThemeColors.primaryColor,
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.grey[200],
-              child: const Icon(Icons.music_note, color: Colors.deepPurple),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: ThemeColors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.music_note, 
+                color: ThemeColors.white,
+                size: 24,
+              ),
             ),
             const SizedBox(width: 12),
             const Text(
               'Groovix',
               style: TextStyle(
-                color: Colors.black,
+                color: ThemeColors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
               ),
@@ -30,11 +42,11 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
+            icon: const Icon(Icons.search, color: ThemeColors.white),
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.notifications_none, color: Colors.black),
+            icon: const Icon(Icons.notifications_none, color: ThemeColors.white),
             onPressed: () {},
           ),
         ],

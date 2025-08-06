@@ -96,27 +96,40 @@ class ThemeFonts {
 
 class AppTheme {
   AppBarTheme appBarTheme() => const AppBarTheme(
-        backgroundColor: ThemeColors.clrWhite,
-        surfaceTintColor: ThemeColors.clrWhite,
-        foregroundColor: ThemeColors.clrBlack,
-        elevation: 2,
+        backgroundColor: ThemeColors.primaryColor,
+        surfaceTintColor: ThemeColors.primaryColor,
+        foregroundColor: ThemeColors.white,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          color: ThemeColors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontFamily: ThemeFonts.lexend,
+        ),
       );
 
   static TextTheme textTheme(BuildContext context) {
     final currentTextTheme = Theme.of(context).textTheme;
-    const defaultTextColor = ThemeColors.clrBlack;
+    const defaultTextColor = ThemeColors.black;
     const lexend = ThemeFonts.lexend;
     return TextTheme(
+      headlineLarge: currentTextTheme.headlineLarge!.copyWith(
+        color: defaultTextColor,
+        fontFamily: lexend,
+        fontSize: 48,
+        fontWeight: FontWeight.bold,
+      ),
       headlineMedium: currentTextTheme.headlineMedium!.copyWith(
         color: defaultTextColor,
         fontFamily: lexend,
         fontSize: 32,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
       titleLarge: currentTextTheme.titleLarge!.copyWith(
         color: defaultTextColor,
         fontFamily: lexend,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
       titleMedium: currentTextTheme.titleMedium!.copyWith(
           color: defaultTextColor,
@@ -152,14 +165,18 @@ class AppTheme {
   static ElevatedButtonThemeData elevatedButtonThemeData() =>
       ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          // foregroundColor: ThemeColors.clrWhite,
+          foregroundColor: ThemeColors.white,
           backgroundColor: ThemeColors.primaryColor,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           textStyle: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
+            fontFamily: ThemeFonts.lexend,
           ),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          elevation: 4,
+          shadowColor: ThemeColors.primaryColor.withOpacity(0.3),
         ),
       );
 }
@@ -192,8 +209,8 @@ ThemeData lightTheme(BuildContext context) => ThemeData(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       primaryColor: ThemeColors.primaryColor,
-      primaryColorDark: ThemeColors.clrBlack50,
-      scaffoldBackgroundColor: ThemeColors.clrWhite,
+      primaryColorDark: ThemeColors.deepPurple,
+      scaffoldBackgroundColor: ThemeColors.white,
       appBarTheme: AppTheme().appBarTheme(),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: ThemeColors.primaryColor,
@@ -205,7 +222,16 @@ ThemeData lightTheme(BuildContext context) => ThemeData(
       fontFamily: ThemeFonts.lexend,
       elevatedButtonTheme: AppTheme.elevatedButtonThemeData(),
       colorScheme: ColorScheme.fromSeed(
-        seedColor: ThemeColors.clrBlack,
+        seedColor: ThemeColors.primaryColor,
+        brightness: Brightness.light,
+        primary: ThemeColors.primaryColor,
+        secondary: ThemeColors.cyanAccent,
+        surface: ThemeColors.white,
+        background: ThemeColors.white,
+        onPrimary: ThemeColors.white,
+        onSecondary: ThemeColors.black,
+        onSurface: ThemeColors.black,
+        onBackground: ThemeColors.black,
       ),
     );
 

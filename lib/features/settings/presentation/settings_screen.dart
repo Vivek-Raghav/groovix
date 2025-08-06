@@ -1,4 +1,6 @@
 // Flutter imports:
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -6,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/routes/app_routes.dart';
 
 /// SettingsScreen - Figma-inspired UI only (no logic)
@@ -17,88 +20,240 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
-        backgroundColor: ThemeColors.deepPurple,
+        backgroundColor: ThemeColors.primaryColor,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          // Profile section
-          const Center(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: ThemeColors.deepPurple100,
-                  child: Icon(Icons.person,
-                      size: 48, color: ThemeColors.deepPurple),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              ThemeColors.primaryColor.withOpacity(0.1),
+              ThemeColors.white,
+            ],
+          ),
+        ),
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            // Profile section
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: ThemeColors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: ThemeColors.primaryColor.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: ThemeColors.primaryColor,
+                      child: Icon(Icons.person,
+                          size: 48, color: ThemeColors.white),
+                    ),
+                    SizedBox(height: 12),
+                    Text('Your Name',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: ThemeColors.black)),
+                    Text('user@email.com',
+                        style: TextStyle(color: ThemeColors.grey)),
+                  ],
                 ),
-                SizedBox(height: 12),
-                Text('Your Name',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                Text('user@email.com',
-                    style: TextStyle(color: ThemeColors.grey)),
-              ],
+              ),
             ),
-          ),
-          const SizedBox(height: 32),
-          // Account settings
-          ListTile(
-            leading: const Icon(Icons.edit, color: ThemeColors.deepPurple),
-            title: const Text('Edit Profile'),
-            trailing: const Icon(Icons.arrow_forward_ios,
-                color: ThemeColors.deepPurple),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.lock, color: ThemeColors.deepPurple),
-            title: const Text('Change Password'),
-            trailing: const Icon(Icons.arrow_forward_ios,
-                color: ThemeColors.deepPurple),
-            onTap: () {},
-          ),
-          ListTile(
-            leading:
-                const Icon(Icons.notifications, color: ThemeColors.deepPurple),
-            title: const Text('Notifications'),
-            trailing: const Icon(Icons.arrow_forward_ios,
-                color: ThemeColors.deepPurple),
-            onTap: () {},
-          ),
-          const Divider(height: 32),
-          // App settings
-          ListTile(
-            leading: const Icon(Icons.palette, color: ThemeColors.deepPurple),
-            title: const Text('Theme'),
-            trailing: const Icon(Icons.arrow_forward_ios,
-                color: ThemeColors.deepPurple),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.language, color: ThemeColors.deepPurple),
-            title: const Text('Language'),
-            trailing: const Icon(Icons.arrow_forward_ios,
-                color: ThemeColors.deepPurple),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.info, color: ThemeColors.deepPurple),
-            title: const Text('About Groovix'),
-            trailing: const Icon(Icons.arrow_forward_ios,
-                color: ThemeColors.deepPurple),
-            onTap: () {},
-          ),
-          const Divider(height: 32),
-          // Logout
-          ListTile(
-            leading: const Icon(Icons.logout, color: ThemeColors.red),
-            title:
-                const Text('Logout', style: TextStyle(color: ThemeColors.red)),
-            onTap: () {
-              context.push(AppRoutes.login);
-            },
-          ),
-        ],
+            const SizedBox(height: 24),
+            // Account settings
+            Container(
+              decoration: BoxDecoration(
+                color: ThemeColors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: ThemeColors.primaryColor.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: ThemeColors.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.edit,
+                          color: ThemeColors.primaryColor, size: 20),
+                    ),
+                    title: const Text('Edit Profile',
+                        style: TextStyle(
+                            color: ThemeColors.black,
+                            fontWeight: FontWeight.w500)),
+                    trailing: const Icon(Icons.arrow_forward_ios,
+                        color: ThemeColors.primaryColor, size: 16),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: ThemeColors.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.lock,
+                          color: ThemeColors.primaryColor, size: 20),
+                    ),
+                    title: const Text('Change Password',
+                        style: TextStyle(
+                            color: ThemeColors.black,
+                            fontWeight: FontWeight.w500)),
+                    trailing: const Icon(Icons.arrow_forward_ios,
+                        color: ThemeColors.primaryColor, size: 16),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: ThemeColors.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.notifications,
+                          color: ThemeColors.primaryColor, size: 20),
+                    ),
+                    title: const Text('Notifications',
+                        style: TextStyle(
+                            color: ThemeColors.black,
+                            fontWeight: FontWeight.w500)),
+                    trailing: const Icon(Icons.arrow_forward_ios,
+                        color: ThemeColors.primaryColor, size: 16),
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            // App settings
+            Container(
+              decoration: BoxDecoration(
+                color: ThemeColors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: ThemeColors.primaryColor.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: ThemeColors.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.palette,
+                          color: ThemeColors.primaryColor, size: 20),
+                    ),
+                    title: const Text('Theme',
+                        style: TextStyle(
+                            color: ThemeColors.black,
+                            fontWeight: FontWeight.w500)),
+                    trailing: const Icon(Icons.arrow_forward_ios,
+                        color: ThemeColors.primaryColor, size: 16),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: ThemeColors.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.language,
+                          color: ThemeColors.primaryColor, size: 20),
+                    ),
+                    title: const Text('Language',
+                        style: TextStyle(
+                            color: ThemeColors.black,
+                            fontWeight: FontWeight.w500)),
+                    trailing: const Icon(Icons.arrow_forward_ios,
+                        color: ThemeColors.primaryColor, size: 16),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: ThemeColors.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.info,
+                          color: ThemeColors.primaryColor, size: 20),
+                    ),
+                    title: const Text('About Groovix',
+                        style: TextStyle(
+                            color: ThemeColors.black,
+                            fontWeight: FontWeight.w500)),
+                    trailing: const Icon(Icons.arrow_forward_ios,
+                        color: ThemeColors.primaryColor, size: 16),
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Logout
+            Container(
+              decoration: BoxDecoration(
+                color: ThemeColors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: ThemeColors.red.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: ThemeColors.red.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.logout,
+                      color: ThemeColors.red, size: 20),
+                ),
+                title: const Text('Logout',
+                    style: TextStyle(
+                        color: ThemeColors.red, fontWeight: FontWeight.w500)),
+                onTap: () async {
+                  final isLogoutSuccess = await FirebaseAuthUc().logout();
+                  if (isLogoutSuccess) {
+                    context.go(AppRoutes.login);
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

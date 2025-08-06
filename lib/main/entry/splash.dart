@@ -1,4 +1,6 @@
 // Flutter imports:
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,11 +9,10 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/gen/assets.gen.dart';
 import 'package:groovix/routes/app_routes.dart';
 
-/// SplashScreen - Initial loading screen with app branding
-/// Handles navigation logic to determine where to route the user
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -25,6 +26,14 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _scaleController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+  final _localCache = getIt<LocalCache>();
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    _scaleController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -64,29 +73,20 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _startSplashSequence() async {
-    // Start animations
     _fadeController.forward();
     await Future.delayed(const Duration(milliseconds: 300));
     _scaleController.forward();
-
-    // Wait for animations to complete
     await Future.delayed(const Duration(milliseconds: 2500));
-
-    // Navigate to appropriate screen
     _navigateToNextScreen();
   }
 
   void _navigateToNextScreen() {
-    if (mounted) {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null && _localCache.getBool(PrefKeys.isLoggedIn) == true) {
       context.go(AppRoutes.bottomNav);
+    } else {
+      context.go(AppRoutes.login);
     }
-  }
-
-  @override
-  void dispose() {
-    _fadeController.dispose();
-    _scaleController.dispose();
-    super.dispose();
   }
 
   @override

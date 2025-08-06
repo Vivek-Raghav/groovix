@@ -1,113 +1,275 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:groovix/core/shared/domain/method/methods.dart';
 
 // Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/features/auth/domain/usecase/firebase_auth_uc.dart';
 import 'package:groovix/gen/assets.gen.dart';
+import 'package:groovix/main/main_index.dart';
+import 'package:groovix/routes/routes_index.dart';
 
 /// LoginScreen - Figma-inspired UI only (no logic)
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ThemeColors.white,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Assets.icons.appIconLight.image(height: 150),
-              Text('Welcome Back!',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              const Text('Login to your account',
-                  style: TextStyle(color: ThemeColors.grey)),
-              const SizedBox(height: 32),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: const Icon(Icons.email),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  filled: true,
-                  fillColor: ThemeColors.deepPurple50,
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: const Icon(Icons.lock),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  filled: true,
-                  fillColor: ThemeColors.deepPurple50,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text('Forgot Password?'),
-                ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ThemeColors.deepPurple,
-                  foregroundColor: ThemeColors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text('Login'),
-              ),
-              const SizedBox(height: 24),
-              const Row(
-                children: [
-                  Expanded(child: Divider()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text('or'),
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-              const SizedBox(height: 24),
-              OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.g_mobiledata,
-                    color: ThemeColors.deepPurple),
-                label: const Text('Continue with Google'),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: ThemeColors.deepPurple),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Don\'t have an account?'),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Sign Up'),
-                  ),
-                ],
-              ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              ThemeColors.primaryColor.withOpacity(0.1),
+              ThemeColors.white,
             ],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: ThemeColors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ThemeColors.primaryColor.withOpacity(0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: Assets.icons.appIconLight.image(height: 120),
+                ),
+                const SizedBox(height: 32),
+                Text('Welcome Back!',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold, color: ThemeColors.black)),
+                const SizedBox(height: 8),
+                const Text('Login to your account',
+                    style: TextStyle(color: ThemeColors.grey, fontSize: 16)),
+                const SizedBox(height: 32),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: ThemeColors.primaryColor.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: const TextStyle(
+                                color: ThemeColors.primaryColor),
+                            prefixIcon: const Icon(Icons.email,
+                                color: ThemeColors.primaryColor),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                  color: ThemeColors.primaryColor, width: 2),
+                            ),
+                            filled: true,
+                            fillColor: ThemeColors.white,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+
+                            final regex =
+                                RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                            if (!regex.hasMatch(value)) {
+                              return 'Please enter a valid email address';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: ThemeColors.primaryColor.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: const TextStyle(
+                                color: ThemeColors.primaryColor),
+                            prefixIcon: const Icon(Icons.lock,
+                                color: ThemeColors.primaryColor),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                  color: ThemeColors.primaryColor, width: 2),
+                            ),
+                            filled: true,
+                            fillColor: ThemeColors.white,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+
+                            final regex = RegExp(
+                                r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#\$&*~]).{6,}$');
+                            if (!regex.hasMatch(value)) {
+                              return 'Password must contain at least 1 letter, 1 number, and 1 special character (!@#\$&*~)';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text('Forgot Password?',
+                        style: TextStyle(color: ThemeColors.primaryColor)),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ThemeColors.primaryColor.withOpacity(0.2),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        final isLoggedInSuccess = await FirebaseAuthUc()
+                            .loginViaEmail(_emailController.text,
+                                _passwordController.text);
+                        if (isLoggedInSuccess) {
+                          context.go(AppRoutes.bottomNav);
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeColors.primaryColor,
+                      foregroundColor: ThemeColors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text('Login',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                        child:
+                            Divider(color: ThemeColors.grey.withOpacity(0.3))),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child:
+                          Text('or', style: TextStyle(color: ThemeColors.grey)),
+                    ),
+                    Expanded(
+                        child:
+                            Divider(color: ThemeColors.grey.withOpacity(0.3))),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                        color: ThemeColors.primaryColor.withOpacity(0.3)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ThemeColors.primaryColor.withOpacity(0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: OutlinedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.g_mobiledata,
+                        color: ThemeColors.primaryColor, size: 20),
+                    label: const Text('Continue with Google',
+                        style: TextStyle(color: ThemeColors.primaryColor)),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Don\'t have an account?',
+                        style: TextStyle(color: ThemeColors.grey)),
+                    TextButton(
+                      onPressed: () {
+                        context.push(AppRoutes.signup);
+                      },
+                      child: const Text('Sign Up',
+                          style: TextStyle(
+                              color: ThemeColors.primaryColor,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
