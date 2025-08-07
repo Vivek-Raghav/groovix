@@ -82,6 +82,7 @@ class _SplashScreenState extends State<SplashScreen>
     final user = FirebaseAuth.instance.currentUser;
     final userExists = _localCache.getBool(PrefKeys.isLoggedIn);
     if (user != null && userExists == true) {
+      debugPrint("User logged In $user &&  $userExists");
       context.go(AppRoutes.bottomNav);
     } else {
       debugPrint("User not logged In $user &&  $userExists");
