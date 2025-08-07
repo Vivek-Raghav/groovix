@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateToNextScreen() async {
     final user = FirebaseAuth.instance.currentUser;
-    final userExists = await _localCache.getBool(PrefKeys.isLoggedIn);
+    final userExists = _localCache.getBool(PrefKeys.isLoggedIn);
     if (user != null && userExists == true) {
       context.go(AppRoutes.bottomNav);
     } else {

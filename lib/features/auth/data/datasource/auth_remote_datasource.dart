@@ -21,9 +21,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       if (user != null) {
         final token = await user.getIdToken();
-        await _cache.setString(PrefKeys.token, token ?? "");
-        await _cache.setBool(PrefKeys.isLoggedIn, true);
-        await _cache.setString(PrefKeys.userEmail, user.email ?? "");
+        _cache.setString(PrefKeys.token, token ?? "");
+        _cache.setBool(PrefKeys.isLoggedIn, true);
+        _cache.setString(PrefKeys.userEmail, user.email ?? "");
         return true;
       } else {
         throw Exception("User not found");
@@ -47,7 +47,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<bool> logout() async {
     try {
       await firebaseAuth.signOut();
-      await _cache.clearAllStorage();
+      _cache.clearAllStorage();
     } catch (e) {
       debugPrint("Auth Logout Error: $e");
       return false;
@@ -62,8 +62,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final user = firebaseAuth.currentUser;
     try {
       if (user != null) {
-        await _cache.setBool(PrefKeys.isLoggedIn, true);
-        await _cache.setString(PrefKeys.userEmail, user.email ?? "");
+        _cache.setBool(PrefKeys.isLoggedIn, true);
+        _cache.setString(PrefKeys.userEmail, user.email ?? "");
         return true;
       } else {
         throw Exception("User not found");

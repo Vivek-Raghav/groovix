@@ -1,21 +1,16 @@
-// Flutter imports:
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 
-// Package imports:
 import 'package:groovix/core/shared/domain/method/methods.dart';
 
-// Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 
-/// SettingsScreen - Figma-inspired UI only (no logic)
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final _cache = getIt<LocalCache>();
     return BlocListener<AuthBloc, AuthState>(
       bloc: getIt<AuthBloc>(),
       listener: (context, state) {
@@ -59,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Center(
+                child: Center(
                   child: Column(
                     children: [
                       CircleAvatar(
@@ -74,7 +69,7 @@ class SettingsScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: ThemeColors.black)),
-                      Text('user@email.com',
+                      Text("${_cache.getString(PrefKeys.userEmail)}",
                           style: TextStyle(color: ThemeColors.grey)),
                     ],
                   ),
