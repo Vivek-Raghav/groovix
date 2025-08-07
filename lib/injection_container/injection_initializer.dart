@@ -7,9 +7,9 @@ import 'package:groovix/injection_container/injection_index.dart';
 final GetIt getIt = GetIt.instance;
 
 Future<void> injectionInit() async {
+  await initializeStorage();
   await injectDatasources();
   await injectRepositories();
   await injectUsecases();
-  await initializeStorage();
   await injectBlocs();
 }

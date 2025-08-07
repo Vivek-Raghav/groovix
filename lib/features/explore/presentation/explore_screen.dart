@@ -44,8 +44,8 @@ class ExploreScreen extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Search music, artists, albums...',
-                  hintStyle: TextStyle(color: ThemeColors.grey),
-                  prefixIcon: Icon(Icons.search, color: ThemeColors.primaryColor),
+                  hintStyle: const TextStyle(color: ThemeColors.grey),
+                  prefixIcon: const Icon(Icons.search, color: ThemeColors.primaryColor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide.none,
@@ -86,7 +86,7 @@ class ExploreScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.trending_up,
+                          const Icon(Icons.trending_up,
                               size: 40, color: ThemeColors.primaryColor),
                           const SizedBox(height: 8),
                           Text('Song ${i + 1}',

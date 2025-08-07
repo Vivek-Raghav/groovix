@@ -1,5 +1,6 @@
-// Package imports:
+// Project imports:
 import "package:equatable/equatable.dart";
+import "package:groovix/core/shared/domain/entity/error.dart";
 
 abstract class Failure extends Equatable {
   @override
@@ -8,23 +9,23 @@ abstract class Failure extends Equatable {
 }
 
 // ServerFailure: handles errors related to server issues
-// class ServerFailure extends Failure {
-//   ServerFailure({this.error, this.errorEntity});
+class ServerFailure extends Failure {
+  ServerFailure({this.error, this.errorEntity});
 
-//   final String? error; // Error message from server
-//   final ErrorEntity?
-//       errorEntity; // An optional error entity for more complex errors
+  final String? error; // Error message from server
+  final ErrorEntity?
+      errorEntity; // An optional error entity for more complex errors
 
-//   // Override props to include error and errorEntity for comparison
-//   @override
-//   List<Object?> get props => [error, errorEntity];
+  // Override props to include error and errorEntity for comparison
+  @override
+  List<Object?> get props => [error, errorEntity];
 
-//   // Override toString to make printing the instance display the error message
-//   @override
-//   String toString() {
-//     return error ?? "ServerFailure: An error occurred";
-//   }
-// }
+  // Override toString to make printing the instance display the error message
+  @override
+  String toString() {
+    return error ?? "ServerFailure: An error occurred";
+  }
+}
 
 // CacheFailure: handles errors related to cache issues (you can expand as needed)
 class CacheFailure extends Failure {
