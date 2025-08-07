@@ -1,9 +1,6 @@
 // Dart imports:
 import 'dart:convert';
-
 // Package imports:
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalCache {

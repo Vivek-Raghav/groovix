@@ -10,7 +10,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _cache = getIt<LocalCache>();
+    final cache = getIt<LocalCache>();
     return BlocListener<AuthBloc, AuthState>(
       bloc: getIt<AuthBloc>(),
       listener: (context, state) {
@@ -57,20 +57,20 @@ class SettingsScreen extends StatelessWidget {
                 child: Center(
                   child: Column(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 40,
                         backgroundColor: ThemeColors.primaryColor,
                         child: Icon(Icons.person,
                             size: 48, color: ThemeColors.white),
                       ),
-                      SizedBox(height: 12),
-                      Text('Your Name',
+                      const SizedBox(height: 12),
+                      const Text('Your Name',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: ThemeColors.black)),
-                      Text("${_cache.getString(PrefKeys.userEmail)}",
-                          style: TextStyle(color: ThemeColors.grey)),
+                      Text("${cache.getString(PrefKeys.userEmail)}",
+                          style: const TextStyle(color: ThemeColors.grey)),
                     ],
                   ),
                 ),

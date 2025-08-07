@@ -1,5 +1,4 @@
 import 'package:groovix/features/auth/auth_index.dart';
-import 'package:groovix/features/auth/domain/usecase/signup_uc.dart';
 
 sealed class AuthEvent {
   const AuthEvent();

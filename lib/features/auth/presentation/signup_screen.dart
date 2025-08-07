@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groovix/core/shared/domain/method/methods.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 

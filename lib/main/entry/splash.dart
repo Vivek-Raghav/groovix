@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
-import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/gen/assets.gen.dart';
-import 'package:groovix/routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

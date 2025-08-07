@@ -1,6 +1,5 @@
 import 'package:groovix/core/shared/domain/method/methods.dart';
 import 'package:groovix/features/auth/auth_index.dart';
-import 'package:groovix/features/auth/domain/usecase/signup_uc.dart';
 
 abstract class AuthRemoteDataSource {
   Future<bool> loginViaEmail(LoginParams params);
