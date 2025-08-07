@@ -254,7 +254,7 @@ class SettingsScreen extends StatelessWidget {
                       style: TextStyle(
                           color: ThemeColors.red, fontWeight: FontWeight.w500)),
                   onTap: () async {
-                    await getIt<AuthRepository>().logout();
+                    getIt<AuthBloc>().add(AuthLogoutEvent());
                   },
                 ),
               ),
