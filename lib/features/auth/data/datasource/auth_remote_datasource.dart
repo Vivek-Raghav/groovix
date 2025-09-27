@@ -1,9 +1,17 @@
+import 'dart:convert';
+
+import 'package:groovix/core/constants/string_constants.dart';
+import 'package:groovix/core/error/server_exception.dart';
+import 'package:groovix/core/services/api_service.dart';
+import 'package:groovix/core/services/api_urls.dart';
 import 'package:groovix/core/shared/domain/method/methods.dart';
 import 'package:groovix/features/auth/auth_index.dart';
+import 'package:groovix/features/auth/domain/models/sign_in.dart';
+import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<bool> loginViaEmail(LoginParams params);
-  Future<bool> signUpViaEmail(SignUpParams params);
+  Future<AuthResponse> loginViaEmail(SignInParams params);
+  Future<AuthResponse> signUpViaEmail(SignUpParams params);
   Future<bool> logout();
 }
 
@@ -11,74 +19,61 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl();
   final LocalCache _cache = getIt<LocalCache>();
   final firebaseAuth = FirebaseAuth.instance;
+  final apiService = getIt<ApiService>();
 
   @override
-  Future<bool> loginViaEmail(LoginParams params) async {
-    await firebaseAuth.signInWithEmailAndPassword(
-        email: params.email, password: params.password);
-    final user = firebaseAuth.currentUser;
+  Future<AuthResponse> loginViaEmail(SignInParams params) async {
     try {
-      if (user != null) {
-        final token = await user.getIdToken();
-        _cache.setString(PrefKeys.token, token ?? "");
-        _cache.setBool(PrefKeys.isLoggedIn, true);
-        _cache.setString(PrefKeys.userEmail, user.email ?? "");
-        return true;
+      final response =
+          await apiService.post(ApiUrls.login, data: params.toJson());
+      if (response.statusCode == 200) {
+        return AuthResponse.fromJson(response.data);
       } else {
-        throw Exception("User not found");
+        return throw ServerException(
+            error: StringConstants.strSomethingWentWrong);
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        showToast(title: "No user found for that email.");
-      } else if (e.code == 'wrong-password') {
-        showToast(title: "Wrong password.");
+    } catch (e) {
+      debugPrint("Auth Login Error: $e");
+      return throw ServerException(
+          error: StringConstants.strSomethingWentWrong);
+    }
+  }
+
+  @override
+  Future<AuthResponse> signUpViaEmail(SignUpParams params) async {
+    try {
+      final response =
+          await apiService.post(ApiUrls.signup, data: params.toJson());
+      if (response.statusCode == 201) {
+        return AuthResponse.fromJson(response.data);
       } else {
-        showToast(title: e.code);
+        return throw ServerException(
+            error: StringConstants.strSomethingWentWrong);
       }
-      return false;
     } catch (e) {
       debugPrint("Auth Sign Up Error: $e");
-      return false;
+      return throw ServerException(
+          error: StringConstants.strSomethingWentWrong);
     }
   }
 
   @override
   Future<bool> logout() async {
+    final cachedUser = _cache.getMap(PrefKeys.userDetails);
+    final user = AuthResponse.fromJson(cachedUser ?? {});
     try {
-      await firebaseAuth.signOut();
-      _cache.clearAllStorage();
-    } catch (e) {
-      debugPrint("Auth Logout Error: $e");
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  Future<bool> signUpViaEmail(SignUpParams params) async {
-    await firebaseAuth.createUserWithEmailAndPassword(
-        email: params.email, password: params.password);
-    final user = firebaseAuth.currentUser;
-    try {
-      if (user != null) {
-        _cache.setBool(PrefKeys.isLoggedIn, true);
-        _cache.setString(PrefKeys.userEmail, user.email ?? "");
+      final response = await apiService.post(ApiUrls.logout,
+          data: jsonEncode({'id': user.id}));
+      if (response.statusCode == 200) {
         return true;
       } else {
-        throw Exception("User not found");
+        return throw ServerException(
+            error: StringConstants.strSomethingWentWrong);
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        showToast(title: "No user found for that email.");
-      } else if (e.code == 'wrong-password') {
-        showToast(title: "Wrong password.");
-      } else {
-        showToast(title: e.code);
-      }
-      return false;
     } catch (e) {
       debugPrint("Auth Sign Up Error: $e");
-      return false;
+      return throw ServerException(
+          error: StringConstants.strSomethingWentWrong);
     }
   }
 }

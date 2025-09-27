@@ -3,6 +3,7 @@
 // Project imports:
 import 'package:groovix/core/shared/domain/method/methods.dart';
 import 'package:groovix/features/auth/auth_index.dart';
+import 'package:groovix/features/auth/domain/models/sign_in.dart';
 import 'package:groovix/gen/assets.gen.dart';
 import 'package:groovix/main/main_index.dart';
 
@@ -208,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           getIt<AuthBloc>().add(AuthLoginEvent(
-                              params: LoginParams(
+                              params: SignInParams(
                                   email: _emailController.text,
                                   password: _passwordController.text)));
                         }

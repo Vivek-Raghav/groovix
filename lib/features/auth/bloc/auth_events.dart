@@ -1,4 +1,5 @@
-import 'package:groovix/features/auth/auth_index.dart';
+import 'package:groovix/features/auth/domain/models/sign_in.dart';
+import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
 sealed class AuthEvent {
   const AuthEvent();
@@ -6,7 +7,7 @@ sealed class AuthEvent {
 }
 
 class AuthLoginEvent extends AuthEvent {
-  final LoginParams params;
+  final SignInParams params;
   AuthLoginEvent({required this.params});
 
   @override

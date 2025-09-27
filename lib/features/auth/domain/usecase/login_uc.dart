@@ -1,15 +1,11 @@
 import 'package:groovix/features/auth/auth_index.dart';
+import 'package:groovix/features/auth/domain/models/sign_in.dart';
+import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
-class LoginUc extends UseCase<bool, LoginParams> {
+class LoginUc extends UseCase<AuthResponse, SignInParams> {
   LoginUc({required this.authRepository});
   final AuthRepository authRepository;
   @override
-  EitherDynamic<bool> call(LoginParams params) =>
+  EitherDynamic<AuthResponse> call(SignInParams params) =>
       authRepository.loginViaEmail(params);
-}
-
-class LoginParams {
-  final String email;
-  final String password;
-  LoginParams({required this.email, required this.password});
 }

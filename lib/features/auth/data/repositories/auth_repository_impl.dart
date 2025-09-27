@@ -3,16 +3,18 @@ import 'package:groovix/core/constants/string_constants.dart';
 import 'package:groovix/core/error/failure.dart';
 import 'package:groovix/core/error/server_exception.dart';
 import 'package:groovix/features/auth/auth_index.dart';
+import 'package:groovix/features/auth/domain/models/sign_in.dart';
+import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
   AuthRepositoryImpl({required this.authRemoteDataSource});
 
   @override
-  EitherDynamic<bool> loginViaEmail(LoginParams params) async {
+  EitherDynamic<AuthResponse> loginViaEmail(SignInParams params) async {
     try {
       final data = await authRemoteDataSource.loginViaEmail(params);
-      if (data) {
+      if (data.id.isNotEmpty) {
         return Right(data);
       } else {
         return Left(
@@ -45,10 +47,10 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  EitherDynamic<bool> signUpViaEmail(SignUpParams params) async {
+  EitherDynamic<AuthResponse> signUpViaEmail(SignUpParams params) async {
     try {
       final data = await authRemoteDataSource.signUpViaEmail(params);
-      if (data) {
+      if (data.id.isNotEmpty) {
         return Right(data);
       } else {
         return Left(

@@ -69,7 +69,7 @@ class SettingsScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: ThemeColors.black)),
-                      Text("${cache.getString(PrefKeys.userEmail)}",
+                      Text("${cache.getMap(PrefKeys.userDetails)?['email']}",
                           style: const TextStyle(color: ThemeColors.grey)),
                     ],
                   ),

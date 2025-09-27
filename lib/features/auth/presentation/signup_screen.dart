@@ -5,6 +5,7 @@ import 'package:groovix/features/auth/auth_index.dart';
 
 // Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
 /// SignupScreen - Figma-inspired UI only (no logic)
 class SignupScreen extends StatefulWidget {
@@ -153,6 +154,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           if (_formKey.currentState!.validate()) {
                             getIt<AuthBloc>().add(AuthSignupEvent(
                                 params: SignUpParams(
+                                    name: _nameController.text,
                                     email: _emailController.text,
                                     password: _passwordController.text)));
                           }

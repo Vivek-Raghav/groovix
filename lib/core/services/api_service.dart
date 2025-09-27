@@ -19,28 +19,28 @@ class ApiService {
   }
 
   void _initializeInterceptors() {
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        if (kDebugMode) {
-          print('[API][REQUEST] => ${options.method} ${options.uri}');
-          print('[API][HEADERS] => ${options.headers}');
-          print('[API][BODY] => ${options.data}');
-        }
-        handler.next(options);
-      },
-      onResponse: (response, handler) {
-        if (kDebugMode) {
-          print('[API][RESPONSE] => ${response.statusCode} ${response.data}');
-        }
-        handler.next(response);
-      },
-      onError: (DioException e, handler) {
-        if (kDebugMode) {
+    _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+      if (kDebugMode) {
+        print('[API][REQUEST][URL] => ${options.method} ${options.uri}');
+        print('[API][BODY] => ${options.data}');
+      }
+      handler.next(options);
+    }, onResponse: (response, handler) {
+      if (kDebugMode) {
+        print('[API][RESPONSE] => ${response.statusCode} ${response.data}');
+      }
+      handler.next(response);
+    }, onError: (DioException e, handler) {
+      if (kDebugMode) {
+        if (e.response != null) {
+          print(
+              '[API][ERROR][STATUS] => ${e.response?.statusCode} && [DATA] => ${e.response?.data}');
+        } else {
           print('[API][ERROR] => ${e.message}');
         }
-        handler.next(e);
-      },
-    ));
+      }
+      handler.next(e);
+    }));
   }
 
   Future<Response<T>> get<T>(

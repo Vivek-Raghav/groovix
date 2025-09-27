@@ -15,13 +15,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUc loginUc;
   final LogoutUc logoutUc;
   final SignupUc signupUc;
-
+  final LocalCache _cache = getIt<LocalCache>();
   Future<void> _hanldleLogin(
       AuthLoginEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoginLoading());
     final result = await loginUc.call(event.params);
     result.fold((failure) => emit(AuthLoginFailure(error: failure.toString())),
-        (success) => emit(AuthLoginSuccess()));
+        (success) {
+      _cache.setBool(PrefKeys.isLoggedIn, true);
+      _cache.setMap(PrefKeys.userDetails, success.toJson());
+      emit(AuthLoginSuccess());
+    });
   }
 
   Future<void> _handleLogout(
@@ -29,7 +33,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLogoutLoading());
     final result = await logoutUc.call(NoParams());
     result.fold((failure) => emit(AuthLogoutFailure(error: failure.toString())),
-        (success) => emit(AuthLogoutSuccess()));
+        (success) {
+      _cache.clearAllStorage();
+      emit(AuthLogoutSuccess());
+    });
   }
 
   Future<void> _handleSignup(
@@ -37,6 +44,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthSignupLoading());
     final result = await signupUc.call(event.params);
     result.fold((failure) => emit(AuthSignupFailure(error: failure.toString())),
-        (success) => emit(AuthSignupSuccess()));
+        (data) {
+      _cache.setBool(PrefKeys.isLoggedIn, true);
+      _cache.setMap(PrefKeys.userDetails, data.toJson());
+      emit(AuthSignupSuccess());
+    });
   }
 }
