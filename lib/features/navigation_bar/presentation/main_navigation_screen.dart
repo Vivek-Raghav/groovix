@@ -8,6 +8,7 @@ import 'package:groovix/features/library/presentation/library_screen.dart';
 import 'package:groovix/features/navigation_bar/presentation/navigation_bar.dart';
 import 'package:groovix/features/playlist/presentation/playlist_screen.dart';
 import 'package:groovix/features/settings/presentation/settings_screen.dart';
+import 'package:groovix/features/song/presentation/upload_song.dart';
 
 /// MainNavigationScreen - Main screen with bottom navigation
 /// This screen manages navigation between different sections of the app
@@ -25,7 +26,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const ExploreScreen(),
-    const LibraryScreen(),
+    const UploadSongScreen(),
     const PlaylistScreen(),
     const SettingsScreen(),
   ];

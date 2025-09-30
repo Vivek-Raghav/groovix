@@ -4,7 +4,6 @@ import 'package:groovix/core/constants/string_constants.dart';
 import 'package:groovix/core/error/server_exception.dart';
 import 'package:groovix/core/services/api_service.dart';
 import 'package:groovix/core/services/api_urls.dart';
-import 'package:groovix/core/shared/domain/method/methods.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/features/auth/domain/models/sign_in.dart';
 import 'package:groovix/features/auth/domain/models/signup_params.dart';
@@ -27,6 +26,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final response =
           await apiService.post(ApiUrls.login, data: params.toJson());
       if (response.statusCode == 200) {
+        if (response.headers.value("authorization") != null) {
+          _cache.setString(
+              PrefKeys.token, response.headers.value("authorization") ?? "");
+        }
         return AuthResponse.fromJson(response.data);
       } else {
         return throw ServerException(
@@ -45,6 +48,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final response =
           await apiService.post(ApiUrls.signup, data: params.toJson());
       if (response.statusCode == 201) {
+        if (response.headers.value("authorization") != null) {
+          _cache.setString(
+              PrefKeys.token, response.headers.value("authorization") ?? "");
+        }
         return AuthResponse.fromJson(response.data);
       } else {
         return throw ServerException(
