@@ -17,7 +17,6 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl();
   final LocalCache _cache = getIt<LocalCache>();
-  final firebaseAuth = FirebaseAuth.instance;
   final apiService = getIt<ApiService>();
 
   @override

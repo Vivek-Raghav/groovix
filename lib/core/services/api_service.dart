@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -102,6 +104,38 @@ class ApiService {
       );
     } on DioException catch (e) {
       throw _handleDioError(e);
+    }
+  }
+
+  Future<Response<T>> postMultipart<T>({
+    required String url,
+    required Map<String, File> files, // key = field name, value = File
+    required Map<String, dynamic> fields, // key = field name, value = data
+    Map<String, dynamic>? headers,
+  }) async {
+    print("headers: $headers");
+    try {
+      // Convert files into MultipartFile
+      final fileMap = <String, MultipartFile>{};
+      for (final entry in files.entries) {
+        fileMap[entry.key] = await MultipartFile.fromFile(entry.value.path);
+      }
+
+      // Merge fields + files
+      final formData = FormData.fromMap({
+        ...fields,
+        ...fileMap,
+      });
+
+      final response = await _dio.post<T>(
+        url,
+        data: formData,
+        options: Options(contentType: "multipart/form-data", headers: headers),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      throw Exception("Upload failed: ${e.message}");
     }
   }
 

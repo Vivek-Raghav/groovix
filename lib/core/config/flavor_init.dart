@@ -4,7 +4,7 @@ import 'package:groovix/core/config/flavor_config.dart';
 
 FlavorConfig flavorDevConfig = FlavorConfig(
   flavor: Flavor.dev,
-  baseUrl: "http://127.0.0.1:8000",
+  baseUrl: "http://10.0.2.2:9000",
 );
 
 FlavorConfig flavorLocalConfig = FlavorConfig(

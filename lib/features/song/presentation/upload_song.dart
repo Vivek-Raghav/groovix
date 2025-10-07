@@ -2,6 +2,11 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:groovix/core/shared/domain/method/methods.dart';
+import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
+import 'package:groovix/features/song/domain/models/upload_song_model.dart';
+import 'package:groovix/features/song/presentation/widgets/audio_wave.dart';
+import 'package:groovix/injection_container/injected/inject_blocs.dart';
 import 'widgets/file_picker.dart';
 
 class UploadSongScreen extends StatefulWidget {
@@ -15,6 +20,7 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
   final TextEditingController _artistController = TextEditingController();
   final TextEditingController _songNameController = TextEditingController();
   final TextEditingController _fileController = TextEditingController();
+  final _uploadSongCubit = getIt<SongCubit>();
 
   Color _selectedColor = const Color(0xFFFF4500);
   int _selectedColorTab = 2;
@@ -22,6 +28,24 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
   Offset _selectedColorPosition = const Offset(100, 100);
   File? _selectedAudioFile;
   File? _selectedThumbnail;
+
+  void _pickImageFromStorage() async {
+    final image = await pickImageFromStorage();
+    if (image != null) {
+      setState(() {
+        _selectedThumbnail = image;
+      });
+    }
+  }
+
+  void _pickAudioFromStorage() async {
+    final audio = await pickAudioFromStorage();
+    if (audio != null) {
+      setState(() {
+        _selectedAudioFile = audio;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -33,18 +57,24 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyMedium!.color!;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF000000),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
+              _buildHeader(textColor),
               const SizedBox(height: 24),
-              _buildThumbnailPicker(),
-              if (_selectedThumbnail != null) ...[
+              _selectedThumbnail != null
+                  ? _buildThumbnailPickerWithDelete(textColor)
+                  : _buildThumbnailPicker(textColor),
+              const SizedBox(height: 24),
+              _buildAudioPickerField(textColor),
+              if (_selectedAudioFile != null) ...[
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -52,45 +82,34 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
                     TextButton.icon(
                       onPressed: () {
                         setState(() {
-                          _selectedThumbnail = null;
+                          _selectedAudioFile = null;
+                          _fileController.clear();
                         });
                       },
-                      icon:
-                          const Icon(Icons.delete, color: Colors.red, size: 16),
-                      label: const Text(
-                        'Remove Thumbnail',
-                        style: TextStyle(color: Colors.red, fontSize: 12),
+                      icon: Icon(Icons.delete,
+                          color: theme.colorScheme.error, size: 16),
+                      label: Text(
+                        'Remove Audio',
+                        style: TextStyle(
+                            color: theme.colorScheme.error, fontSize: 12),
                       ),
                     ),
                   ],
                 ),
               ],
+              const SizedBox(height: 16),
+              _buildTextField('Artist', 'Artist', _artistController, textColor),
+              const SizedBox(height: 16),
+              _buildTextField(
+                  'Song Name', 'Song Name', _songNameController, textColor),
               const SizedBox(height: 24),
-              _buildFilePickerField(),
-              if (_selectedAudioFile != null) ...[
-                const SizedBox(height: 12),
-                FileInfoWidget(
-                  file: _selectedAudioFile!,
-                  onRemove: () {
-                    setState(() {
-                      _selectedAudioFile = null;
-                      _fileController.clear();
-                    });
-                  },
-                ),
-              ],
+              _buildColorSection(textColor),
               const SizedBox(height: 16),
-              _buildTextField('Artist', 'Artist', _artistController),
+              _buildColorWheel(textColor),
               const SizedBox(height: 16),
-              _buildTextField('Song Name', 'Song Name', _songNameController),
+              _buildColorPalette(textColor),
               const SizedBox(height: 24),
-              _buildColorSection(),
-              const SizedBox(height: 16),
-              _buildColorWheel(),
-              const SizedBox(height: 16),
-              _buildColorPalette(),
-              const SizedBox(height: 24),
-              _buildSelectedColorIndicator(),
+              _buildSelectedColorIndicator(textColor),
             ],
           ),
         ),
@@ -98,59 +117,75 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(Color textColor) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios,
-            color: Colors.white,
+            color: textColor,
             size: 20,
           ),
         ),
-        const Text(
+        Text(
           'Upload Song',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
-            color: Colors.white,
+            color: textColor,
             fontFamily: 'Lexend',
           ),
         ),
         const SizedBox(width: 20),
+        IconButton(
+          onPressed: () {
+            if (_selectedThumbnail != null &&
+                _selectedAudioFile != null &&
+                _artistController.text.isNotEmpty &&
+                _songNameController.text.isNotEmpty) {
+              _uploadSongCubit.uploadSong(UploadSongModel(
+                thumbnailFile: _selectedThumbnail!,
+                song: _selectedAudioFile!,
+                artist: _artistController.text,
+                songName: _songNameController.text,
+                hexcode: _selectedColor.value
+                    .toRadixString(16)
+                    .substring(2)
+                    .toUpperCase(),
+              ));
+            } else {
+              showToast(title: 'Please fill all the fields');
+            }
+          },
+          icon: Icon(Icons.upload, color: textColor, size: 20),
+          tooltip: 'Upload Song',
+        ),
       ],
     );
   }
 
-  Widget _buildThumbnailPicker() {
+  Widget _buildThumbnailPicker(Color textColor) {
     return Container(
       height: 120,
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.white,
+          color: textColor,
           width: 2,
           style: BorderStyle.solid,
         ),
         borderRadius: BorderRadius.circular(8),
       ),
       child: InkWell(
-        onTap: () async {
-          final File? image = await FilePickerWidget.pickImageFromGallery();
-          if (image != null) {
-            setState(() {
-              _selectedThumbnail = image;
-            });
-          }
-        },
+        onTap: _pickImageFromStorage,
         borderRadius: BorderRadius.circular(8),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: Colors.white.withOpacity(0.3),
+              color: textColor.withOpacity(0.3),
               width: 1,
               style: BorderStyle.solid,
             ),
@@ -168,9 +203,9 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.folder_outlined,
-                      color: Colors.white,
+                      color: textColor,
                       size: 32,
                     ),
                     const SizedBox(height: 8),
@@ -178,7 +213,7 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
                       'Select the thumbnail for your song',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.7),
+                        color: textColor.withOpacity(0.7),
                         fontFamily: 'Lexend',
                       ),
                     ),
@@ -189,102 +224,126 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
     );
   }
 
-  Widget _buildFilePickerField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildThumbnailPickerWithDelete(Color textColor) {
+    return Stack(
       children: [
-        const Text(
-          'Pick Song',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-            fontFamily: 'Lexend',
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: _fileController,
-          readOnly: true,
-          onTap: () async {
-            final File? audio = await FilePickerWidget.pickAudioFromStorage();
-            if (audio != null) {
+        Container(
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border.all(color: textColor),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(_selectedThumbnail!, fit: BoxFit.cover),
+            )),
+        Positioned(
+          top: 0,
+          right: 0,
+          child: IconButton(
+            onPressed: () {
               setState(() {
-                _selectedAudioFile = audio;
-                _fileController.text = FilePickerWidget.getFullFileName(audio);
+                _selectedThumbnail = null;
               });
-            }
-          },
-          style: const TextStyle(
-            color: Colors.white,
-            fontFamily: 'Lexend',
+            },
+            icon: Icon(Icons.delete, color: textColor, size: 20),
           ),
-          decoration: InputDecoration(
-            hintText: 'Pick Song',
-            hintStyle: TextStyle(
-              color: Colors.white.withOpacity(0.4),
-              fontFamily: 'Lexend',
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.white),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.white),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.white),
-            ),
-            suffixIcon: const Icon(
-              Icons.attach_file,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        )
       ],
     );
   }
 
-  Widget _buildTextField(
-      String label, String hint, TextEditingController controller) {
+  Widget _buildAudioPickerField(Color textColor) {
+    return _selectedAudioFile != null
+        ? AudioWave(path: _selectedAudioFile!.path)
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Pick Song',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                  fontFamily: 'Lexend',
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _fileController,
+                readOnly: true,
+                onTap: _pickAudioFromStorage,
+                style: TextStyle(
+                  color: textColor,
+                  fontFamily: 'Lexend',
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Pick Song',
+                  hintStyle: TextStyle(
+                    color: textColor.withOpacity(0.4),
+                    fontFamily: 'Lexend',
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: textColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: textColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: textColor),
+                  ),
+                  suffixIcon: Icon(
+                    Icons.attach_file,
+                    color: textColor,
+                  ),
+                ),
+              ),
+            ],
+          );
+  }
+
+  Widget _buildTextField(String label, String hint,
+      TextEditingController controller, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Colors.white,
+            color: textColor,
             fontFamily: 'Lexend',
           ),
         ),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: textColor,
             fontFamily: 'Lexend',
           ),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              color: Colors.white.withOpacity(0.4),
+              color: textColor.withOpacity(0.4),
               fontFamily: 'Lexend',
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.white),
+              borderSide: BorderSide(color: textColor),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.white),
+              borderSide: BorderSide(color: textColor),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.white),
+              borderSide: BorderSide(color: textColor),
             ),
           ),
         ),
@@ -292,33 +351,33 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
     );
   }
 
-  Widget _buildColorSection() {
+  Widget _buildColorSection(Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Select color',
           style: TextStyle(
             fontSize: 14,
-            color: Colors.white,
+            color: textColor,
             fontFamily: 'Lexend',
           ),
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            _buildColorTab('Primary', 0),
+            _buildColorTab('Primary', 0, textColor),
             const SizedBox(width: 16),
-            _buildColorTab('Accent', 1),
+            _buildColorTab('Accent', 1, textColor),
             const SizedBox(width: 16),
-            _buildColorTab('Wheel', 2),
+            _buildColorTab('Wheel', 2, textColor),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildColorTab(String label, int index) {
+  Widget _buildColorTab(String label, int index, Color textColor) {
     final isSelected = _selectedColorTab == index;
     return GestureDetector(
       onTap: () {
@@ -329,17 +388,19 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
+          color: isSelected ? textColor : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.white,
+            color: textColor,
             width: 1,
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? Colors.black : Colors.white,
+            color: isSelected
+                ? Theme.of(context).scaffoldBackgroundColor
+                : textColor,
             fontSize: 14,
             fontFamily: 'Lexend',
           ),
@@ -348,7 +409,7 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
     );
   }
 
-  Widget _buildColorWheel() {
+  Widget _buildColorWheel(Color textColor) {
     if (_selectedColorTab != 2) return const SizedBox.shrink();
 
     return Container(
@@ -356,7 +417,7 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
+        border: Border.all(color: textColor.withOpacity(0.3)),
       ),
       child: GestureDetector(
         onTapDown: (details) {
@@ -407,9 +468,11 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
                 width: 12,
                 height: 12,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: textColor,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black, width: 2),
+                  border: Border.all(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      width: 2),
                 ),
               ),
             ),
@@ -419,7 +482,7 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
     );
   }
 
-  Widget _buildColorPalette() {
+  Widget _buildColorPalette(Color textColor) {
     final colors = [
       const Color(0xFFFFFFFF),
       const Color(0xFFFF0000),
@@ -458,14 +521,16 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
                   color: colors[index],
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: isSelected ? Colors.white : Colors.transparent,
-                    width: 2,
+                    color: isSelected
+                        ? textColor
+                        : const Color.fromARGB(255, 208, 198, 198),
+                    width: 0.5,
                   ),
                 ),
                 child: isSelected
-                    ? const Icon(
+                    ? Icon(
                         Icons.check,
-                        color: Colors.white,
+                        color: textColor,
                         size: 20,
                       )
                     : null,
@@ -518,13 +583,13 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
     return HSVColor.fromAHSV(1.0, hue, 1.0, brightness).toColor();
   }
 
-  Widget _buildSelectedColorIndicator() {
+  Widget _buildSelectedColorIndicator(Color textColor) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: textColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
+        border: Border.all(color: textColor.withOpacity(0.3)),
       ),
       child: Row(
         children: [
@@ -534,7 +599,7 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
             decoration: BoxDecoration(
               color: _selectedColor,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.white, width: 2),
+              border: Border.all(color: textColor, width: 2),
             ),
           ),
           const SizedBox(width: 16),
@@ -542,10 +607,10 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Selected Color',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: textColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Lexend',
@@ -555,7 +620,7 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
                 Text(
                   '#${_selectedColor.value.toRadixString(16).substring(2).toUpperCase()}',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
+                    color: textColor.withOpacity(0.7),
                     fontSize: 12,
                     fontFamily: 'Lexend',
                   ),
