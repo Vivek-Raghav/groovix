@@ -10,4 +10,6 @@ class AppRoutes {
   static const String login = '/login';
   static const String signup = '/signup';
   static const String onboarding = '/onboarding';
+  static const String uploadSong = '/upload-song';
+  static const String uploadSuccess = '/upload-success';
 }

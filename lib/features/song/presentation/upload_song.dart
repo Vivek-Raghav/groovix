@@ -1,13 +1,17 @@
 import 'dart:io';
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groovix/core/shared/domain/method/methods.dart';
 import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
+import 'package:groovix/features/song/bloc/state/song_state.dart';
 import 'package:groovix/features/song/domain/models/upload_song_model.dart';
 import 'package:groovix/features/song/presentation/widgets/audio_wave.dart';
 import 'package:groovix/injection_container/injected/inject_blocs.dart';
 import 'widgets/file_picker.dart';
+import 'package:groovix/routes/routes_index.dart';
 
 class UploadSongScreen extends StatefulWidget {
   const UploadSongScreen({super.key});
@@ -16,11 +20,11 @@ class UploadSongScreen extends StatefulWidget {
   State<UploadSongScreen> createState() => _UploadSongScreenState();
 }
 
-class _UploadSongScreenState extends State<UploadSongScreen> {
+class _UploadSongScreenState extends State<UploadSongScreen>
+    with TickerProviderStateMixin {
   final TextEditingController _artistController = TextEditingController();
   final TextEditingController _songNameController = TextEditingController();
   final TextEditingController _fileController = TextEditingController();
-  final _uploadSongCubit = getIt<SongCubit>();
 
   Color _selectedColor = const Color(0xFFFF4500);
   int _selectedColorTab = 2;
@@ -28,6 +32,42 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
   Offset _selectedColorPosition = const Offset(100, 100);
   File? _selectedAudioFile;
   File? _selectedThumbnail;
+
+  late AnimationController _loadingController;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _pulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadingController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _rotationAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _loadingController,
+      curve: Curves.linear,
+    ));
+    _pulseAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.2,
+    ).animate(CurvedAnimation(
+      parent: _loadingController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _artistController.dispose();
+    _songNameController.dispose();
+    _fileController.dispose();
+    _loadingController.dispose();
+    super.dispose();
+  }
 
   void _pickImageFromStorage() async {
     final image = await pickImageFromStorage();
@@ -48,69 +88,196 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
   }
 
   @override
-  void dispose() {
-    _artistController.dispose();
-    _songNameController.dispose();
-    _fileController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return BlocProvider<SongCubit>(
+      create: (context) => getIt<SongCubit>(),
+      child: BlocListener<SongCubit, SongState>(
+        listener: (context, state) {
+          if (state is SongSuccess) {
+            _loadingController.stop();
+            context.go(AppRoutes.uploadSuccess,
+                extra: state.uploadSongResponse);
+          } else if (state is SongFailure) {
+            _loadingController.stop();
+            showToast(title: 'Upload failed: ${state.error}');
+          }
+        },
+        child: BlocBuilder<SongCubit, SongState>(
+          builder: (context, state) {
+            return Scaffold(
+              body: Stack(
+                children: [
+                  // Main content
+                  _buildMainContent(context),
+                  // Loading overlay
+                  if (state is SongLoading) _buildLoadingOverlay(context),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildMainContent(BuildContext context) {
     final theme = Theme.of(context);
     final textColor = theme.textTheme.bodyMedium!.color!;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(textColor),
-              const SizedBox(height: 24),
-              _selectedThumbnail != null
-                  ? _buildThumbnailPickerWithDelete(textColor)
-                  : _buildThumbnailPicker(textColor),
-              const SizedBox(height: 24),
-              _buildAudioPickerField(textColor),
-              if (_selectedAudioFile != null) ...[
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          _selectedAudioFile = null;
-                          _fileController.clear();
-                        });
-                      },
-                      icon: Icon(Icons.delete,
-                          color: theme.colorScheme.error, size: 16),
-                      label: Text(
-                        'Remove Audio',
-                        style: TextStyle(
-                            color: theme.colorScheme.error, fontSize: 12),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(textColor),
+            const SizedBox(height: 24),
+            _selectedThumbnail != null
+                ? _buildThumbnailPickerWithDelete(textColor)
+                : _buildThumbnailPicker(textColor),
+            const SizedBox(height: 24),
+            _buildAudioPickerField(textColor),
+            if (_selectedAudioFile != null) ...[
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        _selectedAudioFile = null;
+                        _fileController.clear();
+                      });
+                    },
+                    icon: Icon(Icons.delete,
+                        color: theme.colorScheme.error, size: 16),
+                    label: Text(
+                      'Remove Audio',
+                      style: TextStyle(
+                          color: theme.colorScheme.error, fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            const SizedBox(height: 16),
+            _buildTextField('Artist', 'Artist', _artistController, textColor),
+            const SizedBox(height: 16),
+            _buildTextField(
+                'Song Name', 'Song Name', _songNameController, textColor),
+            const SizedBox(height: 24),
+            _buildColorSection(textColor),
+            const SizedBox(height: 16),
+            _buildColorWheel(textColor),
+            const SizedBox(height: 16),
+            _buildColorPalette(textColor),
+            const SizedBox(height: 24),
+            _buildSelectedColorIndicator(textColor),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOverlay(BuildContext context) {
+    return Container(
+      color: Colors.black.withOpacity(0.3),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          color: Colors.black.withOpacity(0.1),
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.all(32),
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Animated upload icon
+                  AnimatedBuilder(
+                    animation:
+                        Listenable.merge([_rotationAnimation, _pulseAnimation]),
+                    builder: (context, child) {
+                      return Transform.scale(
+                        scale: _pulseAnimation.value,
+                        child: Transform.rotate(
+                          angle: _rotationAnimation.value * 2 * math.pi,
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [
+                                  Theme.of(context).colorScheme.primary,
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.7),
+                                ],
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.upload,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Uploading Your Song',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      fontFamily: 'Lexend',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Please wait while we upload your masterpiece...',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.color
+                          ?.withOpacity(0.7),
+                      fontFamily: 'Lexend',
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: 200,
+                    child: LinearProgressIndicator(
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .outline
+                          .withOpacity(0.2),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                  ],
-                ),
-              ],
-              const SizedBox(height: 16),
-              _buildTextField('Artist', 'Artist', _artistController, textColor),
-              const SizedBox(height: 16),
-              _buildTextField(
-                  'Song Name', 'Song Name', _songNameController, textColor),
-              const SizedBox(height: 24),
-              _buildColorSection(textColor),
-              const SizedBox(height: 16),
-              _buildColorWheel(textColor),
-              const SizedBox(height: 16),
-              _buildColorPalette(textColor),
-              const SizedBox(height: 24),
-              _buildSelectedColorIndicator(textColor),
-            ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -139,28 +306,39 @@ class _UploadSongScreenState extends State<UploadSongScreen> {
           ),
         ),
         const SizedBox(width: 20),
-        IconButton(
-          onPressed: () {
-            if (_selectedThumbnail != null &&
-                _selectedAudioFile != null &&
-                _artistController.text.isNotEmpty &&
-                _songNameController.text.isNotEmpty) {
-              _uploadSongCubit.uploadSong(UploadSongModel(
-                thumbnailFile: _selectedThumbnail!,
-                song: _selectedAudioFile!,
-                artist: _artistController.text,
-                songName: _songNameController.text,
-                hexcode: _selectedColor.value
-                    .toRadixString(16)
-                    .substring(2)
-                    .toUpperCase(),
-              ));
-            } else {
-              showToast(title: 'Please fill all the fields');
-            }
+        BlocBuilder<SongCubit, SongState>(
+          builder: (context, state) {
+            return IconButton(
+              onPressed: state is SongLoading
+                  ? null
+                  : () {
+                      if (_selectedThumbnail != null &&
+                          _selectedAudioFile != null &&
+                          _artistController.text.isNotEmpty &&
+                          _songNameController.text.isNotEmpty) {
+                        _loadingController.repeat();
+                        context.read<SongCubit>().uploadSong(UploadSongModel(
+                              thumbnailFile: _selectedThumbnail!,
+                              song: _selectedAudioFile!,
+                              artist: _artistController.text,
+                              songName: _songNameController.text,
+                              hexcode: _selectedColor.value
+                                  .toRadixString(16)
+                                  .substring(2)
+                                  .toUpperCase(),
+                            ));
+                      } else {
+                        showToast(title: 'Please fill all the fields');
+                      }
+                    },
+              icon: Icon(Icons.upload,
+                  color: state is SongLoading
+                      ? textColor.withOpacity(0.5)
+                      : textColor,
+                  size: 20),
+              tooltip: 'Upload Song',
+            );
           },
-          icon: Icon(Icons.upload, color: textColor, size: 20),
-          tooltip: 'Upload Song',
         ),
       ],
     );
