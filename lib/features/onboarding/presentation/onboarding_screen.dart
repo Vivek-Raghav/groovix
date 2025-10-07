@@ -1,8 +1,5 @@
-// Flutter imports:
-import 'package:flutter/material.dart';
-
 // Project imports:
-import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/features/onboarding/onboarding_index.dart';
 
 /// OnboardingScreen - Figma-inspired UI only (no logic)
 class OnboardingScreen extends StatelessWidget {

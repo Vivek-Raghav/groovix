@@ -1,7 +1,8 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
 import 'package:groovix/core/shared/domain/method/methods.dart';
-
 import 'package:groovix/core/theme/app_theme.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 

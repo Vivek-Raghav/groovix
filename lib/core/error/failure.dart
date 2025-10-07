@@ -1,5 +1,7 @@
-// Project imports:
+// Package imports:
 import "package:equatable/equatable.dart";
+
+// Project imports:
 import "package:groovix/core/shared/domain/entity/error.dart";
 
 abstract class Failure extends Equatable {

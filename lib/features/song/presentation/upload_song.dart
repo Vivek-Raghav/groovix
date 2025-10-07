@@ -1,16 +1,9 @@
+// Dart imports:
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:groovix/core/shared/domain/method/methods.dart';
-import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
-import 'package:groovix/features/song/bloc/state/song_state.dart';
-import 'package:groovix/features/song/domain/models/upload_song_model.dart';
-import 'package:groovix/features/song/presentation/widgets/audio_wave.dart';
-import 'package:groovix/injection_container/injected/inject_blocs.dart';
-import 'widgets/file_picker.dart';
+
+// Project imports:
 import 'package:groovix/routes/routes_index.dart';
 
 class UploadSongScreen extends StatefulWidget {

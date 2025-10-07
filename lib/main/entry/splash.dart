@@ -1,15 +1,17 @@
 // Flutter imports:
 // ignore_for_file: deprecated_member_use
 
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-// Package imports:
 
 // Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/gen/assets.gen.dart';
+
+// Package imports:
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

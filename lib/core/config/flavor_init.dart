@@ -1,5 +1,7 @@
 // Project imports:
 // ignore_for_file: avoid_print
+
+// Project imports:
 import 'package:groovix/core/config/flavor_config.dart';
 
 FlavorConfig flavorDevConfig = FlavorConfig(

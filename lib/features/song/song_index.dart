@@ -1,19 +1,29 @@
 library song_index;
 
-export 'package:groovix/core/shared/domain/usecase/usecase.dart';
-export 'package:groovix/core/shared/model/song_model.dart';
-export 'package:groovix/core/shared/model/liked_song_model.dart';
-export 'package:flutter/material.dart';
-export 'package:groovix/core/constants/string_constants.dart';
-export 'package:groovix/core/error/server_exception.dart';
-export 'package:groovix/core/local_db/local_cache.dart';
-export 'package:groovix/core/services/api_service.dart';
-export 'package:groovix/features/song/data/datasource/song_datasource.dart';
-export 'package:groovix/features/song/domain/models/upload_song_model.dart';
-export 'package:groovix/features/song/domain/models/upload_song_response.dart';
+// Core dependencies
+export 'package:groovix/core/core_index.dart';
+
+// Song data layer
+export 'data/datasource/song_datasource.dart';
+export 'data/datasource/song_datasource_impl.dart';
+export 'data/repositories/song_repository_impl.dart';
+
+// Song domain layer
+export 'domain/models/upload_song_model.dart';
+export 'domain/models/upload_song_response.dart';
+export 'domain/repositories/song_repository.dart';
+export 'domain/usecase/upload_song_uc.dart';
+
+// Song presentation layer
+export 'presentation/upload_song.dart';
+export 'presentation/screens/song_upload_success_screen.dart';
+export 'presentation/widgets/audio_wave.dart';
+export 'presentation/widgets/file_picker.dart';
+
+// Song bloc layer
+export 'bloc/cubit/song_cubit.dart';
+export 'bloc/state/song_state.dart';
+export 'bloc/event/song_event.dart';
+
+// Injection
 export 'package:groovix/injection_container/injection_initializer.dart';
-export 'package:groovix/core/error/failure.dart';
-export 'package:groovix/core/utils/generic_typedef.dart';
-export 'package:groovix/features/song/domain/repositories/song_repository.dart';
-export 'package:groovix/core/services/api_urls.dart';
-export 'package:groovix/core/constants/pref_keys.dart';

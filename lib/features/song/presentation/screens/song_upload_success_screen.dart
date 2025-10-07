@@ -1,8 +1,8 @@
+// Dart imports:
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
-import 'package:groovix/features/song/domain/models/upload_song_response.dart';
-import 'package:go_router/go_router.dart';
-import 'package:groovix/routes/app_routes.dart';
+
+// Project imports:
+import 'package:groovix/routes/routes_index.dart';
 
 class SongUploadSuccessScreen extends StatefulWidget {
   final UploadSongResponse uploadResponse;

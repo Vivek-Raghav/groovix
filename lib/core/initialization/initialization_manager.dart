@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// Project imports:
 import 'package:groovix/core/config/app_env.dart';
 import 'package:groovix/injection_container/injection_initializer.dart';
 

@@ -1,7 +1,11 @@
+// Dart imports:
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+// Flutter imports:
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:file_picker/file_picker.dart';
 
 Future<File?> pickImageFromStorage() async {
   try {

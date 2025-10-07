@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:groovix/features/song/domain/models/upload_song_model.dart';
 
 abstract class SongEvent extends Equatable {

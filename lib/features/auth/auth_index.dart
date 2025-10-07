@@ -1,19 +1,30 @@
 library auth_index;
 
+// Core dependencies
+export 'package:groovix/core/core_index.dart';
+
+// Auth data layer
 export 'data/datasource/auth_remote_datasource.dart';
 export 'data/repositories/auth_repository_impl.dart';
+
+// Auth domain layer
+export 'domain/models/sign_in.dart';
 export 'domain/repositories/auth_repository.dart';
-export 'package:groovix/core/constants/pref_keys.dart';
-export 'package:groovix/core/local_db/local_cache.dart';
-export 'package:groovix/injection_container/injection_initializer.dart';
-export 'package:groovix/core/utils/generic_typedef.dart';
-export 'package:groovix/features/auth/domain/usecase/login_uc.dart';
-export 'package:groovix/core/shared/domain/usecase/usecase.dart';
-export 'package:flutter/rendering.dart';
-export 'package:groovix/features/auth/bloc/auth_bloc.dart';
-export 'package:groovix/features/auth/bloc/auth_state.dart';
-export 'package:groovix/features/auth/domain/usecase/signup_uc.dart';
+export 'domain/usecase/login_uc.dart';
+export 'domain/usecase/signup_uc.dart';
+export 'domain/usecase/logout_uc.dart';
+
+// Auth presentation layer
+export 'presentation/login_screen.dart';
+export 'presentation/signup_screen.dart';
+
+// Auth bloc layer
+export 'bloc/auth_bloc.dart';
+export 'bloc/auth_state.dart';
+export 'bloc/auth_events.dart';
+
+// Routes
 export 'package:groovix/routes/routes_index.dart';
-export 'package:groovix/features/auth/auth_index.dart';
-export 'package:groovix/features/auth/bloc/auth_events.dart';
-export 'package:flutter_bloc/flutter_bloc.dart';
+
+// Injection
+export 'package:groovix/injection_container/injection_initializer.dart';

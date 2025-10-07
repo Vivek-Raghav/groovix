@@ -1,6 +1,11 @@
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:audio_waveforms/audio_waveforms.dart';
+
+// Project imports:
 import 'package:groovix/core/theme/app_theme.dart';
 
 class AudioWave extends StatefulWidget {

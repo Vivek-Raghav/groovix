@@ -1,10 +1,10 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:groovix/core/shared/domain/method/methods.dart';
-import 'package:groovix/features/auth/auth_index.dart';
 
 // Project imports:
+import 'package:groovix/core/shared/domain/method/methods.dart';
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
 /// SignupScreen - Figma-inspired UI only (no logic)

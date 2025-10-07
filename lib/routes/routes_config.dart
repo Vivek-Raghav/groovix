@@ -1,10 +1,4 @@
 // Project imports:
-import 'package:groovix/features/auth/presentation/login_screen.dart';
-import 'package:groovix/features/auth/presentation/signup_screen.dart';
-import 'package:groovix/features/song/domain/models/upload_song_response.dart';
-import 'package:groovix/features/song/presentation/upload_song.dart';
-import 'package:groovix/features/song/presentation/screens/song_upload_success_screen.dart';
-import 'package:groovix/main/entry/splash.dart';
 import 'package:groovix/routes/routes_index.dart';
 
 final GoRouter appRouter = GoRouter(
