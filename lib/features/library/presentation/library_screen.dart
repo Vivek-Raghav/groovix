@@ -13,7 +13,7 @@ class LibraryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Library'),
-        backgroundColor: ThemeColors.primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -21,8 +21,8 @@ class LibraryScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              ThemeColors.primaryColor.withOpacity(0.1),
-              ThemeColors.white,
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              Theme.of(context).colorScheme.surface,
             ],
           ),
         ),
@@ -32,11 +32,12 @@ class LibraryScreen extends StatelessWidget {
             // Liked Songs
             Container(
               decoration: BoxDecoration(
-                color: ThemeColors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: ThemeColors.primaryColor.withOpacity(0.1),
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -46,15 +47,21 @@ class LibraryScreen extends StatelessWidget {
                 leading: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: ThemeColors.pink.withOpacity(0.1),
+                    color: Theme.of(context).colorScheme.error.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.favorite, color: ThemeColors.pink, size: 24),
+                  child: Icon(Icons.favorite,
+                      color: Theme.of(context).colorScheme.error, size: 24),
                 ),
-                title: const Text('Liked Songs',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: ThemeColors.black)),
-                subtitle: const Text('Your favorite tracks', style: TextStyle(color: ThemeColors.grey)),
-                trailing: const Icon(Icons.arrow_forward_ios, color: ThemeColors.primaryColor),
+                title: Text('Liked Songs',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface)),
+                subtitle: Text('Your favorite tracks',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                trailing: Icon(Icons.arrow_forward_ios,
+                    color: Theme.of(context).colorScheme.primary),
                 onTap: () {},
               ),
             ),
@@ -62,11 +69,12 @@ class LibraryScreen extends StatelessWidget {
             // Downloaded Albums
             Container(
               decoration: BoxDecoration(
-                color: ThemeColors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: ThemeColors.primaryColor.withOpacity(0.1),
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -76,35 +84,46 @@ class LibraryScreen extends StatelessWidget {
                 leading: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: ThemeColors.blue.withOpacity(0.1),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondary
+                        .withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.download, color: ThemeColors.blue, size: 24),
+                  child: Icon(Icons.download,
+                      color: Theme.of(context).colorScheme.secondary, size: 24),
                 ),
-                title: const Text('Downloads',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: ThemeColors.black)),
-                subtitle: const Text('Offline albums & tracks', style: TextStyle(color: ThemeColors.grey)),
-                trailing: const Icon(Icons.arrow_forward_ios, color: ThemeColors.primaryColor),
+                title: Text('Downloads',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface)),
+                subtitle: Text('Offline albums & tracks',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                trailing: Icon(Icons.arrow_forward_ios,
+                    color: Theme.of(context).colorScheme.primary),
                 onTap: () {},
               ),
             ),
             const SizedBox(height: 32),
             // Recently Played section
             Text('Recently Played',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold, color: ThemeColors.black)),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface)),
             const SizedBox(height: 16),
             for (int i = 0; i < 3; i++)
               Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: ThemeColors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: ThemeColors.primaryColor.withOpacity(0.05),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.05),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -114,20 +133,31 @@ class LibraryScreen extends StatelessWidget {
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: ThemeColors.primaryColor.withOpacity(0.1),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.music_note, color: ThemeColors.primaryColor, size: 20),
+                    child: Icon(Icons.music_note,
+                        color: Theme.of(context).colorScheme.primary, size: 20),
                   ),
-                  title: Text('Track ${i + 1}', style: const TextStyle(fontWeight: FontWeight.w600, color: ThemeColors.black)),
-                  subtitle: const Text('Artist Name', style: TextStyle(color: ThemeColors.grey)),
+                  title: Text('Track ${i + 1}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onSurface)),
+                  subtitle: Text('Artist Name',
+                      style: TextStyle(
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant)),
                   trailing: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: ThemeColors.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Icon(Icons.play_arrow, color: ThemeColors.white, size: 20),
+                    child: Icon(Icons.play_arrow,
+                        color: Theme.of(context).colorScheme.surface, size: 20),
                   ),
                   onTap: () {},
                 ),

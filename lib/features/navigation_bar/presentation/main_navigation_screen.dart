@@ -1,15 +1,8 @@
-// Project imports:
-import 'package:groovix/features/explore/explore_index.dart';
-import 'package:groovix/features/home/home_index.dart';
 import 'package:groovix/features/navigation_bar/navigation_index.dart';
-import 'package:groovix/features/playlist/playlist_index.dart';
-import 'package:groovix/features/settings/settings_index.dart';
-import 'package:groovix/features/song/song_index.dart';
 
-/// MainNavigationScreen - Main screen with bottom navigation
-/// This screen manages navigation between different sections of the app
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
+  const MainNavigationScreen({super.key, this.index = 0});
+  final int? index;
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
@@ -17,6 +10,12 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.index ?? 0;
+  }
 
   // List of screens to display based on navigation index
   final List<Widget> _screens = [

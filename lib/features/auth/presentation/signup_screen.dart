@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:groovix/core/shared/domain/method/methods.dart';
-import 'package:groovix/core/theme/app_theme.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
@@ -34,7 +33,6 @@ class _SignupScreenState extends State<SignupScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: ThemeColors.white,
         body: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(32),
@@ -47,8 +45,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Icon(Icons.music_note,
-                          size: 64, color: ThemeColors.deepPurple),
+                      Icon(Icons.music_note,
+                          size: 64,
+                          color: Theme.of(context).colorScheme.primary),
                       const SizedBox(height: 24),
                       Text('Create Account',
                           style: Theme.of(context)
@@ -56,8 +55,11 @@ class _SignupScreenState extends State<SignupScreen> {
                               .headlineSmall
                               ?.copyWith(fontWeight: FontWeight.bold)),
                       const SizedBox(height: 8),
-                      const Text('Sign up to get started',
-                          style: TextStyle(color: ThemeColors.grey)),
+                      Text('Sign up to get started',
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant)),
                       const SizedBox(height: 32),
                       TextFormField(
                         controller: _nameController,
@@ -67,7 +69,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                           filled: true,
-                          fillColor: ThemeColors.deepPurple50,
+                          fillColor: Theme.of(context).colorScheme.surface,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -85,7 +87,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                           filled: true,
-                          fillColor: ThemeColors.deepPurple50,
+                          fillColor: Theme.of(context).colorScheme.surface,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -111,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                           filled: true,
-                          fillColor: ThemeColors.deepPurple50,
+                          fillColor: Theme.of(context).colorScheme.surface,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -137,7 +139,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                           filled: true,
-                          fillColor: ThemeColors.deepPurple50,
+                          fillColor: Theme.of(context).colorScheme.surface,
                         ),
                         validator: (value) {
                           if (value == null ||
@@ -160,8 +162,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: ThemeColors.deepPurple,
-                          foregroundColor: ThemeColors.white,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12)),
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -172,24 +176,39 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Divider()),
+                    Expanded(
+                        child: Divider(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant
+                                .withOpacity(0.3))),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text('or'),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text('or',
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant)),
                     ),
-                    Expanded(child: Divider()),
+                    Expanded(
+                        child: Divider(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant
+                                .withOpacity(0.3))),
                   ],
                 ),
                 const SizedBox(height: 24),
                 OutlinedButton.icon(
                   onPressed: () {},
-                  icon: const Icon(Icons.g_mobiledata,
-                      color: ThemeColors.deepPurple),
+                  icon: Icon(Icons.g_mobiledata,
+                      color: Theme.of(context).colorScheme.primary),
                   label: const Text('Continue with Google'),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: ThemeColors.deepPurple),
+                    side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -199,14 +218,18 @@ class _SignupScreenState extends State<SignupScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an account?'),
+                    Text('Already have an account?',
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant)),
                     TextButton(
                       onPressed: () {
                         context.push(AppRoutes.login);
                       },
-                      child: const Text('Login',
+                      child: Text('Login',
                           style: TextStyle(
-                              color: ThemeColors.primaryColor,
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold)),
                     ),
                   ],

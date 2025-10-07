@@ -13,6 +13,7 @@ export 'constants/pref_keys.dart';
 // Core services
 export 'services/api_service.dart';
 export 'services/api_urls.dart';
+export 'services/theme_manager.dart';
 
 // Core error handling
 export 'error/failure.dart';

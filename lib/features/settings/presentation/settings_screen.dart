@@ -1,13 +1,17 @@
-// Flutter imports:
-import 'package:flutter/material.dart';
-
 // Project imports:
-import 'package:groovix/core/shared/domain/method/methods.dart';
-import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/core/core_index.dart';
 import 'package:groovix/features/auth/auth_index.dart';
+import 'package:groovix/routes/routes_index.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  final ThemeManager _themeManager = ThemeManager();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,6 @@ class SettingsScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
-          backgroundColor: ThemeColors.primaryColor,
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -33,8 +36,8 @@ class SettingsScreen extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                ThemeColors.primaryColor.withOpacity(0.1),
-                ThemeColors.white,
+                Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                Theme.of(context).colorScheme.background,
               ],
             ),
           ),
@@ -45,11 +48,14 @@ class SettingsScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: ThemeColors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: ThemeColors.primaryColor.withOpacity(0.1),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -58,20 +64,24 @@ class SettingsScreen extends StatelessWidget {
                 child: Center(
                   child: Column(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 40,
-                        backgroundColor: ThemeColors.primaryColor,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         child: Icon(Icons.person,
-                            size: 48, color: ThemeColors.white),
+                            size: 48,
+                            color: Theme.of(context).colorScheme.onPrimary),
                       ),
                       const SizedBox(height: 12),
-                      const Text('Your Name',
+                      Text('Your Name',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
-                              color: ThemeColors.black)),
+                              color: Theme.of(context).colorScheme.onSurface)),
                       Text("${cache.getMap(PrefKeys.userDetails)?['email']}",
-                          style: const TextStyle(color: ThemeColors.grey)),
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant)),
                     ],
                   ),
                 ),
@@ -80,11 +90,14 @@ class SettingsScreen extends StatelessWidget {
               // Account settings
               Container(
                 decoration: BoxDecoration(
-                  color: ThemeColors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: ThemeColors.primaryColor.withOpacity(0.1),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -96,54 +109,69 @@ class SettingsScreen extends StatelessWidget {
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: ThemeColors.primaryColor.withOpacity(0.1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.edit,
-                            color: ThemeColors.primaryColor, size: 20),
+                        child: Icon(Icons.edit,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
                       ),
-                      title: const Text('Edit Profile',
+                      title: Text('Edit Profile',
                           style: TextStyle(
-                              color: ThemeColors.black,
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w500)),
-                      trailing: const Icon(Icons.arrow_forward_ios,
-                          color: ThemeColors.primaryColor, size: 16),
+                      trailing: Icon(Icons.arrow_forward_ios,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 16),
                       onTap: () {},
                     ),
                     ListTile(
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: ThemeColors.primaryColor.withOpacity(0.1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.lock,
-                            color: ThemeColors.primaryColor, size: 20),
+                        child: Icon(Icons.lock,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
                       ),
-                      title: const Text('Change Password',
+                      title: Text('Change Password',
                           style: TextStyle(
-                              color: ThemeColors.black,
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w500)),
-                      trailing: const Icon(Icons.arrow_forward_ios,
-                          color: ThemeColors.primaryColor, size: 16),
+                      trailing: Icon(Icons.arrow_forward_ios,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 16),
                       onTap: () {},
                     ),
                     ListTile(
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: ThemeColors.primaryColor.withOpacity(0.1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.notifications,
-                            color: ThemeColors.primaryColor, size: 20),
+                        child: Icon(Icons.notifications,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
                       ),
-                      title: const Text('Notifications',
+                      title: Text('Notifications',
                           style: TextStyle(
-                              color: ThemeColors.black,
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w500)),
-                      trailing: const Icon(Icons.arrow_forward_ios,
-                          color: ThemeColors.primaryColor, size: 16),
+                      trailing: Icon(Icons.arrow_forward_ios,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 16),
                       onTap: () {},
                     ),
                   ],
@@ -153,11 +181,14 @@ class SettingsScreen extends StatelessWidget {
               // App settings
               Container(
                 decoration: BoxDecoration(
-                  color: ThemeColors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: ThemeColors.primaryColor.withOpacity(0.1),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -165,58 +196,89 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
+                    // Theme Selection
+                    AnimatedBuilder(
+                      animation: _themeManager,
+                      builder: (context, child) {
+                        return ListTile(
+                          leading: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(_themeManager.themeModeIcon,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 20),
+                          ),
+                          title: Text('Theme',
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontWeight: FontWeight.w500)),
+                          subtitle: Text(
+                            _themeManager.themeModeDisplayName,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontSize: 12,
+                            ),
+                          ),
+                          trailing: Icon(Icons.arrow_forward_ios,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 16),
+                          onTap: () => _showThemeSelectionDialog(),
+                        );
+                      },
+                    ),
                     ListTile(
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: ThemeColors.primaryColor.withOpacity(0.1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.palette,
-                            color: ThemeColors.primaryColor, size: 20),
+                        child: Icon(Icons.language,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
                       ),
-                      title: const Text('Theme',
+                      title: Text('Language',
                           style: TextStyle(
-                              color: ThemeColors.black,
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w500)),
-                      trailing: const Icon(Icons.arrow_forward_ios,
-                          color: ThemeColors.primaryColor, size: 16),
+                      trailing: Icon(Icons.arrow_forward_ios,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 16),
                       onTap: () {},
                     ),
                     ListTile(
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: ThemeColors.primaryColor.withOpacity(0.1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.language,
-                            color: ThemeColors.primaryColor, size: 20),
+                        child: Icon(Icons.info,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20),
                       ),
-                      title: const Text('Language',
+                      title: Text('About Groovix',
                           style: TextStyle(
-                              color: ThemeColors.black,
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w500)),
-                      trailing: const Icon(Icons.arrow_forward_ios,
-                          color: ThemeColors.primaryColor, size: 16),
-                      onTap: () {},
-                    ),
-                    ListTile(
-                      leading: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: ThemeColors.primaryColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(Icons.info,
-                            color: ThemeColors.primaryColor, size: 20),
-                      ),
-                      title: const Text('About Groovix',
-                          style: TextStyle(
-                              color: ThemeColors.black,
-                              fontWeight: FontWeight.w500)),
-                      trailing: const Icon(Icons.arrow_forward_ios,
-                          color: ThemeColors.primaryColor, size: 16),
+                      trailing: Icon(Icons.arrow_forward_ios,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 16),
                       onTap: () {},
                     ),
                   ],
@@ -226,11 +288,12 @@ class SettingsScreen extends StatelessWidget {
               // Logout
               Container(
                 decoration: BoxDecoration(
-                  color: ThemeColors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: ThemeColors.red.withOpacity(0.1),
+                      color:
+                          Theme.of(context).colorScheme.error.withOpacity(0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -240,15 +303,17 @@ class SettingsScreen extends StatelessWidget {
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: ThemeColors.red.withOpacity(0.1),
+                      color:
+                          Theme.of(context).colorScheme.error.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.logout,
-                        color: ThemeColors.red, size: 20),
+                    child: Icon(Icons.logout,
+                        color: Theme.of(context).colorScheme.error, size: 20),
                   ),
-                  title: const Text('Logout',
+                  title: Text('Logout',
                       style: TextStyle(
-                          color: ThemeColors.red, fontWeight: FontWeight.w500)),
+                          color: Theme.of(context).colorScheme.error,
+                          fontWeight: FontWeight.w500)),
                   onTap: () async {
                     getIt<AuthBloc>().add(AuthLogoutEvent());
                   },
@@ -258,6 +323,120 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showThemeSelectionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          title: Text(
+            'Choose Theme',
+            style: TextStyle(
+              fontFamily: 'Lexend',
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildThemeOption(
+                context,
+                'Light',
+                Icons.light_mode,
+                ThemeMode.light,
+                'Always use light theme',
+              ),
+              const SizedBox(height: 8),
+              _buildThemeOption(
+                context,
+                'Dark',
+                Icons.dark_mode,
+                ThemeMode.dark,
+                'Always use dark theme',
+              ),
+              const SizedBox(height: 8),
+              _buildThemeOption(
+                context,
+                'System',
+                Icons.brightness_auto,
+                ThemeMode.system,
+                'Follow system setting',
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontFamily: 'Lexend',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildThemeOption(
+    BuildContext context,
+    String title,
+    IconData icon,
+    ThemeMode mode,
+    String subtitle,
+  ) {
+    final isSelected = _themeManager.themeMode == mode;
+
+    return AnimatedBuilder(
+      animation: _themeManager,
+      builder: (context, child) {
+        return ListTile(
+          leading: Icon(
+            icon,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onSurfaceVariant,
+            size: 24,
+          ),
+          title: Text(
+            title,
+            style: TextStyle(
+              fontFamily: 'Lexend',
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          subtitle: Text(
+            subtitle,
+            style: TextStyle(
+              fontFamily: 'Lexend',
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          trailing: isSelected
+              ? Icon(
+                  Icons.check_circle,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 20,
+                )
+              : null,
+          onTap: () async {
+            await _themeManager.setThemeMode(mode);
+            Navigator.of(context).pop();
+            showToast(title: 'Theme changed to $title');
+          },
+        );
+      },
     );
   }
 }

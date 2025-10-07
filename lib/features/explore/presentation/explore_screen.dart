@@ -1,10 +1,5 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import 'package:groovix/core/theme/app_theme.dart';
-
-/// ExploreScreen - Figma-inspired UI only (no logic)
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({super.key});
 
@@ -13,7 +8,6 @@ class ExploreScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Explore'),
-        backgroundColor: ThemeColors.primaryColor,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -21,8 +15,8 @@ class ExploreScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              ThemeColors.primaryColor.withOpacity(0.1),
-              ThemeColors.white,
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              Theme.of(context).colorScheme.background,
             ],
           ),
         ),
@@ -35,7 +29,8 @@ class ExploreScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: ThemeColors.primaryColor.withOpacity(0.1),
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -44,24 +39,25 @@ class ExploreScreen extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Search music, artists, albums...',
-                  hintStyle: const TextStyle(color: ThemeColors.grey),
-                  prefixIcon: const Icon(Icons.search, color: ThemeColors.primaryColor),
+                  hintStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  prefixIcon: Icon(Icons.search,
+                      color: Theme.of(context).colorScheme.primary),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: ThemeColors.white,
+                  fillColor: Theme.of(context).colorScheme.surface,
                 ),
               ),
             ),
             const SizedBox(height: 24),
             // Trending section
             Text('Trending',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold, color: ThemeColors.black)),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface)),
             const SizedBox(height: 12),
             SizedBox(
               height: 160,
@@ -73,11 +69,14 @@ class ExploreScreen extends StatelessWidget {
                       width: 120,
                       margin: const EdgeInsets.only(right: 16),
                       decoration: BoxDecoration(
-                        color: ThemeColors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: ThemeColors.primaryColor.withOpacity(0.1),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -86,14 +85,20 @@ class ExploreScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.trending_up,
-                              size: 40, color: ThemeColors.primaryColor),
+                          Icon(Icons.trending_up,
+                              size: 40,
+                              color: Theme.of(context).colorScheme.primary),
                           const SizedBox(height: 8),
                           Text('Song ${i + 1}',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold, color: ThemeColors.black)),
-                          const Text('Artist',
-                              style: TextStyle(color: ThemeColors.grey)),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface)),
+                          Text('Artist',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant)),
                         ],
                       ),
                     ),
@@ -103,10 +108,9 @@ class ExploreScreen extends StatelessWidget {
             const SizedBox(height: 32),
             // Genres section
             Text('Genres',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold, color: ThemeColors.black)),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface)),
             const SizedBox(height: 12),
             Wrap(
               spacing: 12,
@@ -122,23 +126,17 @@ class ExploreScreen extends StatelessWidget {
                   'Indie'
                 ])
                   Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: ThemeColors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: ThemeColors.primaryColor.withOpacity(0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Chip(
-                      label: Text(genre),
-                      backgroundColor: Colors.transparent,
-                      labelStyle: const TextStyle(color: ThemeColors.primaryColor, fontWeight: FontWeight.w500),
-                    ),
-                  ),
+                    child: Text(genre,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.primary)),
+                  )
               ],
             ),
           ],

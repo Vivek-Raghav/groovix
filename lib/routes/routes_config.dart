@@ -21,19 +21,35 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
     GoRoute(
-      path: AppRoutes.settings,
-      pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const SettingsScreen(),
-      ),
-    ),
-    GoRoute(
       path: AppRoutes.explore,
       pageBuilder: (context, state) => customTransitionPage(
         context: context,
         state: state,
-        child: const ExploreScreen(),
+        child: const MainNavigationScreen(index: 1),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.uploadSong,
+      pageBuilder: (context, state) => customTransitionPage(
+        context: context,
+        state: state,
+        child: const MainNavigationScreen(index: 2),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.playlist,
+      pageBuilder: (context, state) => customTransitionPage(
+        context: context,
+        state: state,
+        child: const MainNavigationScreen(index: 3),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.settings,
+      pageBuilder: (context, state) => customTransitionPage(
+        context: context,
+        state: state,
+        child: const MainNavigationScreen(index: 4),
       ),
     ),
     GoRoute(
@@ -42,14 +58,6 @@ final GoRouter appRouter = GoRouter(
         context: context,
         state: state,
         child: const LibraryScreen(),
-      ),
-    ),
-    GoRoute(
-      path: AppRoutes.playlist,
-      pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const PlaylistScreen(),
       ),
     ),
     GoRoute(
@@ -66,14 +74,6 @@ final GoRouter appRouter = GoRouter(
         context: context,
         state: state,
         child: const SignupScreen(),
-      ),
-    ),
-    GoRoute(
-      path: AppRoutes.uploadSong,
-      pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const UploadSongScreen(),
       ),
     ),
     GoRoute(

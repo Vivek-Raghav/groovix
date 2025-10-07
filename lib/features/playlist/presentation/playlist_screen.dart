@@ -13,7 +13,7 @@ class PlaylistScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Playlists'),
-        backgroundColor: ThemeColors.primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -21,8 +21,8 @@ class PlaylistScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              ThemeColors.primaryColor.withOpacity(0.1),
-              ThemeColors.white,
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              Theme.of(context).colorScheme.surface,
             ],
           ),
         ),
@@ -35,7 +35,8 @@ class PlaylistScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: ThemeColors.primaryColor.withOpacity(0.2),
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.2),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -46,11 +47,12 @@ class PlaylistScreen extends StatelessWidget {
                 icon: const Icon(Icons.add, size: 20),
                 label: const Text('Create New Playlist'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: ThemeColors.primaryColor,
-                  foregroundColor: ThemeColors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.surface,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 ),
               ),
             ),
@@ -60,11 +62,14 @@ class PlaylistScreen extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
-                  color: ThemeColors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: ThemeColors.primaryColor.withOpacity(0.1),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -74,16 +79,25 @@ class PlaylistScreen extends StatelessWidget {
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: ThemeColors.primaryColor.withOpacity(0.1),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.album, color: ThemeColors.primaryColor, size: 24),
+                    child: Icon(Icons.album,
+                        color: Theme.of(context).colorScheme.primary, size: 24),
                   ),
                   title: Text('Playlist ${i + 1}',
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: ThemeColors.black)),
-                  subtitle: const Text('X songs', style: TextStyle(color: ThemeColors.grey)),
-                  trailing: const Icon(Icons.arrow_forward_ios,
-                      color: ThemeColors.primaryColor),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface)),
+                  subtitle: Text('X songs',
+                      style: TextStyle(
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant)),
+                  trailing: Icon(Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.primary),
                   onTap: () {},
                 ),
               ),

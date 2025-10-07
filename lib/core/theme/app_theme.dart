@@ -2,6 +2,11 @@
 import 'package:flutter/material.dart';
 
 class ThemeColors {
+  // Primary colors (consistent across themes)
+  static const Color primaryColor = Color(0xFF7C3AED);
+  static const Color accentColor = Color(0xFF6366F1);
+
+  // Legacy colors (keeping for backward compatibility)
   static const Color clrTransparent = Color(0x00ffffff);
   static const Color clrBlack = Color(0xFF000000);
   static const Color clrGreen = Color(0xFF4CAF50);
@@ -13,8 +18,6 @@ class ThemeColors {
   static const Color clrBorderColor = Color(0xFFD5D0FF);
   static const Color clrPrimaryColor20 = Color(0xFFD5D0FF);
   static const Color darkAppColor = Color(0xFF0D0E25);
-
-  static const Color primaryColor = Color(0xFF7D3CFF);
   static const Color secondaryColor = Color(0xFF00CFFF);
 
   // Added Flutter Material Colors
@@ -96,13 +99,13 @@ class ThemeFonts {
 
 class AppTheme {
   AppBarTheme appBarTheme() => const AppBarTheme(
-        backgroundColor: ThemeColors.primaryColor,
-        surfaceTintColor: ThemeColors.primaryColor,
-        foregroundColor: ThemeColors.white,
+        backgroundColor: Color(0xFF7C3AED), // primaryColor
+        surfaceTintColor: Color(0xFF7C3AED), // primaryColor
+        foregroundColor: Color(0xFFFFFFFF), // white text on primary
         elevation: 0,
         centerTitle: true,
         titleTextStyle: TextStyle(
-          color: ThemeColors.white,
+          color: Color(0xFFFFFFFF), // white text on primary
           fontSize: 20,
           fontWeight: FontWeight.bold,
           fontFamily: ThemeFonts.lexend,
@@ -184,9 +187,16 @@ class AppTheme {
 class AppThemeDark {
   static AppBarTheme appBarTheme() {
     return const AppBarTheme(
-      backgroundColor: ThemeColors.clrBlack,
-      foregroundColor: ThemeColors.clrWhite,
-      titleTextStyle: TextStyle(color: ThemeColors.clrWhite),
+      backgroundColor: Color(0xFF121212), // background
+      foregroundColor: Color(0xFFFFFFFF), // text_primary
+      titleTextStyle: TextStyle(
+        color: Color(0xFFFFFFFF), // text_primary
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        fontFamily: ThemeFonts.lexend,
+      ),
+      elevation: 0,
+      centerTitle: true,
     );
   }
 
@@ -209,8 +219,7 @@ ThemeData lightTheme(BuildContext context) => ThemeData(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       primaryColor: ThemeColors.primaryColor,
-      primaryColorDark: ThemeColors.deepPurple,
-      scaffoldBackgroundColor: ThemeColors.white,
+      scaffoldBackgroundColor: const Color(0xFFFFFFFF), // background
       appBarTheme: AppTheme().appBarTheme(),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: ThemeColors.primaryColor,
@@ -221,23 +230,28 @@ ThemeData lightTheme(BuildContext context) => ThemeData(
       focusColor: ThemeColors.primaryColor,
       fontFamily: ThemeFonts.lexend,
       elevatedButtonTheme: AppTheme.elevatedButtonThemeData(),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: ThemeColors.primaryColor,
-        brightness: Brightness.light,
-        primary: ThemeColors.primaryColor,
-        secondary: ThemeColors.cyanAccent,
-        surface: ThemeColors.white,
-        background: ThemeColors.white,
-        onPrimary: ThemeColors.white,
-        onSecondary: ThemeColors.black,
-        onSurface: ThemeColors.black,
-        onBackground: ThemeColors.black,
+      colorScheme: const ColorScheme.light(
+        primary: Color(0xFF7C3AED), // primaryColor
+        secondary: Color(0xFF6366F1), // accentColor
+        surface: Color(0xFFF9FAFB), // card_background
+        background: Color(0xFFFFFFFF), // background
+        onPrimary: Color(0xFFFFFFFF),
+        onSecondary: Color(0xFFFFFFFF),
+        onSurface: Color(0xFF111827), // text_primary
+        onBackground: Color(0xFF111827), // text_primary
+        outline: Color(0xFFE5E7EB), // border_color
+        error: Color(0xFFF44336),
+        onError: Color(0xFFFFFFFF),
+        surfaceContainerHighest: Color(0xFFF9FAFB), // card_background
+        onSurfaceVariant: Color(0xFF6B7280), // text_secondary
       ),
     );
 
 ThemeData darkTheme(BuildContext context) => ThemeData(
-      colorSchemeSeed: ThemeColors.primaryColor,
-      scaffoldBackgroundColor: ThemeColors.clrBlack,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      primaryColor: ThemeColors.primaryColor,
+      scaffoldBackgroundColor: const Color(0xFF121212), // background
       brightness: Brightness.dark,
       useMaterial3: true,
       appBarTheme: AppThemeDark.appBarTheme(),
@@ -249,4 +263,19 @@ ThemeData darkTheme(BuildContext context) => ThemeData(
       focusColor: ThemeColors.primaryColor,
       elevatedButtonTheme: AppThemeDark.elevatedButtonThemeData(),
       fontFamily: ThemeFonts.lexend,
+      colorScheme: const ColorScheme.dark(
+        primary: Color(0xFF7C3AED), // primaryColor
+        secondary: Color(0xFF6366F1), // accentColor
+        surface: Color(0xFF1E1E1E), // card_background
+        background: Color(0xFF121212), // background
+        onPrimary: Color(0xFFFFFFFF),
+        onSecondary: Color(0xFFFFFFFF),
+        onSurface: Color(0xFFFFFFFF), // text_primary
+        onBackground: Color(0xFFFFFFFF), // text_primary
+        outline: Color(0xFF2D2D2D), // border_color
+        error: Color(0xFFF44336),
+        onError: Color(0xFFFFFFFF),
+        surfaceContainerHighest: Color(0xFF1E1E1E), // card_background
+        onSurfaceVariant: Color(0xFFB3B3B3), // text_secondary
+      ),
     );

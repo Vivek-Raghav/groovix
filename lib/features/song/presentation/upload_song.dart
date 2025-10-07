@@ -2,8 +2,6 @@
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui';
-
-// Project imports:
 import 'package:groovix/routes/routes_index.dart';
 
 class UploadSongScreen extends StatefulWidget {
@@ -19,9 +17,10 @@ class _UploadSongScreenState extends State<UploadSongScreen>
   final TextEditingController _songNameController = TextEditingController();
   final TextEditingController _fileController = TextEditingController();
 
-  Color _selectedColor = const Color(0xFFFF4500);
+  Color _selectedColor =
+      const Color(0xFF7C3AED); // Use primary color as default
   int _selectedColorTab = 2;
-  int _selectedPaletteColor = 1;
+  int _selectedPaletteColor = 0; // Primary color is now at index 0
   Offset _selectedColorPosition = const Offset(100, 100);
   File? _selectedAudioFile;
   File? _selectedThumbnail;
@@ -90,6 +89,14 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             _loadingController.stop();
             context.go(AppRoutes.uploadSuccess,
                 extra: state.uploadSongResponse);
+            _selectedThumbnail = null;
+            _selectedAudioFile = null;
+            _artistController.clear();
+            _songNameController.clear();
+            _selectedColor = const Color(0xFF7C3AED);
+            _selectedColorTab = 2;
+            _selectedPaletteColor = 0;
+            _selectedColorPosition = const Offset(100, 100);
           } else if (state is SongFailure) {
             _loadingController.stop();
             showToast(title: 'Upload failed: ${state.error}');
@@ -119,7 +126,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -130,42 +137,12 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                 : _buildThumbnailPicker(textColor),
             const SizedBox(height: 24),
             _buildAudioPickerField(textColor),
-            if (_selectedAudioFile != null) ...[
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        _selectedAudioFile = null;
-                        _fileController.clear();
-                      });
-                    },
-                    icon: Icon(Icons.delete,
-                        color: theme.colorScheme.error, size: 16),
-                    label: Text(
-                      'Remove Audio',
-                      style: TextStyle(
-                          color: theme.colorScheme.error, fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-            ],
             const SizedBox(height: 16),
-            _buildTextField('Artist', 'Artist', _artistController, textColor),
-            const SizedBox(height: 16),
-            _buildTextField(
-                'Song Name', 'Song Name', _songNameController, textColor),
+            _buildInputGroup(textColor),
             const SizedBox(height: 24),
             _buildColorSection(textColor),
-            const SizedBox(height: 16),
-            _buildColorWheel(textColor),
-            const SizedBox(height: 16),
-            _buildColorPalette(textColor),
             const SizedBox(height: 24),
-            _buildSelectedColorIndicator(textColor),
+            _buildUploadButton(textColor),
           ],
         ),
       ),
@@ -281,24 +258,27 @@ class _UploadSongScreenState extends State<UploadSongScreen>
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: textColor,
-            size: 20,
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            Icons.music_note,
+            color: Theme.of(context).colorScheme.onPrimary,
+            size: 16,
           ),
         ),
         Text(
           'Upload Song',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
             color: textColor,
             fontFamily: 'Lexend',
           ),
         ),
-        const SizedBox(width: 20),
         BlocBuilder<SongCubit, SongState>(
           builder: (context, state) {
             return IconButton(
@@ -324,12 +304,12 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                         showToast(title: 'Please fill all the fields');
                       }
                     },
-              icon: Icon(Icons.upload,
+              icon: Icon(Icons.cloud_upload_rounded,
                   color: state is SongLoading
                       ? textColor.withOpacity(0.5)
                       : textColor,
-                  size: 20),
-              tooltip: 'Upload Song',
+                  size: 22),
+              tooltip: 'Start Upload',
             );
           },
         ),
@@ -339,52 +319,79 @@ class _UploadSongScreenState extends State<UploadSongScreen>
 
   Widget _buildThumbnailPicker(Color textColor) {
     return Container(
-      height: 120,
+      height: 180,
       width: double.infinity,
       decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: textColor,
+          color: Theme.of(context).colorScheme.outline,
           width: 2,
           style: BorderStyle.solid,
         ),
-        borderRadius: BorderRadius.circular(8),
       ),
       child: InkWell(
         onTap: _pickImageFromStorage,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(16),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: textColor.withOpacity(0.3),
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
               width: 1,
               style: BorderStyle.solid,
             ),
           ),
           child: _selectedThumbnail != null
               ? ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.file(
-                    _selectedThumbnail!,
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(16),
+                  child: Stack(
+                    children: [
+                      Image.file(
+                        _selectedThumbnail!,
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                      Positioned(
+                        top: 12,
+                        right: 12,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _selectedThumbnail = null;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 )
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.folder_outlined,
-                      color: textColor,
-                      size: 32,
+                      Icons.image_outlined,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      size: 36,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Text(
-                      'Select the thumbnail for your song',
+                      'Select or Drop Thumbnail',
                       style: TextStyle(
                         fontSize: 14,
-                        color: textColor.withOpacity(0.7),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontFamily: 'Lexend',
                       ),
                     ),
@@ -426,59 +433,104 @@ class _UploadSongScreenState extends State<UploadSongScreen>
   }
 
   Widget _buildAudioPickerField(Color textColor) {
-    return _selectedAudioFile != null
-        ? AudioWave(path: _selectedAudioFile!.path)
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      height: 90,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline,
+          width: 1,
+        ),
+      ),
+      child: InkWell(
+        onTap: _pickAudioFromStorage,
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
             children: [
-              Text(
-                'Pick Song',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: textColor,
-                  fontFamily: 'Lexend',
+              Icon(
+                Icons.music_note_rounded,
+                color: Theme.of(context).colorScheme.primary,
+                size: 24,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Pick Audio File',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Lexend',
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _selectedAudioFile != null
+                          ? _selectedAudioFile!.path.split('/').last
+                          : 'Choose .mp3, .wav, or .aac',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontFamily: 'Lexend',
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _fileController,
-                readOnly: true,
-                onTap: _pickAudioFromStorage,
-                style: TextStyle(
-                  color: textColor,
-                  fontFamily: 'Lexend',
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Pick Song',
-                  hintStyle: TextStyle(
-                    color: textColor.withOpacity(0.4),
-                    fontFamily: 'Lexend',
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: textColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: textColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: textColor),
-                  ),
-                  suffixIcon: Icon(
-                    Icons.attach_file,
-                    color: textColor,
+              if (_selectedAudioFile != null)
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedAudioFile = null;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    size: 20,
                   ),
                 ),
-              ),
             ],
-          );
+          ),
+        ),
+      ),
+    );
   }
 
-  Widget _buildTextField(String label, String hint,
-      TextEditingController controller, Color textColor) {
+  Widget _buildInputGroup(Color textColor) {
+    return Column(
+      children: [
+        _buildInputField(
+          label: 'Artist Name',
+          placeholder: 'Enter Artist Name',
+          controller: _artistController,
+          icon: Icons.person_outline,
+        ),
+        const SizedBox(height: 12),
+        _buildInputField(
+          label: 'Song Title',
+          placeholder: 'Enter Song Name',
+          controller: _songNameController,
+          icon: Icons.music_note_outlined,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInputField({
+    required String label,
+    required String placeholder,
+    required TextEditingController controller,
+    required IconData icon,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -487,34 +539,39 @@ class _UploadSongScreenState extends State<UploadSongScreen>
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: textColor,
+            color: Theme.of(context).colorScheme.onSurface,
             fontFamily: 'Lexend',
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          style: TextStyle(
-            color: textColor,
-            fontFamily: 'Lexend',
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Theme.of(context).colorScheme.outline),
           ),
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: TextStyle(
-              color: textColor.withOpacity(0.4),
+          child: TextField(
+            controller: controller,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
               fontFamily: 'Lexend',
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: textColor),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: textColor),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: textColor),
+            decoration: InputDecoration(
+              hintText: placeholder,
+              hintStyle: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontFamily: 'Lexend',
+              ),
+              prefixIcon: Icon(
+                icon,
+                color: Theme.of(context).colorScheme.primary,
+                size: 20,
+              ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
             ),
           ),
         ),
@@ -527,68 +584,83 @@ class _UploadSongScreenState extends State<UploadSongScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Select color',
+          'Select Color',
           style: TextStyle(
-            fontSize: 14,
-            color: textColor,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.onSurface,
             fontFamily: 'Lexend',
           ),
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            _buildColorTab('Primary', 0, textColor),
-            const SizedBox(width: 16),
-            _buildColorTab('Accent', 1, textColor),
-            const SizedBox(width: 16),
-            _buildColorTab('Wheel', 2, textColor),
-          ],
-        ),
+        const SizedBox(height: 16),
+        _buildTabButtons(),
+        const SizedBox(height: 20),
+        if (_selectedColorTab == 2) _buildColorWheel(textColor),
+        const SizedBox(height: 20),
+        _buildColorPalette(textColor),
+        const SizedBox(height: 20),
+        _buildColorPreview(),
       ],
     );
   }
 
-  Widget _buildColorTab(String label, int index, Color textColor) {
-    final isSelected = _selectedColorTab == index;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedColorTab = index;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? textColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: textColor,
-            width: 1,
+  Widget _buildTabButtons() {
+    final tabs = ['Primary', 'Accent', 'Wheel'];
+    return Row(
+      children: tabs.asMap().entries.map((entry) {
+        final index = entry.key;
+        final tab = entry.value;
+        final isSelected = _selectedColorTab == index;
+
+        return Expanded(
+          child: Container(
+            margin: EdgeInsets.only(
+              right: index < tabs.length - 1 ? 8 : 0,
+            ),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedColorTab = index;
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                ),
+                child: Text(
+                  tab,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: isSelected
+                        ? Colors.white
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Lexend',
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected
-                ? Theme.of(context).scaffoldBackgroundColor
-                : textColor,
-            fontSize: 14,
-            fontFamily: 'Lexend',
-          ),
-        ),
-      ),
+        );
+      }).toList(),
     );
   }
 
   Widget _buildColorWheel(Color textColor) {
-    if (_selectedColorTab != 2) return const SizedBox.shrink();
-
     return Container(
       height: 200,
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: textColor.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Theme.of(context).colorScheme.outline),
       ),
       child: GestureDetector(
         onTapDown: (details) {
@@ -605,14 +677,15 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                 borderRadius: BorderRadius.circular(8),
                 gradient: const SweepGradient(
                   colors: [
-                    Color(0xFFFF0000),
-                    Color(0xFFFF7F00),
-                    Color(0xFFFFFF00),
-                    Color(0xFF00FF00),
-                    Color(0xFF0000FF),
-                    Color(0xFF4B0082),
-                    Color(0xFF8F00FF),
-                    Color(0xFFFF0000),
+                    Color(0xFFEF4444), // Red
+                    Color(0xFFF59E0B), // Orange
+                    Color(0xFFEAB308), // Yellow
+                    Color(0xFF10B981), // Green
+                    Color(0xFF06B6D4), // Cyan
+                    Color(0xFF3B82F6), // Blue
+                    Color(0xFF8B5CF6), // Purple
+                    Color(0xFFEC4899), // Pink
+                    Color(0xFFEF4444), // Red (complete circle)
                   ],
                 ),
               ),
@@ -655,16 +728,16 @@ class _UploadSongScreenState extends State<UploadSongScreen>
 
   Widget _buildColorPalette(Color textColor) {
     final colors = [
-      const Color(0xFFFFFFFF),
-      const Color(0xFFFF0000),
-      const Color(0xFF00FF00),
-      const Color(0xFF0000FF),
-      const Color(0xFFFFFF00),
-      const Color(0xFFFF00FF),
-      const Color(0xFF00FFFF),
-      const Color(0xFF808080),
-      const Color(0xFF000000),
-      const Color(0xFFFFA500),
+      const Color(0xFFFFFFFF), // White
+      const Color(0xFFFF0000), // Red
+      const Color(0xFF00FF00), // Green
+      const Color(0xFF0000FF), // Blue
+      const Color(0xFFFFFF00), // Yellow
+      const Color(0xFFFF00FF), // Magenta
+      const Color(0xFF00FFFF), // Cyan
+      const Color(0xFF808080), // Gray
+      const Color(0xFF000000), // Black
+      const Color(0xFFFFA500), // Orange
     ];
 
     return Column(
@@ -686,25 +759,18 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                 });
               },
               child: Container(
-                width: 40,
-                height: 40,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
                   color: colors[index],
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: isSelected
-                        ? textColor
-                        : const Color.fromARGB(255, 208, 198, 198),
-                    width: 0.5,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.outline,
+                    width: isSelected ? 3 : 1,
                   ),
                 ),
-                child: isSelected
-                    ? Icon(
-                        Icons.check,
-                        color: textColor,
-                        size: 20,
-                      )
-                    : null,
               ),
             );
           }),
@@ -754,53 +820,125 @@ class _UploadSongScreenState extends State<UploadSongScreen>
     return HSVColor.fromAHSV(1.0, hue, 1.0, brightness).toColor();
   }
 
-  Widget _buildSelectedColorIndicator(Color textColor) {
+  Color _getContrastColor(Color color) {
+    // Calculate luminance
+    final luminance =
+        (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
+    return luminance > 0.5 ? Colors.black : Colors.white;
+  }
+
+  Widget _buildColorPreview() {
+    final hexColor =
+        _selectedColor.value.toRadixString(16).substring(2).toUpperCase();
+    final contrastColor = _getContrastColor(_selectedColor);
+
     return Container(
-      padding: const EdgeInsets.all(16),
+      height: 60,
       decoration: BoxDecoration(
-        color: textColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: textColor.withOpacity(0.3)),
+        color: _selectedColor,
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: _selectedColor,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: textColor, width: 2),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                'HEX: $hexColor',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: contrastColor,
+                  fontFamily: 'Lexend',
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: hexColor));
+                showToast(title: 'Copied!');
+              },
+              icon: Icon(
+                Icons.content_copy_rounded,
+                color: contrastColor,
+                size: 20,
+              ),
+              tooltip: 'Copy Hex',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUploadButton(Color textColor) {
+    return BlocBuilder<SongCubit, SongState>(
+      builder: (context, state) {
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary,
+              ],
             ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          child: ElevatedButton(
+            onPressed: state is SongLoading
+                ? null
+                : () {
+                    if (_selectedThumbnail != null &&
+                        _selectedAudioFile != null &&
+                        _artistController.text.isNotEmpty &&
+                        _songNameController.text.isNotEmpty) {
+                      _loadingController.repeat();
+                      context.read<SongCubit>().uploadSong(UploadSongModel(
+                            thumbnailFile: _selectedThumbnail!,
+                            song: _selectedAudioFile!,
+                            artist: _artistController.text,
+                            songName: _songNameController.text,
+                            hexcode: _selectedColor.value
+                                .toRadixString(16)
+                                .substring(2)
+                                .toUpperCase(),
+                          ));
+                    } else {
+                      showToast(title: 'Please fill all the fields');
+                    }
+                  },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Selected Color',
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Lexend',
-                  ),
+                Icon(
+                  Icons.cloud_upload_outlined,
+                  color: Colors.white,
+                  size: 20,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(width: 8),
                 Text(
-                  '#${_selectedColor.value.toRadixString(16).substring(2).toUpperCase()}',
+                  'Upload Now',
                   style: TextStyle(
-                    color: textColor.withOpacity(0.7),
-                    fontSize: 12,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
                     fontFamily: 'Lexend',
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
