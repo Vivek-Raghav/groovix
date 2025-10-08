@@ -38,5 +38,5 @@ export 'utils/generic_typedef.dart';
 export 'initialization/initialization_manager.dart';
 
 // Core config
-export 'config/flavor_config.dart';
-export 'config/flavor_init.dart';
+export '../main/flavor/flavor_config.dart';
+export '../main/flavor/flavor_init.dart';

@@ -1,5 +1,5 @@
 // Project imports:
-import 'package:groovix/core/config/flavor_config.dart';
+import 'package:groovix/main/flavor/flavor_config.dart';
 
 class AppUrls {
   static String get baseUrl => FlavorConfig.instance.baseUrl;

@@ -1,5 +1,5 @@
 // Project imports:
-import 'package:groovix/core/config/flavor_config.dart';
+import 'package:groovix/main/flavor/flavor_config.dart';
 import 'package:groovix/core/constants/pref_keys.dart';
 import 'package:groovix/core/local_db/local_cache.dart';
 import 'package:groovix/core/services/api_service.dart';

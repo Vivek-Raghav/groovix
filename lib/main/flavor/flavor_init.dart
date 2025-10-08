@@ -2,7 +2,7 @@
 // ignore_for_file: avoid_print
 
 // Project imports:
-import 'package:groovix/core/config/flavor_config.dart';
+import 'package:groovix/main/flavor/flavor_config.dart';
 
 FlavorConfig flavorDevConfig = FlavorConfig(
   flavor: Flavor.dev,

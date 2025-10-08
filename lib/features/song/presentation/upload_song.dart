@@ -256,10 +256,9 @@ class _UploadSongScreenState extends State<UploadSongScreen>
 
   Widget _buildHeader(Color textColor) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          padding: const EdgeInsets.all(6),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.2),
             borderRadius: BorderRadius.circular(12),
@@ -267,9 +266,10 @@ class _UploadSongScreenState extends State<UploadSongScreen>
           child: Icon(
             Icons.music_note,
             color: Theme.of(context).colorScheme.onPrimary,
-            size: 16,
+            size: 24,
           ),
         ),
+        const SizedBox(width: 12),
         Text(
           'Upload Song',
           style: TextStyle(
@@ -279,6 +279,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             fontFamily: 'Lexend',
           ),
         ),
+        const Expanded(child: SizedBox()),
         BlocBuilder<SongCubit, SongState>(
           builder: (context, state) {
             return IconButton(
@@ -308,7 +309,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                   color: state is SongLoading
                       ? textColor.withOpacity(0.5)
                       : textColor,
-                  size: 22),
+                  size: 30),
               tooltip: 'Start Upload',
             );
           },
