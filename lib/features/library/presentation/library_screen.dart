@@ -1,10 +1,5 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import 'package:groovix/core/theme/app_theme.dart';
-
-/// LibraryScreen - Figma-inspired UI only (no logic)
 class LibraryScreen extends StatelessWidget {
   const LibraryScreen({super.key});
 

@@ -33,6 +33,26 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions += "default"
+
+    // 🏗️ Product Flavors
+    productFlavors {
+        create("local") {
+            dimension = "default"
+            versionNameSuffix = "-local"
+            resValue("string", "app_name", "Groovix Local")
+        }
+        create("dev") {
+            dimension = "default"
+            versionNameSuffix = "-dev"
+            resValue("string", "app_name", "Groovix Dev")
+        }
+        create("prod") {
+            dimension = "default"
+            resValue("string", "app_name", "Groovix")
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
