@@ -11,9 +11,9 @@ export 'constants/string_constants.dart';
 export 'constants/pref_keys.dart';
 
 // Core services
-export 'services/api_service.dart';
-export 'services/api_urls.dart';
-export 'services/theme_manager.dart';
+export 'services/api/api_service.dart';
+export 'services/api/api_urls.dart';
+export 'services/theme/theme_manager.dart';
 
 // Core error handling
 export 'error/failure.dart';
@@ -28,7 +28,6 @@ export 'theme/app_theme.dart';
 // Core shared utilities
 export 'shared/domain/method/methods.dart';
 export 'shared/domain/usecase/usecase.dart';
-export 'shared/model/song_model.dart';
 export 'shared/model/liked_song_model.dart';
 
 // Core utils

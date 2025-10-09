@@ -1,55 +1,37 @@
-import 'package:flutter/material.dart';
+import 'package:groovix/core/services/music_player/bloc/player_event.dart';
+import 'package:groovix/features/home/home_index.dart';
+import 'package:groovix/features/song/song_index.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final songCubit = getIt<SongCubit>();
+  final musicPlayerBloc = getIt<MusicPlayerBloc>();
+  int currentPage = 1;
+  int pageSize = 10;
+
+  @override
+  void initState() {
+    super.initState();
+    initCalls();
+  }
+
+  void initCalls() {
+    songCubit.getSongList(SongsQueryModel(page: currentPage, size: pageSize));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                Icons.music_note,
-                color: Theme.of(context).colorScheme.onPrimary,
-                size: 24,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'Groovix',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search,
-                color: Theme.of(context).colorScheme.onPrimary),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.notifications_none,
-                color: Theme.of(context).colorScheme.onPrimary),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: buildAppBar(),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          // Welcome Banner
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -160,22 +142,98 @@ class HomeScreen extends StatelessWidget {
                   .titleLarge
                   ?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
-          for (int i = 0; i < 4; i++)
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                child: Icon(Icons.music_note,
-                    color: Theme.of(context).colorScheme.primary),
-              ),
-              title: Text('Track ${i + 1}'),
-              subtitle: const Text('Artist Name'),
-              trailing: Icon(Icons.play_arrow,
-                  color: Theme.of(context).colorScheme.primary),
-              onTap: () {},
-            ),
+          BlocBuilder<SongCubit, SongState>(builder: (context, state) {
+            if (state is SongListSuccess) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.songsListResponse.songs.length,
+                itemBuilder: (context, index) {
+                  final song = state.songsListResponse.songs[index];
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      song.artist,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                    subtitle: Text(
+                      song.songName,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.1),
+                      backgroundImage: NetworkImage(song.thumbnailUrl),
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        musicPlayerBloc.add(PlaySongEvent(song));
+                        context.push(AppRoutes.fullMusic);
+                      },
+                      icon: Icon(Icons.play_arrow,
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
+                  );
+                },
+              );
+            } else if (state is SongListLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return const SizedBox.shrink();
+          }),
         ],
       ),
+    );
+  }
+
+// AppBar build
+  AppBar buildAppBar() {
+    return AppBar(
+      elevation: 0,
+      title: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.music_note,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            'Groovix',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.search,
+              color: Theme.of(context).colorScheme.onPrimary),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.notifications_none,
+              color: Theme.of(context).colorScheme.onPrimary),
+          onPressed: () {},
+        ),
+      ],
     );
   }
 }

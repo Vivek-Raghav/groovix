@@ -1,4 +1,5 @@
 // Project imports:
+import 'package:groovix/features/song/presentation/screens/full_music_screen.dart';
 import 'package:groovix/routes/routes_index.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -89,6 +90,14 @@ final GoRouter appRouter = GoRouter(
           ),
         );
       },
+    ),
+    GoRoute(
+      path: AppRoutes.fullMusic,
+      pageBuilder: (context, state) => customTransitionPage(
+        context: context,
+        state: state,
+        child: const FullMusicScreen(),
+      ),
     ),
   ],
 );

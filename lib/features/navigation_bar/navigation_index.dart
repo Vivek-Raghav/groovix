@@ -9,3 +9,4 @@ export 'presentation/navigation_bar.dart';
 
 // Routes
 export 'package:groovix/routes/routes_index.dart';
+export 'package:groovix/features/home/presentation/home_page.dart';

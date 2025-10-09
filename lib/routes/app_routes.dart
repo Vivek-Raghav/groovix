@@ -12,4 +12,5 @@ class AppRoutes {
   static const String onboarding = '/onboarding';
   static const String uploadSong = '/upload-song';
   static const String uploadSuccess = '/upload-success';
+  static const String fullMusic = '/full-music-screen';
 }

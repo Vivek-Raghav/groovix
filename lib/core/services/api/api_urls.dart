@@ -4,5 +4,5 @@ class ApiUrls {
   static String get logout => '/auth/logout';
   static String get uploadSong => '/songs/upload';
   static String get refreshToken => '/auth/refresh';
-
+  static String get getSongList => '/songs/list';
 }

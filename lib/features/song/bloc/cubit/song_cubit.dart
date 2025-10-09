@@ -1,20 +1,23 @@
-// Package imports:
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-// Project imports:
-import 'package:groovix/features/song/bloc/state/song_state.dart';
-import 'package:groovix/features/song/domain/usecase/upload_song_uc.dart';
 import 'package:groovix/features/song/song_index.dart';
 
 class SongCubit extends Cubit<SongState> {
-  SongCubit({required this.uploadSongUc}) : super(SongInitial());
+  SongCubit({required this.uploadSongUc, required this.songListUc})
+      : super(SongInitial());
 
   final UploadSongUc uploadSongUc;
+  final SongListUc songListUc;
 
   Future<void> uploadSong(UploadSongModel uploadSongModel) async {
     emit(SongLoading());
     final result = await uploadSongUc.call(uploadSongModel);
     result.fold((failure) => emit(SongFailure(error: failure.toString())),
         (success) => emit(SongSuccess(uploadSongResponse: success)));
+  }
+
+  Future<void> getSongList(SongsQueryModel songPaginationModel) async {
+    emit(SongListLoading());
+    final result = await songListUc.call(songPaginationModel);
+    result.fold((failure) => emit(SongListFailure(error: failure.toString())),
+        (success) => emit(SongListSuccess(songsListResponse: success)));
   }
 }

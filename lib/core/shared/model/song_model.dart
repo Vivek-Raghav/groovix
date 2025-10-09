@@ -1,29 +1,40 @@
-// Package imports:
-import 'package:json_annotation/json_annotation.dart';
-
-part 'song_model.g.dart';
-
-@JsonSerializable()
+// models/song_model.dart
 class SongModel {
   final String id;
-  final String title;
-  final String artistId;
-  final String album;
-  final String coverUrl;
-  final String audioUrl;
-  final DateTime createdAt;
+  final String songUrl;
+  final String thumbnailUrl;
+  final String artist;
+  final String songName;
+  final String hexcode;
 
   SongModel({
     required this.id,
-    required this.title,
-    required this.artistId,
-    required this.album,
-    required this.coverUrl,
-    required this.audioUrl,
-    required this.createdAt,
+    required this.songUrl,
+    required this.thumbnailUrl,
+    required this.artist,
+    required this.songName,
+    required this.hexcode,
   });
 
-  factory SongModel.fromJson(Map<String, dynamic> json) =>
-      _$SongModelFromJson(json);
-  Map<String, dynamic> toJson() => _$SongModelToJson(this);
+  factory SongModel.fromJson(Map<String, dynamic> json) {
+    return SongModel(
+      id: json['id'] ?? '',
+      songUrl: json['song_url'] ?? '',
+      thumbnailUrl: json['thumbnail_url'] ?? '',
+      artist: json['artist'] ?? '',
+      songName: json['song_name'] ?? '',
+      hexcode: json['hexcode'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'song_url': songUrl,
+      'thumbnail_url': thumbnailUrl,
+      'artist': artist,
+      'song_name': songName,
+      'hexcode': hexcode,
+    };
+  }
 }

@@ -18,7 +18,7 @@ class ApiService {
           contentType: Headers.jsonContentType,
           responseType: ResponseType.json,
           headers: {
-            if (token != null) 'Authorization': 'Bearer $token',
+            if (token != null) 'Authorization': token,
           },
         )) {
     _initializeInterceptors();
@@ -27,6 +27,7 @@ class ApiService {
   void _initializeInterceptors() {
     _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       if (kDebugMode) {
+        print('headers: ${options.headers}');
         print('[API][REQUEST][URL] => ${options.method} ${options.uri}');
         print('[API][BODY] => ${options.data}');
       }

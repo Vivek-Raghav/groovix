@@ -19,7 +19,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   // List of screens to display based on navigation index
   final List<Widget> _screens = [
-    const HomeScreen(),
+    const HomePage(),
     const ExploreScreen(),
     const UploadSongScreen(),
     const PlaylistScreen(),

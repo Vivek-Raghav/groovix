@@ -4,8 +4,8 @@ import 'dart:convert';
 // Project imports:
 import 'package:groovix/core/constants/string_constants.dart';
 import 'package:groovix/core/error/server_exception.dart';
-import 'package:groovix/core/services/api_service.dart';
-import 'package:groovix/core/services/api_urls.dart';
+import 'package:groovix/core/services/api/api_service.dart';
+import 'package:groovix/core/services/api/api_urls.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/features/auth/domain/models/sign_in.dart';
 import 'package:groovix/features/auth/domain/models/signup_params.dart';

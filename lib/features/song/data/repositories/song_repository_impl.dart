@@ -25,4 +25,20 @@ class SongRepositoryImpl extends SongRepository {
       return Left(ServerFailure(error: e.error));
     }
   }
+
+  @override
+  EitherDynamic<SongsListResponse> getSongList(SongsQueryModel params) async {
+    try {
+      final data = await songRemoteDataSource.getSongList(params);
+      if (data != null) {
+        return Right(data);
+      } else {
+        return Left(
+          ServerFailure(error: StringConstants.strSomethingWentWrong),
+        );
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(error: e.error));
+    }
+  }
 }
