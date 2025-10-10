@@ -9,6 +9,7 @@ class HomePage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: getIt<SongCubit>()),
+        BlocProvider.value(value: getIt<MusicPlayerBloc>()),
       ],
       child: const HomeScreen(),
     );

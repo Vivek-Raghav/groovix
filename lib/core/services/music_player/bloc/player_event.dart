@@ -50,3 +50,5 @@ class UpdatePlayerStateEvent extends MusicPlayerEvent {
   @override
   List<Object?> get props => [position, isPlaying, processingState];
 }
+
+class CloseMusicPlayerEvent extends MusicPlayerEvent {}

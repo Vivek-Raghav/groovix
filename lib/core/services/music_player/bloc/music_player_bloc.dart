@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:groovix/core/services/music_player/bloc/music_player_state.dart';
-import 'package:groovix/core/services/music_player/bloc/player_event.dart';
-import 'package:groovix/core/services/music_player/music_player_manager.dart';
+
+import 'package:groovix/core/core_index.dart';
 import 'package:just_audio/just_audio.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
@@ -17,6 +15,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<SeekSongEvent>(_onSeekSong);
     on<SongCompletedEvent>(_onSongCompleted);
     on<UpdatePlayerStateEvent>(_onUpdatePlayerState);
+    on<CloseMusicPlayerEvent>(_onCloseMusicPlayer);
 
     _listenToStreams();
   }
@@ -85,6 +84,18 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       isPlaying: event.isPlaying ?? state.isPlaying,
       processingState: event.processingState ?? state.processingState,
     ));
+  }
+
+  Future<void> _onCloseMusicPlayer(
+      CloseMusicPlayerEvent event, Emitter<MusicPlayerState> emit) async {
+    await _manager.stop();
+    emit(state.copyWith(
+        currentSong: null,
+        isLoading: false,
+        isPlaying: false,
+        position: Duration.zero,
+        duration: Duration.zero,
+        isCompleted: false));
   }
 
   @override

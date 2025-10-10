@@ -1,4 +1,3 @@
-import 'package:groovix/core/services/music_player/bloc/player_event.dart';
 import 'package:groovix/features/home/home_index.dart';
 import 'package:groovix/features/song/song_index.dart';
 
@@ -11,7 +10,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final songCubit = getIt<SongCubit>();
-  final musicPlayerBloc = getIt<MusicPlayerBloc>();
   int currentPage = 1;
   int pageSize = 10;
 
@@ -149,38 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: state.songsListResponse.songs.length,
                 itemBuilder: (context, index) {
                   final song = state.songsListResponse.songs[index];
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      song.artist,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          overflow: TextOverflow.ellipsis),
-                    ),
-                    subtitle: Text(
-                      song.songName,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          overflow: TextOverflow.ellipsis),
-                    ),
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.1),
-                      backgroundImage: NetworkImage(song.thumbnailUrl),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        musicPlayerBloc.add(PlaySongEvent(song));
-                        context.push(AppRoutes.fullMusic);
-                      },
-                      icon: Icon(Icons.play_arrow,
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                  );
+                  return SongListTile(song: song);
                 },
               );
             } else if (state is SongListLoading) {

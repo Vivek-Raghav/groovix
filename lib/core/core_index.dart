@@ -39,3 +39,10 @@ export 'initialization/initialization_manager.dart';
 // Core config
 export '../main/flavor/flavor_config.dart';
 export '../main/flavor/flavor_init.dart';
+
+// Music player services
+export 'services/music_player/bloc/music_player_bloc.dart';
+export 'services/music_player/bloc/music_player_state.dart';
+export 'services/music_player/bloc/player_event.dart';
+export 'services/music_player/music_player_manager.dart';
+export 'shared/model/song_model.dart';
