@@ -23,10 +23,16 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
   void _listenToStreams() {
     _positionSub = _manager.positionStream.listen((pos) {
-      add(SeekSongEvent(pos));
+      if (state.processingState != ProcessingState.loading) {
+        add(UpdatePlayerStateEvent(
+            position: pos,
+            isPlaying: state.isPlaying,
+            processingState: state.processingState));
+      }
     });
 
     _playerStateSub = _manager.playerStateStream.listen((playerState) {
+      add(UpdatePlayerStateEvent(processingState: playerState.processingState));
       if (playerState.processingState == ProcessingState.completed) {
         add(SongCompletedEvent());
       }
@@ -61,11 +67,14 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
   Future<void> _onSeekSong(
       SeekSongEvent event, Emitter<MusicPlayerState> emit) async {
+    _manager.seek(event.position);
     emit(state.copyWith(position: event.position));
   }
 
   Future<void> _onSongCompleted(
       SongCompletedEvent event, Emitter<MusicPlayerState> emit) async {
+    await _manager.stop();
+    await _manager.seek(Duration.zero);
     emit(state.copyWith(isPlaying: false, position: Duration.zero));
   }
 
