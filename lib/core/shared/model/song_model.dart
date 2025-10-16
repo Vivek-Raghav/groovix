@@ -37,4 +37,9 @@ class SongModel {
       'hexcode': hexcode,
     };
   }
+
+  @override
+  String toString() {
+    return 'SongModel(id: $id, songUrl: $songUrl, thumbnailUrl: $thumbnailUrl, artist: $artist, songName: $songName, hexcode: $hexcode)';
+  }
 }

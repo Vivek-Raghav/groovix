@@ -9,8 +9,10 @@ class MusicPlayerState extends Equatable {
   final Duration position;
   final Duration duration;
   final bool isCompleted;
+  final bool isNext;
+  final bool isPrevious;
   final ProcessingState processingState;
-
+  final bool isFavorite;
   const MusicPlayerState({
     this.currentSong,
     this.isPlaying = false,
@@ -19,6 +21,9 @@ class MusicPlayerState extends Equatable {
     this.position = Duration.zero,
     this.duration = Duration.zero,
     this.processingState = ProcessingState.idle,
+    this.isNext = true,
+    this.isPrevious = true,
+    this.isFavorite = false,
   });
 
   MusicPlayerState copyWith({
@@ -29,6 +34,9 @@ class MusicPlayerState extends Equatable {
     Duration? position,
     Duration? duration,
     ProcessingState? processingState,
+    bool? isNext,
+    bool? isPrevious,
+    bool? isFavorite,
   }) {
     return MusicPlayerState(
       currentSong: currentSong ?? this.currentSong,
@@ -38,6 +46,9 @@ class MusicPlayerState extends Equatable {
       position: position ?? this.position,
       duration: duration ?? this.duration,
       processingState: processingState ?? this.processingState,
+      isNext: isNext ?? this.isNext,
+      isPrevious: isPrevious ?? this.isPrevious,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
@@ -49,5 +60,8 @@ class MusicPlayerState extends Equatable {
         isCompleted,
         position,
         duration,
+        isNext,
+        isPrevious,
+        isFavorite,
       ];
 }

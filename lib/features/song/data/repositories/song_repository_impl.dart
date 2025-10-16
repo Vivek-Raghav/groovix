@@ -12,7 +12,7 @@ class SongRepositoryImpl extends SongRepository {
   EitherDynamic<UploadSongResponse> uploadSong(UploadSongModel params) async {
     try {
       final data = await songRemoteDataSource.uploadSong(params);
-      if (data != null) {
+      if (data.id.isNotEmpty) {
         return Right(data);
       } else {
         return Left(
@@ -30,7 +30,24 @@ class SongRepositoryImpl extends SongRepository {
   EitherDynamic<SongsListResponse> getSongList(SongsQueryModel params) async {
     try {
       final data = await songRemoteDataSource.getSongList(params);
-      if (data != null) {
+      if (data.songs.isNotEmpty) {
+        return Right(data);
+      } else {
+        return Left(
+          ServerFailure(error: StringConstants.strSomethingWentWrong),
+        );
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(error: e.error));
+    }
+  }
+
+  @override
+  EitherDynamic<UserSongFlagsResponse> updateSongFlags(
+      SongFlagParams params) async {
+    try {
+      final data = await songRemoteDataSource.updateSongFlags(params);
+      if (data.id.isNotEmpty) {
         return Right(data);
       } else {
         return Left(

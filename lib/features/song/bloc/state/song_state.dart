@@ -1,9 +1,5 @@
-// Package imports:
 import 'package:equatable/equatable.dart';
-import 'package:groovix/features/song/domain/models/song_list_response.dart';
-
-// Project imports:
-import 'package:groovix/features/song/domain/models/upload_song_response.dart';
+import 'package:groovix/features/song/song_index.dart';
 
 abstract class SongState extends Equatable {
   const SongState();
@@ -29,7 +25,6 @@ class SongFailure extends SongState {
   List<Object?> get props => [error];
 }
 
-
 // song list state
 class SongListSuccess extends SongState {
   final SongsListResponse songsListResponse;
@@ -46,3 +41,19 @@ class SongListFailure extends SongState {
 }
 
 class SongListLoading extends SongState {}
+
+class SongFlagsLoading extends SongState {}
+
+class SongFlagsSuccess extends SongState {
+  final UserSongFlagsResponse songFlagsResponse;
+  const SongFlagsSuccess({required this.songFlagsResponse});
+  @override
+  List<Object?> get props => [songFlagsResponse];
+}
+
+class SongFlagsFailure extends SongState {
+  final String error;
+  const SongFlagsFailure({required this.error});
+  @override
+  List<Object?> get props => [error];
+}

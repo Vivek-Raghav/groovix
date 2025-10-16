@@ -11,11 +11,12 @@ abstract class MusicPlayerEvent extends Equatable {
 
 // User actions
 class PlaySongEvent extends MusicPlayerEvent {
-  final SongModel song;
-  const PlaySongEvent(this.song);
+  final List<SongModel> songs;
+  final int currentIndex;
+  const PlaySongEvent(this.songs, this.currentIndex);
 
   @override
-  List<Object?> get props => [song];
+  List<Object?> get props => [songs];
 }
 
 class PauseSongEvent extends MusicPlayerEvent {}
@@ -51,4 +52,12 @@ class UpdatePlayerStateEvent extends MusicPlayerEvent {
   List<Object?> get props => [position, isPlaying, processingState];
 }
 
-class CloseMusicPlayerEvent extends MusicPlayerEvent {}
+class NextSongEvent extends MusicPlayerEvent {}
+
+class PreviousSongEvent extends MusicPlayerEvent {}
+
+class CallFlagsEvent extends MusicPlayerEvent {
+  final String songId;
+  final String userId;
+  const CallFlagsEvent(this.songId, this.userId);
+}

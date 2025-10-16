@@ -5,4 +5,5 @@ class ApiUrls {
   static String get uploadSong => '/songs/upload';
   static String get refreshToken => '/auth/refresh';
   static String get getSongList => '/songs/list';
+  static String get updateSongFlags => '/flags/update';
 }

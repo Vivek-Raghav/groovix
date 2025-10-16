@@ -1,24 +1,34 @@
 import 'dart:async';
-
+import 'package:flutter/foundation.dart';
 import 'package:groovix/core/core_index.dart';
+import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
+import 'package:groovix/features/song/domain/models/song_flags_params.dart';
+import 'package:groovix/injection_container/injected/inject_blocs.dart';
 import 'package:just_audio/just_audio.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final MusicPlayerManager _manager;
+  final SongCubit songCubit;
   StreamSubscription? _positionSub;
   StreamSubscription? _playerStateSub;
 
-  MusicPlayerBloc(this._manager) : super(const MusicPlayerState()) {
+  MusicPlayerBloc(this._manager, this.songCubit)
+      : super(const MusicPlayerState()) {
     on<PlaySongEvent>(_onPlaySong);
     on<PauseSongEvent>(_onPauseSong);
     on<ResumeSongEvent>(_onResumeSong);
     on<SeekSongEvent>(_onSeekSong);
     on<SongCompletedEvent>(_onSongCompleted);
+    on<NextSongEvent>(_onNextSong);
+    on<PreviousSongEvent>(_onPreviousSong);
     on<UpdatePlayerStateEvent>(_onUpdatePlayerState);
-    on<CloseMusicPlayerEvent>(_onCloseMusicPlayer);
-
+    on<CallFlagsEvent>(_callFlags);
     _listenToStreams();
   }
+
+  List<SongModel> loadedSongs = [];
+  int currentIndex = 0;
+  final userId = getIt<LocalCache>().getMap(PrefKeys.userDetails);
 
   void _listenToStreams() {
     _positionSub = _manager.positionStream.listen((pos) {
@@ -34,7 +44,8 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       add(UpdatePlayerStateEvent(processingState: playerState.processingState));
       if (playerState.processingState == ProcessingState.completed) {
         add(SongCompletedEvent());
-      }
+      } else if (playerState.processingState == ProcessingState.buffering) {
+      } else if (playerState.processingState == ProcessingState.ready) {}
     });
   }
 
@@ -42,15 +53,57 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       PlaySongEvent event, Emitter<MusicPlayerState> emit) async {
     emit(state.copyWith(isLoading: true));
     try {
-      await _manager.loadAndPlay(event.song);
+      if (loadedSongs.isEmpty ||
+          loadedSongs.length != event.songs.length ||
+          !listEquals(loadedSongs, event.songs)) {
+        loadedSongs = event.songs;
+      }
+      currentIndex = event.currentIndex;
+      await _manager.loadAndPlay(loadedSongs[event.currentIndex]);
 
       emit(state.copyWith(
-          currentSong: event.song,
+          currentSong: loadedSongs[event.currentIndex],
           isPlaying: true,
           duration: _manager.duration,
-          isLoading: false));
+          isLoading: false,
+          isNext: currentIndex == (loadedSongs.length - 1) ? false : true,
+          isPrevious: currentIndex == 0 ? false : true));
+      add(CallFlagsEvent(
+          loadedSongs[event.currentIndex].id, userId?['id'] ?? ''));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  Future<void> _onNextSong(
+      NextSongEvent event, Emitter<MusicPlayerState> emit) async {
+    if (state.isNext) {
+      currentIndex++;
+      await _manager.loadAndPlay(loadedSongs[currentIndex]);
+      emit(state.copyWith(
+          currentSong: loadedSongs[currentIndex],
+          isPlaying: true,
+          duration: _manager.duration,
+          isLoading: false,
+          isNext: currentIndex == (loadedSongs.length - 1) ? false : true,
+          isPrevious: currentIndex == 0 ? false : true));
+      add(CallFlagsEvent(loadedSongs[currentIndex].id, userId?['id'] ?? ''));
+    }
+  }
+
+  Future<void> _onPreviousSong(
+      PreviousSongEvent event, Emitter<MusicPlayerState> emit) async {
+    if (state.isPrevious) {
+      currentIndex--;
+      await _manager.loadAndPlay(loadedSongs[currentIndex]);
+      emit(state.copyWith(
+          currentSong: loadedSongs[currentIndex],
+          isPlaying: true,
+          duration: _manager.duration,
+          isLoading: false,
+          isNext: currentIndex == (loadedSongs.length - 1) ? false : true,
+          isPrevious: currentIndex == 0 ? false : true));
+      add(CallFlagsEvent(loadedSongs[currentIndex].id, userId?['id'] ?? ''));
     }
   }
 
@@ -72,30 +125,27 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
   Future<void> _onSongCompleted(
       SongCompletedEvent event, Emitter<MusicPlayerState> emit) async {
-    await _manager.stop();
-    await _manager.seek(Duration.zero);
-    emit(state.copyWith(isPlaying: false, position: Duration.zero));
+    if (state.isNext) {
+      add(NextSongEvent());
+    } else {
+      await _manager.stop();
+      await _manager.seek(Duration.zero);
+      emit(state.copyWith(isPlaying: false, position: Duration.zero));
+    }
   }
 
   Future<void> _onUpdatePlayerState(
       UpdatePlayerStateEvent event, Emitter<MusicPlayerState> emit) async {
     emit(state.copyWith(
-      position: event.position ?? state.position,
-      isPlaying: event.isPlaying ?? state.isPlaying,
-      processingState: event.processingState ?? state.processingState,
-    ));
+        position: event.position ?? state.position,
+        isPlaying: event.isPlaying ?? state.isPlaying,
+        processingState: event.processingState ?? state.processingState));
   }
 
-  Future<void> _onCloseMusicPlayer(
-      CloseMusicPlayerEvent event, Emitter<MusicPlayerState> emit) async {
-    await _manager.stop();
-    emit(state.copyWith(
-        currentSong: null,
-        isLoading: false,
-        isPlaying: false,
-        position: Duration.zero,
-        duration: Duration.zero,
-        isCompleted: false));
+  Future<void> _callFlags(
+      CallFlagsEvent event, Emitter<MusicPlayerState> emit) async {
+    // await songCubit.getSongFlags(
+    //     SongFlagParams(songId: event.songId, userId: event.userId));
   }
 
   @override

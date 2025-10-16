@@ -8,8 +8,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: getIt<SongCubit>()),
         BlocProvider.value(value: getIt<MusicPlayerBloc>()),
+        BlocProvider.value(value: getIt<SongCubit>()),
       ],
       child: const HomeScreen(),
     );

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:groovix/routes/routes_index.dart';
 
 class MiniMusicScreen extends StatelessWidget {
@@ -125,11 +126,9 @@ class MiniMusicScreen extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {
-                          musicPlayerBloc.add(CloseMusicPlayerEvent());
-                        },
-                        icon: const Icon(Icons.close,
-                            color: ThemeColors.clrWhite),
+                        onPressed: () {},
+                        icon: const Icon(CupertinoIcons.heart,
+                            color: ThemeColors.clrWhite, size: 20),
                       ),
                     ],
                   ),
@@ -153,7 +152,7 @@ class MiniMusicScreen extends StatelessWidget {
       data: SliderTheme.of(context).copyWith(
           padding: EdgeInsets.zero,
           activeTrackColor: Theme.of(context).colorScheme.primary,
-          inactiveTrackColor: ThemeColors.clrGrey.withOpacity(0.4),
+          inactiveTrackColor: ThemeColors.clrWhite.withOpacity(0.4),
           thumbColor: Theme.of(context).colorScheme.primary,
           thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
           trackHeight: 1.2),

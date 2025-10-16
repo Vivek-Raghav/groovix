@@ -146,8 +146,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 shrinkWrap: true,
                 itemCount: state.songsListResponse.songs.length,
                 itemBuilder: (context, index) {
-                  final song = state.songsListResponse.songs[index];
-                  return SongListTile(song: song);
+                  final songs = state.songsListResponse.songs;
+                  return SongListTile(songs: songs, currentIndex: index);
                 },
               );
             } else if (state is SongListLoading) {

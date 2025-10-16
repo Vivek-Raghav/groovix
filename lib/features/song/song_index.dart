@@ -30,3 +30,6 @@ export 'package:groovix/injection_container/injection_initializer.dart';
 export 'package:groovix/features/song/domain/models/song_list_response.dart';
 export 'package:groovix/features/song/domain/models/song_query_model.dart';
 export 'package:groovix/features/song/domain/usecase/song_list_uc.dart';
+export 'package:groovix/features/song/domain/models/song_flag_response.dart';
+export 'package:groovix/features/song/domain/usecase/song_flags_uc.dart';
+export 'package:groovix/features/song/domain/models/song_flags_params.dart';

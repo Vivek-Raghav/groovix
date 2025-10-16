@@ -11,7 +11,13 @@ Future<void> injectBlocs() async {
   getIt.registerLazySingleton<AuthBloc>(
       () => AuthBloc(loginUc: getIt(), signupUc: getIt(), logoutUc: getIt()));
   getIt.registerLazySingleton<SongCubit>(
-      () => SongCubit(uploadSongUc: getIt(), songListUc: getIt()));
+    () => SongCubit(
+      uploadSongUc: getIt(),
+      songListUc: getIt(),
+      songFlagsUc: getIt(),
+    ),
+  );
   getIt.registerLazySingleton<MusicPlayerManager>(() => MusicPlayerManager());
-  getIt.registerLazySingleton<MusicPlayerBloc>(() => MusicPlayerBloc(getIt()));
+  getIt.registerLazySingleton<MusicPlayerBloc>(
+      () => MusicPlayerBloc(getIt(), getIt<SongCubit>()));
 }

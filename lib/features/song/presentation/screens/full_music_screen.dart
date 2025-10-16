@@ -1,9 +1,22 @@
-// full_music_screen.dart
-import 'package:flutter/material.dart';
-import 'package:groovix/core/services/music_player/bloc/music_player_bloc.dart';
-import 'package:groovix/core/services/music_player/bloc/music_player_state.dart';
-import 'package:groovix/core/services/music_player/bloc/player_event.dart';
+import 'package:groovix/features/playlist/playlist_index.dart';
+import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
+import 'package:groovix/features/song/bloc/state/song_state.dart';
+import 'package:groovix/features/song/domain/models/song_flags_params.dart';
 import 'package:groovix/injection_container/injected/inject_blocs.dart';
+
+class FullMusicPage extends StatelessWidget {
+  const FullMusicPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: getIt<SongCubit>()),
+      ],
+      child: const FullMusicScreen(),
+    );
+  }
+}
 
 class FullMusicScreen extends StatelessWidget {
   const FullMusicScreen({super.key});
@@ -20,9 +33,9 @@ class FullMusicScreen extends StatelessWidget {
           final state = snapshot.data ?? musicPlayerBloc.state;
 
           if (state.isLoading) {
-            return _buildNoSongScreen(context);
+            return _buildNoSongScreen(context, state.isLoading);
           } else if (state.currentSong == null) {
-            return _buildNoSongScreen(context);
+            return _buildNoSongScreen(context, state.isLoading);
           }
 
           final song = state.currentSong!;
@@ -32,7 +45,7 @@ class FullMusicScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNoSongScreen(BuildContext context) {
+  Widget _buildNoSongScreen(BuildContext context, bool isLoading) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -44,19 +57,19 @@ class FullMusicScreen extends StatelessWidget {
           ],
         ),
       ),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.music_note,
               size: 80,
               color: Colors.white54,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              "No song playing",
-              style: TextStyle(
+              isLoading ? "Loading..." : "No song playing",
+              style: const TextStyle(
                 fontSize: 18,
                 color: Colors.white54,
                 fontWeight: FontWeight.w500,
@@ -77,7 +90,7 @@ class FullMusicScreen extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             Theme.of(context).colorScheme.primary.withOpacity(0.1),
-            const Color(0xFF121212),
+            const Color(0xFF121212)
           ],
         ),
       ),
@@ -96,7 +109,7 @@ class FullMusicScreen extends StatelessWidget {
 
               // Song Info
               _buildSongInfo(context, song),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               // Progress Bar
               _buildProgressBar(context, state, musicBloc),
@@ -124,15 +137,13 @@ class FullMusicScreen extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.keyboard_arrow_down,
-              color: Colors.white, size: 28),
+          icon: const Icon(Icons.keyboard_arrow_down, size: 28),
         ),
         Expanded(
           child: Text(
             song.songName ?? "Unknown Song",
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.white,
               fontWeight: FontWeight.w600,
             ),
             textAlign: TextAlign.center,
@@ -140,7 +151,7 @@ class FullMusicScreen extends StatelessWidget {
         ),
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.more_horiz, color: Colors.white, size: 28),
+          icon: const Icon(Icons.more_horiz, size: 28),
         ),
       ],
     );
@@ -231,28 +242,63 @@ class FullMusicScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSongInfo(BuildContext context, dynamic song) {
-    return Column(
+  Widget _buildSongInfo(BuildContext context, SongModel song) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          song.songName ?? "Unknown Song",
-          style: const TextStyle(
-            fontSize: 24,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              song.songName,
+              style: const TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              song.artist,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.white70,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
-        Text(
-          song.artist ?? "Unknown Artist",
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.white70,
-            fontWeight: FontWeight.w500,
-          ),
-          textAlign: TextAlign.center,
-        ),
+        BlocBuilder<SongCubit, SongState>(builder: (context, state) {
+          final userId = getIt<LocalCache>().getMap(PrefKeys.userDetails);
+          if (state is SongFlagsLoading) {
+            return SizedBox(
+              height: 24,
+              width: 24,
+              child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary, strokeWidth: 2),
+            );
+          } else if (state is SongFlagsSuccess) {
+            return IconButton(
+              onPressed: () {
+                getIt<SongCubit>().updateSongFlags(SongFlagParams(
+                    songId: song.id,
+                    userId: userId?['id'] ?? '',
+                    isLiked: !state.songFlagsResponse.isLiked));
+              },
+              icon: Icon(
+                  state.songFlagsResponse.isLiked
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: state.songFlagsResponse.isLiked
+                      ? Colors.red
+                      : Colors.white54,
+                  size: 24),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
       ],
     );
   }
@@ -267,6 +313,7 @@ class FullMusicScreen extends StatelessWidget {
       children: [
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
+            padding: EdgeInsets.zero,
             activeTrackColor: Theme.of(context).colorScheme.primary,
             inactiveTrackColor: Colors.white24,
             thumbColor: Theme.of(context).colorScheme.primary,
@@ -316,8 +363,14 @@ class FullMusicScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.skip_previous, color: Colors.white, size: 32),
+          onPressed: state.isPrevious
+              ? () {
+                  musicBloc.add(PreviousSongEvent());
+                }
+              : null,
+          icon: Icon(Icons.skip_previous,
+              color: state.isPrevious ? Colors.white : Colors.white54,
+              size: 32),
         ),
 
         // Play/Pause Button with Loading State
@@ -375,8 +428,13 @@ class FullMusicScreen extends StatelessWidget {
         ),
 
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.skip_next, color: Colors.white, size: 32),
+          onPressed: state.isNext
+              ? () {
+                  musicBloc.add(NextSongEvent());
+                }
+              : null,
+          icon: Icon(Icons.skip_next,
+              color: state.isNext ? Colors.white : Colors.white54, size: 32),
         ),
       ],
     );

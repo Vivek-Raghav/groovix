@@ -96,7 +96,7 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => customTransitionPage(
         context: context,
         state: state,
-        child: const FullMusicScreen(),
+        child: const FullMusicPage(),
       ),
     ),
   ],

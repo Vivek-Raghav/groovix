@@ -19,6 +19,7 @@ class SongRemoteDataSourceImpl extends SongRemoteDataSource {
       if (response.statusCode == 201) {
         return UploadSongResponse.fromJson(response.data);
       } else {
+        debugPrint("Song Status Code: ${response.statusCode}");
         return throw ServerException(
             error: StringConstants.strSomethingWentWrong);
       }
@@ -42,6 +43,24 @@ class SongRemoteDataSourceImpl extends SongRemoteDataSource {
       }
     } catch (e) {
       debugPrint("Song List Error: $e");
+      return throw ServerException(
+          error: StringConstants.strSomethingWentWrong);
+    }
+  }
+
+  @override
+  Future<UserSongFlagsResponse> updateSongFlags(SongFlagParams params) async {
+    try {
+      final response =
+          await apiService.post(ApiUrls.updateSongFlags, data: params.toJson());
+      if (response.statusCode == 200) {
+        return UserSongFlagsResponse.fromJson(response.data);
+      } else {
+        return throw ServerException(
+            error: StringConstants.strSomethingWentWrong);
+      }
+    } catch (e) {
+      debugPrint("Song Flags Update Error: $e");
       return throw ServerException(
           error: StringConstants.strSomethingWentWrong);
     }

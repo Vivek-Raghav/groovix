@@ -432,8 +432,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               : null,
           onTap: () async {
             await _themeManager.setThemeMode(mode);
-            Navigator.of(context).pop();
-            showToast(title: 'Theme changed to $title');
+            Navigator.pop(context);
           },
         );
       },
