@@ -1,6 +1,10 @@
-// Project imports:
 import 'package:groovix/injection_container/injection_index.dart';
 
 final GetIt getIt = GetIt.instance;
 
-Future<void> injectRepositories() async {}
+Future<void> injectRepositories() async {
+  getIt.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(authRemoteDataSource: getIt()));
+  getIt.registerLazySingleton<SongRepository>(
+      () => SongRepositoryImpl(songRemoteDataSource: getIt()));
+}

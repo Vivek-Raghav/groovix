@@ -45,5 +45,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Permissions for file picker functionality -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to your photo library to select images for song thumbnails.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This app needs access to your music library to upload songs.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to microphone for audio recording.</string>
 </dict>
 </plist>

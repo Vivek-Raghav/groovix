@@ -27,10 +27,30 @@ android {
         applicationId = "com.groovix.vivek"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 21
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    flavorDimensions += "default"
+
+    // 🏗️ Product Flavors
+    productFlavors {
+        create("local") {
+            dimension = "default"
+            versionNameSuffix = "-local"
+            resValue("string", "app_name", "Groovix Local")
+        }
+        create("dev") {
+            dimension = "default"
+            versionNameSuffix = "-dev"
+            resValue("string", "app_name", "Groovix Dev")
+        }
+        create("prod") {
+            dimension = "default"
+            resValue("string", "app_name", "Groovix")
+        }
     }
 
     buildTypes {

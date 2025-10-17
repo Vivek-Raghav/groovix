@@ -1,7 +1,12 @@
+// Dart imports:
 import 'dart:ui';
 
-import 'package:groovix/core/constants/global_const.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
+import 'package:groovix/core/constants/global_const.dart';
+import 'package:groovix/core/theme/app_theme.dart';
 
 bool _isSnackbarClosing = false;
 Future<void> showToast({
@@ -52,7 +57,7 @@ Future<void> showToast({
                       ?.copyWith(
                         fontWeight: FontWeight.w400,
                         fontSize: 16,
-                        color: Colors.white,
+                        color: ThemeColors.primaryColor,
                       ),
                 ),
               ),

@@ -1,5 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
+
+// Project imports:
+import 'package:groovix/core/theme/app_theme.dart';
 
 CustomTransitionPage<T> customTransitionPage<T>({
   required BuildContext context,
@@ -10,7 +16,7 @@ CustomTransitionPage<T> customTransitionPage<T>({
     key: state.pageKey,
     child: child,
     opaque: false,
-    barrierColor: Colors.transparent,
+    barrierColor: ThemeColors.clrTransparent,
     maintainState: true,
     transitionDuration: const Duration(milliseconds: 350),
     reverseTransitionDuration: const Duration(milliseconds: 250),

@@ -1,5 +1,9 @@
 // ignore_for_file: constant_identifier_names
+
+// Dart imports:
 import "dart:math";
+
+// Flutter imports:
 import "package:flutter/material.dart";
 
 // Design size constants - adjust these to match your design specs
