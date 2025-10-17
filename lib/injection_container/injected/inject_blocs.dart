@@ -14,10 +14,12 @@ Future<void> injectBlocs() async {
     () => SongCubit(
       uploadSongUc: getIt(),
       songListUc: getIt(),
-      songFlagsUc: getIt(),
     ),
   );
   getIt.registerLazySingleton<MusicPlayerManager>(() => MusicPlayerManager());
-  getIt.registerLazySingleton<MusicPlayerBloc>(
-      () => MusicPlayerBloc(getIt(), getIt<SongCubit>()));
+  getIt.registerLazySingleton<MusicPlayerBloc>(() => MusicPlayerBloc(
+        getIt(),
+        getIt(),
+        getIt(),
+      ));
 }

@@ -4,26 +4,46 @@ import 'package:json_annotation/json_annotation.dart';
 part 'song_flags_params.g.dart';
 
 @JsonSerializable()
-class SongFlagParams {
+class UpdateSongFlagParams {
   @JsonKey(name: 'song_id')
   final String songId;
 
   @JsonKey(name: 'user_id')
   final String userId;
 
-  // Backend expects camelCase keys for these two, so no rename.
   final bool? isLiked;
   final bool? isRecent;
 
-  const SongFlagParams({
+  const UpdateSongFlagParams({
     required this.songId,
     required this.userId,
     this.isLiked = false,
     this.isRecent = false,
   });
 
-  factory SongFlagParams.fromJson(Map<String, dynamic> json) =>
-      _$SongFlagParamsFromJson(json);
+  factory UpdateSongFlagParams.fromJson(Map<String, dynamic> json) =>
+      _$UpdateSongFlagParamsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SongFlagParamsToJson(this);
+  Map<String, dynamic> toJson() => _$UpdateSongFlagParamsToJson(this);
+}
+
+
+
+@JsonSerializable()
+class GetSongFlagParams {
+  @JsonKey(name: 'song_id')
+  final String songId;
+
+  @JsonKey(name: 'user_id')
+  final String userId;
+
+  const GetSongFlagParams({
+    required this.songId,
+    required this.userId,
+  });
+
+  factory GetSongFlagParams.fromJson(Map<String, dynamic> json) =>
+      _$GetSongFlagParamsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GetSongFlagParamsToJson(this);
 }

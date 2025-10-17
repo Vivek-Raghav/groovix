@@ -56,8 +56,15 @@ class NextSongEvent extends MusicPlayerEvent {}
 
 class PreviousSongEvent extends MusicPlayerEvent {}
 
-class CallFlagsEvent extends MusicPlayerEvent {
-  final String songId;
-  final String userId;
-  const CallFlagsEvent(this.songId, this.userId);
+class ToggleFavoriteEvent extends MusicPlayerEvent {
+  final bool isLiked;
+  const ToggleFavoriteEvent(this.isLiked);
+  @override
+  List<Object?> get props => [isLiked];
+}
+
+class LoadFlagsEvent extends MusicPlayerEvent {
+  const LoadFlagsEvent();
+  @override
+  List<Object?> get props => [];
 }

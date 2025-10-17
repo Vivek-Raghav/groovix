@@ -5,7 +5,7 @@ export 'package:groovix/core/core_index.dart';
 
 // Song data layer
 export 'data/datasource/song_datasource.dart';
-export 'data/datasource/song_datasource_impl.dart';
+export 'data/datasource/song_remote_datasource_impl.dart';
 export 'data/repositories/song_repository_impl.dart';
 
 // Song domain layer
@@ -31,5 +31,5 @@ export 'package:groovix/features/song/domain/models/song_list_response.dart';
 export 'package:groovix/features/song/domain/models/song_query_model.dart';
 export 'package:groovix/features/song/domain/usecase/song_list_uc.dart';
 export 'package:groovix/features/song/domain/models/song_flag_response.dart';
-export 'package:groovix/features/song/domain/usecase/song_flags_uc.dart';
+export 'package:groovix/features/song/domain/usecase/update_song_flags_uc.dart';
 export 'package:groovix/features/song/domain/models/song_flags_params.dart';

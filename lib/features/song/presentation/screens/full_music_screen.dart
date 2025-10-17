@@ -1,22 +1,5 @@
 import 'package:groovix/features/playlist/playlist_index.dart';
-import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
-import 'package:groovix/features/song/bloc/state/song_state.dart';
-import 'package:groovix/features/song/domain/models/song_flags_params.dart';
 import 'package:groovix/injection_container/injected/inject_blocs.dart';
-
-class FullMusicPage extends StatelessWidget {
-  const FullMusicPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: getIt<SongCubit>()),
-      ],
-      child: const FullMusicScreen(),
-    );
-  }
-}
 
 class FullMusicScreen extends StatelessWidget {
   const FullMusicScreen({super.key});
@@ -108,7 +91,7 @@ class FullMusicScreen extends StatelessWidget {
               const SizedBox(height: 30),
 
               // Song Info
-              _buildSongInfo(context, song),
+              _buildSongInfo(context, song, state, musicBloc),
               const SizedBox(height: 20),
 
               // Progress Bar
@@ -242,7 +225,8 @@ class FullMusicScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSongInfo(BuildContext context, SongModel song) {
+  Widget _buildSongInfo(BuildContext context, SongModel song,
+      MusicPlayerState state, MusicPlayerBloc musicBloc) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -270,35 +254,14 @@ class FullMusicScreen extends StatelessWidget {
             ),
           ],
         ),
-        BlocBuilder<SongCubit, SongState>(builder: (context, state) {
-          final userId = getIt<LocalCache>().getMap(PrefKeys.userDetails);
-          if (state is SongFlagsLoading) {
-            return SizedBox(
-              height: 24,
-              width: 24,
-              child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary, strokeWidth: 2),
-            );
-          } else if (state is SongFlagsSuccess) {
-            return IconButton(
-              onPressed: () {
-                getIt<SongCubit>().updateSongFlags(SongFlagParams(
-                    songId: song.id,
-                    userId: userId?['id'] ?? '',
-                    isLiked: !state.songFlagsResponse.isLiked));
-              },
-              icon: Icon(
-                  state.songFlagsResponse.isLiked
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  color: state.songFlagsResponse.isLiked
-                      ? Colors.red
-                      : Colors.white54,
-                  size: 24),
-            );
-          }
-          return const SizedBox.shrink();
-        }),
+        IconButton(
+            onPressed: () {
+              musicBloc.add(ToggleFavoriteEvent(!state.isFavorite));
+            },
+            icon: Icon(
+                state.isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: state.isFavorite ? Colors.red : Colors.white54,
+                size: 24))
       ],
     );
   }

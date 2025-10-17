@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:groovix/core/core_index.dart';
-import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
 import 'package:groovix/features/song/domain/models/song_flags_params.dart';
+import 'package:groovix/features/song/domain/usecase/get_song_flags_uc.dart';
+import 'package:groovix/features/song/domain/usecase/update_song_flags_uc.dart';
 import 'package:groovix/injection_container/injected/inject_blocs.dart';
 import 'package:just_audio/just_audio.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final MusicPlayerManager _manager;
-  final SongCubit songCubit;
+  final UpdateSongFlagsUc updateSongFlagsUc;
+  final GetSongFlagsUc getSongFlagsUc;
   StreamSubscription? _positionSub;
   StreamSubscription? _playerStateSub;
 
-  MusicPlayerBloc(this._manager, this.songCubit)
+  MusicPlayerBloc(this._manager, this.updateSongFlagsUc, this.getSongFlagsUc)
       : super(const MusicPlayerState()) {
     on<PlaySongEvent>(_onPlaySong);
     on<PauseSongEvent>(_onPauseSong);
@@ -22,7 +24,8 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<NextSongEvent>(_onNextSong);
     on<PreviousSongEvent>(_onPreviousSong);
     on<UpdatePlayerStateEvent>(_onUpdatePlayerState);
-    on<CallFlagsEvent>(_callFlags);
+    on<LoadFlagsEvent>(_onLoadFlags);
+    on<ToggleFavoriteEvent>(_toggleFavorite);
     _listenToStreams();
   }
 
@@ -68,8 +71,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           isLoading: false,
           isNext: currentIndex == (loadedSongs.length - 1) ? false : true,
           isPrevious: currentIndex == 0 ? false : true));
-      add(CallFlagsEvent(
-          loadedSongs[event.currentIndex].id, userId?['id'] ?? ''));
+      add(const LoadFlagsEvent());
     } catch (e) {
       emit(state.copyWith(isLoading: false));
     }
@@ -87,7 +89,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           isLoading: false,
           isNext: currentIndex == (loadedSongs.length - 1) ? false : true,
           isPrevious: currentIndex == 0 ? false : true));
-      add(CallFlagsEvent(loadedSongs[currentIndex].id, userId?['id'] ?? ''));
+      add(const LoadFlagsEvent());
     }
   }
 
@@ -103,7 +105,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           isLoading: false,
           isNext: currentIndex == (loadedSongs.length - 1) ? false : true,
           isPrevious: currentIndex == 0 ? false : true));
-      add(CallFlagsEvent(loadedSongs[currentIndex].id, userId?['id'] ?? ''));
+      add(const LoadFlagsEvent());
     }
   }
 
@@ -142,10 +144,22 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         processingState: event.processingState ?? state.processingState));
   }
 
-  Future<void> _callFlags(
-      CallFlagsEvent event, Emitter<MusicPlayerState> emit) async {
-    // await songCubit.getSongFlags(
-    //     SongFlagParams(songId: event.songId, userId: event.userId));
+  Future<void> _onLoadFlags(
+      LoadFlagsEvent event, Emitter<MusicPlayerState> emit) async {
+    final result = await getSongFlagsUc.call(GetSongFlagParams(
+        songId: state.currentSong?.id ?? '', userId: userId?['id'] ?? ''));
+    result.fold((failure) => emit(state.copyWith(isFavorite: false)),
+        (success) => emit(state.copyWith(isFavorite: success.isLiked)));
+  }
+
+  Future<void> _toggleFavorite(
+      ToggleFavoriteEvent event, Emitter<MusicPlayerState> emit) async {
+    final result = await updateSongFlagsUc.call(UpdateSongFlagParams(
+        songId: state.currentSong?.id ?? '',
+        userId: userId?['id'] ?? '',
+        isLiked: !state.isFavorite));
+    result.fold((failure) => emit(state.copyWith(isFavorite: false)),
+        (success) => emit(state.copyWith(isFavorite: success.isLiked)));
   }
 
   @override

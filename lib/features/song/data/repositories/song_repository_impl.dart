@@ -44,7 +44,7 @@ class SongRepositoryImpl extends SongRepository {
 
   @override
   EitherDynamic<UserSongFlagsResponse> updateSongFlags(
-      SongFlagParams params) async {
+      UpdateSongFlagParams params) async {
     try {
       final data = await songRemoteDataSource.updateSongFlags(params);
       if (data.id.isNotEmpty) {
@@ -53,6 +53,20 @@ class SongRepositoryImpl extends SongRepository {
         return Left(
           ServerFailure(error: StringConstants.strSomethingWentWrong),
         );
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(error: e.error));
+    }
+  }
+
+  @override
+  EitherDynamic<UserSongFlagsResponse> getSongFlags(GetSongFlagParams params) async {
+    try {
+      final data = await songRemoteDataSource.getSongFlags(params);
+      if (data.id.isNotEmpty) {
+        return Right(data);
+      } else {
+        return Left(ServerFailure(error: StringConstants.strSomethingWentWrong));
       }
     } on ServerException catch (e) {
       return Left(ServerFailure(error: e.error));

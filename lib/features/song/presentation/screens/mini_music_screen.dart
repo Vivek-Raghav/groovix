@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:groovix/routes/routes_index.dart';
 
 class MiniMusicScreen extends StatelessWidget {
@@ -45,21 +44,6 @@ class MiniMusicScreen extends StatelessWidget {
         ));
   }
 
-  Widget _noSongScreen(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          context.push(AppRoutes.fullMusic);
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          height: 60,
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10)),
-        ));
-  }
-
   Widget _buildMiniMusicScreen(
     BuildContext context,
     MusicPlayerState state,
@@ -75,10 +59,9 @@ class MiniMusicScreen extends StatelessWidget {
             height: 60,
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(4), topRight: Radius.circular(4)),
-              color: Color(int.parse("0xFF${song.hexcode}")),
-            ),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(4), topRight: Radius.circular(4)),
+                color: Color(int.parse("0xFF${song.hexcode}"))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
@@ -126,10 +109,18 @@ class MiniMusicScreen extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
-                        icon: const Icon(CupertinoIcons.heart,
-                            color: ThemeColors.clrWhite, size: 20),
-                      ),
+                          onPressed: () {
+                            musicPlayerBloc
+                                .add(ToggleFavoriteEvent(!state.isFavorite));
+                          },
+                          icon: Icon(
+                              state.isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: state.isFavorite
+                                  ? Colors.red
+                                  : Colors.white54,
+                              size: 24)),
                     ],
                   ),
                 ),
