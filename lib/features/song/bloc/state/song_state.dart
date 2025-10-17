@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:groovix/features/song/domain/models/song_flag_response.dart';
 import 'package:groovix/features/song/song_index.dart';
 
 abstract class SongState extends Equatable {
