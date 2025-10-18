@@ -1,6 +1,7 @@
-import '../models/song_model.dart';
+// Project imports:
+import "package:groovix/features/cms/cms_index.dart";
 
-abstract class CMSSongRepository {
+abstract class CmsSongRemoteDataSource {
   Future<List<SongModel>> getAllSongs();
   Future<SongModel?> getSongById(String id);
   Future<List<SongModel>> searchSongs(String query);
@@ -8,4 +9,5 @@ abstract class CMSSongRepository {
   Future<SongModel> updateSong(SongModel song);
   Future<void> deleteSong(String id);
   Future<List<SongModel>> getRecentSongs({int limit = 10});
+  Future<UploadSongResponse> uploadSong(UploadSongModel params);
 }

@@ -9,24 +9,6 @@ class SongRepositoryImpl extends SongRepository {
   final SongRemoteDataSource songRemoteDataSource;
 
   @override
-  EitherDynamic<UploadSongResponse> uploadSong(UploadSongModel params) async {
-    try {
-      final data = await songRemoteDataSource.uploadSong(params);
-      if (data.id.isNotEmpty) {
-        return Right(data);
-      } else {
-        return Left(
-          ServerFailure(
-            error: StringConstants.strSomethingWentWrong,
-          ),
-        );
-      }
-    } on ServerException catch (e) {
-      return Left(ServerFailure(error: e.error));
-    }
-  }
-
-  @override
   EitherDynamic<SongsListResponse> getSongList(SongsQueryModel params) async {
     try {
       final data = await songRemoteDataSource.getSongList(params);
@@ -60,13 +42,15 @@ class SongRepositoryImpl extends SongRepository {
   }
 
   @override
-  EitherDynamic<UserSongFlagsResponse> getSongFlags(GetSongFlagParams params) async {
+  EitherDynamic<UserSongFlagsResponse> getSongFlags(
+      GetSongFlagParams params) async {
     try {
       final data = await songRemoteDataSource.getSongFlags(params);
       if (data.id.isNotEmpty) {
         return Right(data);
       } else {
-        return Left(ServerFailure(error: StringConstants.strSomethingWentWrong));
+        return Left(
+            ServerFailure(error: StringConstants.strSomethingWentWrong));
       }
     } on ServerException catch (e) {
       return Left(ServerFailure(error: e.error));

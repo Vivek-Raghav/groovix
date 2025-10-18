@@ -62,8 +62,8 @@ class _CMSScreenState extends State<CMSScreen> {
         BlocProvider<DashboardBloc>(
           create: (context) => getIt<DashboardBloc>(),
         ),
-        BlocProvider<SongBloc>(
-          create: (context) => getIt<SongBloc>(),
+        BlocProvider<CmsSongBloc>(
+          create: (context) => getIt<CmsSongBloc>(),
         ),
       ],
       child: Scaffold(

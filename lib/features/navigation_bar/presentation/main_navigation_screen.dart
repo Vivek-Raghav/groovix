@@ -22,7 +22,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     const HomePage(),
     const ExploreScreen(),
-    const UploadSongScreen(),
+    const PlaylistScreen(),
     const PlaylistScreen(),
     const SettingsScreen(),
   ];

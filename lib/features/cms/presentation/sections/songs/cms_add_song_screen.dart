@@ -407,6 +407,21 @@ class _CMSAddSongScreenState extends State<CMSAddSongScreen> {
         _isUploading = true;
       });
 
+      // Create SongModel with form data
+      final song = SongModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        songName: _songNameController.text.trim(),
+        artist: _artistController.text.trim(),
+        songUrl:
+            'https://example.com/audio/${DateTime.now().millisecondsSinceEpoch}.mp3', // Placeholder URL
+        thumbnailUrl:
+            'https://example.com/thumb/${DateTime.now().millisecondsSinceEpoch}.jpg', // Placeholder URL
+        hexcode: '#FF6B6B', // Default color
+      );
+
+      // Add song using BLoC
+      context.read<CmsSongBloc>().add(CreateSong(song));
+
       // Simulate upload process
       Future.delayed(const Duration(seconds: 2), () {
         setState(() {

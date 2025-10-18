@@ -10,7 +10,6 @@ export 'package:groovix/features/auth/data/repositories/auth_repository_impl.dar
 export 'package:groovix/features/auth/domain/repositories/auth_repository.dart';
 export 'package:groovix/features/auth/domain/usecase/login_uc.dart';
 export 'package:groovix/features/song/domain/usecase/song_list_uc.dart';
-export 'package:groovix/features/song/domain/usecase/upload_song_uc.dart';
 export 'package:groovix/features/song/data/repositories/song_repository_impl.dart';
 export 'package:groovix/features/song/domain/repositories/song_repository.dart';
 export 'package:groovix/features/auth/data/datasource/auth_remote_datasource.dart';

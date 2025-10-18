@@ -1,6 +1,4 @@
-import 'package:groovix/injection_container/injection_index.dart';
-import 'package:groovix/features/cms/data/datasources/cms_song_datasource_impl.dart';
-import 'package:groovix/features/cms/data/datasources/cms_song_datasource.dart';
+import 'package:groovix/features/cms/cms_index.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -11,5 +9,6 @@ Future<void> injectDatasources() async {
       () => SongRemoteDataSourceImpl());
 
   // CMS DataSources
-  getIt.registerLazySingleton<CMSSongDataSource>(() => CMSSongDataSourceImpl());
+  getIt.registerLazySingleton<CmsSongRemoteDataSource>(
+      () => CmsSongRemoteDatasourceImpl());
 }

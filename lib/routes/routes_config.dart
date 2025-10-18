@@ -1,5 +1,8 @@
 // Project imports:
 import 'package:groovix/features/cms/cms_screen.dart';
+import 'package:groovix/features/cms/presentation/sections/songs/cms_upload_song.dart';
+import 'package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_response.dart';
+import 'package:groovix/features/cms/presentation/sections/songs/song_upload_success_screen.dart';
 import 'package:groovix/features/song/presentation/screens/full_music_screen.dart';
 import 'package:groovix/routes/routes_index.dart';
 
@@ -25,88 +28,71 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.bottomNav,
       pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const MainNavigationScreen(),
-      ),
+          context: context, state: state, child: const MainNavigationScreen()),
     ),
     GoRoute(
       path: AppRoutes.explore,
       pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const MainNavigationScreen(index: 1),
-      ),
-    ),
-    GoRoute(
-      path: AppRoutes.uploadSong,
-      pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const MainNavigationScreen(index: 2),
-      ),
-    ),
-    GoRoute(
-      path: AppRoutes.playlist,
-      pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const MainNavigationScreen(index: 3),
-      ),
-    ),
-    GoRoute(
-      path: AppRoutes.settings,
-      pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const MainNavigationScreen(index: 4),
-      ),
+          context: context,
+          state: state,
+          child: const MainNavigationScreen(index: 1)),
     ),
     GoRoute(
       path: AppRoutes.library,
       pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const LibraryScreen(),
-      ),
+          context: context,
+          state: state,
+          child: const MainNavigationScreen(index: 2)),
+    ),
+    GoRoute(
+      path: AppRoutes.playlist,
+      pageBuilder: (context, state) => customTransitionPage(
+          context: context,
+          state: state,
+          child: const MainNavigationScreen(index: 3)),
+    ),
+    GoRoute(
+      path: AppRoutes.settings,
+      pageBuilder: (context, state) => customTransitionPage(
+          context: context,
+          state: state,
+          child: const MainNavigationScreen(index: 4)),
+    ),
+    GoRoute(
+      path: AppRoutes.library,
+      pageBuilder: (context, state) => customTransitionPage(
+          context: context, state: state, child: const LibraryScreen()),
     ),
     GoRoute(
       path: AppRoutes.login,
       pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const LoginScreen(),
-      ),
+          context: context, state: state, child: const LoginScreen()),
     ),
     GoRoute(
       path: AppRoutes.signup,
       pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const SignupScreen(),
-      ),
+          context: context, state: state, child: const SignupScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.uploadSong,
+      pageBuilder: (context, state) => customTransitionPage(
+          context: context, state: state, child: const UploadSongScreen()),
     ),
     GoRoute(
       path: AppRoutes.uploadSuccess,
       pageBuilder: (context, state) {
-        // Extract the upload response from state.extra
         final uploadResponse = state.extra as UploadSongResponse?;
         return customTransitionPage(
           context: context,
           state: state,
-          child: SongUploadSuccessScreen(
-            uploadResponse: uploadResponse!,
-          ),
+          child: SongUploadSuccessScreen(uploadResponse: uploadResponse!),
         );
       },
     ),
     GoRoute(
       path: AppRoutes.fullMusic,
       pageBuilder: (context, state) => customTransitionPage(
-        context: context,
-        state: state,
-        child: const FullMusicScreen(),
-      ),
+          context: context, state: state, child: const FullMusicScreen()),
     ),
   ],
 );

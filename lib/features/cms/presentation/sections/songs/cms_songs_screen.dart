@@ -1,4 +1,4 @@
-import '../../../cms_index.dart';
+import "package:groovix/features/cms/cms_index.dart";
 
 class CMSSongsScreen extends StatefulWidget {
   const CMSSongsScreen({super.key});
@@ -13,7 +13,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<SongBloc>().add(LoadSongs());
+    context.read<CmsSongBloc>().add(LoadSongs());
   }
 
   @override
@@ -43,15 +43,15 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
             placeholder: 'Search songs by name, artist, or album...',
             controller: _searchController,
             onChanged: (query) {
-              context.read<SongBloc>().add(SearchSongs(query));
+              context.read<CmsSongBloc>().add(SearchSongs(query));
             },
           ),
 
           // Songs List
           Expanded(
-            child: BlocBuilder<SongBloc, SongState>(
+            child: BlocBuilder<CmsSongBloc, CmsSongState>(
               builder: (context, state) {
-                if (state is SongLoading) {
+                if (state is SongUploadLoading) {
                   return const Center(
                     child: CircularProgressIndicator(
                       color: ThemeColors.primaryColor,
@@ -64,7 +64,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.error_outline,
                           size: 64,
                           color: ThemeColors.red,
@@ -83,7 +83,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
-                            context.read<SongBloc>().add(LoadSongs());
+                            context.read<CmsSongBloc>().add(LoadSongs());
                           },
                           child: const Text('Retry'),
                         ),
@@ -104,7 +104,9 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: "cms_songs_fab",
-        onPressed: _navigateToAddSong,
+        onPressed: () {
+          context.push(AppRoutes.uploadSong);
+        },
         backgroundColor: ThemeColors.primaryColor,
         foregroundColor: ThemeColors.white,
         child: const Icon(Icons.add),
@@ -170,7 +172,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
               ? NetworkImage(song.thumbnailUrl)
               : null,
           child: song.thumbnailUrl.isEmpty
-              ? Icon(
+              ? const Icon(
                   Icons.music_note,
                   color: ThemeColors.primaryColor,
                   size: 24,
@@ -178,7 +180,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
               : null,
         ),
         title: Text(
-          song.name,
+          song.songName,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: isDark ? ThemeColors.white : ThemeColors.black,
@@ -186,23 +188,11 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              song.artist,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
-              ),
-            ),
-            Text(
-              song.genres.join(', '),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: ThemeColors.primaryColor,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
+        subtitle: Text(
+          song.artist,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
+          ),
         ),
         trailing: PopupMenuButton<String>(
           icon: Icon(
@@ -249,20 +239,10 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
     );
   }
 
-  void _navigateToAddSong() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CMSAddSongScreen(),
-      ),
-    );
-  }
-
   void _navigateToEditSong(SongModel song) {
-    // TODO: Implement edit song screen
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Edit ${song.name} - To be implemented'),
+        content: Text('Edit ${song.songName} - To be implemented'),
         backgroundColor: ThemeColors.primaryColor,
       ),
     );
@@ -273,7 +253,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Song'),
-        content: Text('Are you sure you want to delete "${song.name}"?'),
+        content: Text('Are you sure you want to delete "${song.songName}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -282,10 +262,10 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              context.read<SongBloc>().add(DeleteSong(song.id));
+              context.read<CmsSongBloc>().add(DeleteSong(song.id));
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${song.name} deleted successfully'),
+                  content: Text('${song.songName} deleted successfully'),
                   backgroundColor: ThemeColors.clrGreen,
                 ),
               );

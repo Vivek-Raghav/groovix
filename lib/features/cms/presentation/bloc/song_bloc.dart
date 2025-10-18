@@ -1,72 +1,12 @@
-import '../../cms_index.dart';
+import 'package:groovix/features/cms/presentation/sections/songs/domain/usecase/upload_song_uc.dart';
 
-// Events
-abstract class SongEvent {}
+import "package:groovix/features/cms/cms_index.dart";
 
-class LoadSongs extends SongEvent {}
+class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
+  final CmsSongRepository _songRepository;
 
-class SearchSongs extends SongEvent {
-  final String query;
-  SearchSongs(this.query);
-}
-
-class CreateSong extends SongEvent {
-  final SongModel song;
-  CreateSong(this.song);
-}
-
-class UpdateSong extends SongEvent {
-  final SongModel song;
-  UpdateSong(this.song);
-}
-
-class DeleteSong extends SongEvent {
-  final String songId;
-  DeleteSong(this.songId);
-}
-
-class LoadRecentSongs extends SongEvent {
-  final int limit;
-  LoadRecentSongs({this.limit = 10});
-}
-
-// States
-abstract class SongState {}
-
-class SongInitial extends SongState {}
-
-class SongLoading extends SongState {}
-
-class SongLoaded extends SongState {
-  final List<SongModel> songs;
-  SongLoaded(this.songs);
-}
-
-class SongError extends SongState {
-  final String message;
-  SongError(this.message);
-}
-
-class SongCreated extends SongState {
-  final SongModel song;
-  SongCreated(this.song);
-}
-
-class SongUpdated extends SongState {
-  final SongModel song;
-  SongUpdated(this.song);
-}
-
-class SongDeleted extends SongState {
-  final String songId;
-  SongDeleted(this.songId);
-}
-
-// BLoC
-class SongBloc extends Bloc<SongEvent, SongState> {
-  final CMSSongRepository _songRepository;
-
-  SongBloc(this._songRepository) : super(SongInitial()) {
+  CmsSongBloc(this._songRepository, {required this.uploadSongUc})
+      : super(SongInitial()) {
     on<LoadSongs>(_onLoadSongs);
     on<SearchSongs>(_onSearchSongs);
     on<CreateSong>(_onCreateSong);
@@ -75,7 +15,16 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     on<LoadRecentSongs>(_onLoadRecentSongs);
   }
 
-  Future<void> _onLoadSongs(LoadSongs event, Emitter<SongState> emit) async {
+  final UploadSongUc uploadSongUc;
+
+  Future<void> uploadSong(UploadSongModel uploadSongModel) async {
+    emit(SongUploadLoading());
+    final result = await uploadSongUc.call(uploadSongModel);
+    result.fold((failure) => emit(UploadSongFailure(error: failure.toString())),
+        (success) => emit(UploadSongSuccess(uploadSongResponse: success)));
+  }
+
+  Future<void> _onLoadSongs(LoadSongs event, Emitter<CmsSongState> emit) async {
     emit(SongLoading());
     try {
       final songs = await _songRepository.getAllSongs();
@@ -86,7 +35,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
   }
 
   Future<void> _onSearchSongs(
-      SearchSongs event, Emitter<SongState> emit) async {
+      SearchSongs event, Emitter<CmsSongState> emit) async {
     emit(SongLoading());
     try {
       final songs = await _songRepository.searchSongs(event.query);
@@ -96,7 +45,8 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     }
   }
 
-  Future<void> _onCreateSong(CreateSong event, Emitter<SongState> emit) async {
+  Future<void> _onCreateSong(
+      CreateSong event, Emitter<CmsSongState> emit) async {
     try {
       final song = await _songRepository.createSong(event.song);
       emit(SongCreated(song));
@@ -105,7 +55,8 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     }
   }
 
-  Future<void> _onUpdateSong(UpdateSong event, Emitter<SongState> emit) async {
+  Future<void> _onUpdateSong(
+      UpdateSong event, Emitter<CmsSongState> emit) async {
     try {
       final song = await _songRepository.updateSong(event.song);
       emit(SongUpdated(song));
@@ -114,7 +65,8 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     }
   }
 
-  Future<void> _onDeleteSong(DeleteSong event, Emitter<SongState> emit) async {
+  Future<void> _onDeleteSong(
+      DeleteSong event, Emitter<CmsSongState> emit) async {
     try {
       await _songRepository.deleteSong(event.songId);
       emit(SongDeleted(event.songId));
@@ -124,7 +76,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
   }
 
   Future<void> _onLoadRecentSongs(
-      LoadRecentSongs event, Emitter<SongState> emit) async {
+      LoadRecentSongs event, Emitter<CmsSongState> emit) async {
     try {
       final songs = await _songRepository.getRecentSongs(limit: event.limit);
       emit(SongLoaded(songs));

@@ -2,6 +2,10 @@
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
+import 'package:groovix/features/cms/presentation/bloc/song_bloc.dart';
+import 'package:groovix/features/cms/presentation/bloc/states/cms_song_state.dart';
+import 'package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_model.dart';
 import 'package:groovix/routes/routes_index.dart';
 
 class UploadSongScreen extends StatefulWidget {
@@ -81,9 +85,9 @@ class _UploadSongScreenState extends State<UploadSongScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SongCubit>(
-      create: (context) => getIt<SongCubit>(),
-      child: BlocListener<SongCubit, SongState>(
+    return BlocProvider<CmsSongBloc>(
+      create: (context) => getIt<CmsSongBloc>(),
+      child: BlocListener<CmsSongBloc, CmsSongState>(
         listener: (context, state) {
           if (state is UploadSongSuccess) {
             _loadingController.stop();
@@ -102,7 +106,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             showToast(title: 'Upload failed: ${state.error}');
           }
         },
-        child: BlocBuilder<SongCubit, SongState>(
+        child: BlocBuilder<CmsSongBloc, CmsSongState>(
           builder: (context, state) {
             return Scaffold(
               body: Stack(
@@ -257,17 +261,16 @@ class _UploadSongScreenState extends State<UploadSongScreen>
   Widget _buildHeader(Color textColor) {
     return Row(
       children: [
+        IconButton(
+            onPressed: context.pop,
+            icon: Icon(CupertinoIcons.back, color: textColor)),
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(
-            Icons.music_note,
-            color: Theme.of(context).colorScheme.onPrimary,
-            size: 24,
-          ),
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12)),
+          child: Icon(Icons.music_note,
+              color: Theme.of(context).colorScheme.onPrimary, size: 24),
         ),
         const SizedBox(width: 12),
         Text(
@@ -280,7 +283,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
           ),
         ),
         const Expanded(child: SizedBox()),
-        BlocBuilder<SongCubit, SongState>(
+        BlocBuilder<CmsSongBloc, CmsSongState>(
           builder: (context, state) {
             return IconButton(
               onPressed: state is UploadSongLoading
@@ -291,7 +294,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                           _artistController.text.isNotEmpty &&
                           _songNameController.text.isNotEmpty) {
                         _loadingController.repeat();
-                        context.read<SongCubit>().uploadSong(UploadSongModel(
+                        context.read<CmsSongBloc>().uploadSong(UploadSongModel(
                               thumbnailFile: _selectedThumbnail!,
                               song: _selectedAudioFile!,
                               artist: _artistController.text,
@@ -873,7 +876,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
   }
 
   Widget _buildUploadButton(Color textColor) {
-    return BlocBuilder<SongCubit, SongState>(
+    return BlocBuilder<CmsSongBloc, CmsSongState>(
       builder: (context, state) {
         return Container(
           width: double.infinity,
@@ -895,7 +898,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                         _artistController.text.isNotEmpty &&
                         _songNameController.text.isNotEmpty) {
                       _loadingController.repeat();
-                      context.read<SongCubit>().uploadSong(UploadSongModel(
+                      context.read<CmsSongBloc>().uploadSong(UploadSongModel(
                             thumbnailFile: _selectedThumbnail!,
                             song: _selectedAudioFile!,
                             artist: _artistController.text,
@@ -917,7 +920,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
               ),
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
@@ -925,7 +928,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                   color: Colors.white,
                   size: 20,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   'Upload Now',
                   style: TextStyle(

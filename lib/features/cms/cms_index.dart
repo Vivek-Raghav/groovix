@@ -1,27 +1,26 @@
 // CMS Models
-export 'domain/models/song_model.dart';
 export 'domain/models/playlist_model.dart';
 export 'domain/models/genre_model.dart';
 export 'domain/models/artist_model.dart';
 export 'domain/models/dashboard_stats.dart';
 
 // CMS Repositories
-export 'domain/repositories/cms_song_repository.dart';
+export 'presentation/sections/songs/domain/repositories/cms_song_repository.dart';
 export 'domain/repositories/playlist_repository.dart';
 export 'domain/repositories/genre_repository.dart';
 export 'domain/repositories/artist_repository.dart';
 export 'domain/repositories/dashboard_repository.dart';
 
 // CMS Data Sources
-export 'data/datasources/cms_song_datasource.dart';
-export 'data/datasources/cms_song_datasource_impl.dart';
+export 'presentation/sections/songs/data/datasource/cms_song_datasource.dart';
+export 'presentation/sections/songs/data/datasource/cms_song_remote_datasource_impl.dart';
 
 // CMS Repository Implementations
-export 'data/repositories/cms_song_repository_impl.dart';
+export 'presentation/sections/songs/data/repositories/cms_song_repository_impl.dart';
 export 'data/repositories/dashboard_repository_impl.dart';
 
 // CMS Use Cases
-export 'domain/usecase/song_usecases.dart';
+export 'presentation/sections/songs/domain/usecase/song_usecases.dart';
 export 'domain/usecase/artist_usecases.dart';
 export 'domain/usecase/playlist_usecases.dart';
 export 'domain/usecase/genre_usecases.dart';
@@ -58,3 +57,19 @@ export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:groovix/core/theme/app_theme.dart';
 export 'package:groovix/core/services/theme/theme_manager.dart';
 export 'package:groovix/injection_container/injection_index.dart';
+
+export 'package:groovix/core/shared/model/song_model.dart';
+export 'package:groovix/features/cms/presentation/bloc/events/cms_song_event.dart';
+export 'package:groovix/features/cms/presentation/bloc/states/cms_song_state.dart';
+
+export "package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_model.dart";
+export "package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_response.dart";
+
+export "package:groovix/core/constants/string_constants.dart";
+export "package:groovix/core/error/server_exception.dart";
+export "package:groovix/core/services/api/api_service.dart";
+export "package:groovix/core/services/api/api_urls.dart";
+
+export 'package:groovix/core/utils/generic_typedef.dart';
+export "package:go_router/go_router.dart";
+export "package:groovix/routes/app_routes.dart";

@@ -2,6 +2,7 @@
 import 'dart:math' as math;
 
 // Project imports:
+import 'package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_response.dart';
 import 'package:groovix/routes/routes_index.dart';
 
 class SongUploadSuccessScreen extends StatefulWidget {

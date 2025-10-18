@@ -1,8 +1,7 @@
-import '../models/song_model.dart';
-import '../repositories/cms_song_repository.dart';
+import "package:groovix/features/cms/cms_index.dart";
 
 class GetAllSongsUseCase {
-  final CMSSongRepository _repository;
+  final CmsSongRepository _repository;
 
   GetAllSongsUseCase(this._repository);
 
@@ -12,7 +11,7 @@ class GetAllSongsUseCase {
 }
 
 class GetSongByIdUseCase {
-  final CMSSongRepository _repository;
+  final CmsSongRepository _repository;
 
   GetSongByIdUseCase(this._repository);
 
@@ -22,7 +21,7 @@ class GetSongByIdUseCase {
 }
 
 class SearchSongsUseCase {
-  final CMSSongRepository _repository;
+  final CmsSongRepository _repository;
 
   SearchSongsUseCase(this._repository);
 
@@ -32,7 +31,7 @@ class SearchSongsUseCase {
 }
 
 class CreateSongUseCase {
-  final CMSSongRepository _repository;
+  final CmsSongRepository _repository;
 
   CreateSongUseCase(this._repository);
 
@@ -42,7 +41,7 @@ class CreateSongUseCase {
 }
 
 class UpdateSongUseCase {
-  final CMSSongRepository _repository;
+  final CmsSongRepository _repository;
 
   UpdateSongUseCase(this._repository);
 
@@ -52,7 +51,7 @@ class UpdateSongUseCase {
 }
 
 class DeleteSongUseCase {
-  final CMSSongRepository _repository;
+  final CmsSongRepository _repository;
 
   DeleteSongUseCase(this._repository);
 
@@ -62,7 +61,7 @@ class DeleteSongUseCase {
 }
 
 class GetRecentSongsUseCase {
-  final CMSSongRepository _repository;
+  final CmsSongRepository _repository;
 
   GetRecentSongsUseCase(this._repository);
 

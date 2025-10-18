@@ -9,14 +9,7 @@ export 'data/datasource/song_remote_datasource_impl.dart';
 export 'data/repositories/song_repository_impl.dart';
 
 // Song domain layer
-export 'domain/models/upload_song_model.dart';
-export 'domain/models/upload_song_response.dart';
 export 'domain/repositories/song_repository.dart';
-export 'domain/usecase/upload_song_uc.dart';
-
-// Song presentation layer
-export 'presentation/upload_song.dart';
-export 'presentation/screens/song_upload_success_screen.dart';
 export 'presentation/widgets/audio_wave.dart';
 export 'presentation/widgets/file_picker.dart';
 
