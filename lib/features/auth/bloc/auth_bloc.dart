@@ -25,7 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (success) {
       _cache.setBool(PrefKeys.isLoggedIn, true);
       _cache.setMap(PrefKeys.userDetails, success.toJson());
-      emit(AuthLoginSuccess());
+      emit(AuthLoginSuccess(data: success));
     });
   }
 
@@ -48,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (data) {
       _cache.setBool(PrefKeys.isLoggedIn, true);
       _cache.setMap(PrefKeys.userDetails, data.toJson());
-      emit(AuthSignupSuccess());
+      emit(AuthSignupSuccess(data: data));
     });
   }
 }

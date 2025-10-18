@@ -12,7 +12,6 @@ import 'package:groovix/gen/assets.gen.dart';
 
 // Package imports:
 
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -82,10 +81,14 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateToNextScreen() async {
     final userExists = _localCache.getBool(PrefKeys.isLoggedIn);
+    final user = _localCache.getMap(PrefKeys.userDetails);
     if (userExists) {
-      context.go(AppRoutes.bottomNav);
+      if (user?["role"] == "cms") {
+        context.go(AppRoutes.cmsDashboard);
+      } else {
+        context.go(AppRoutes.bottomNav);
+      }
     } else {
-      debugPrint("User not logged $userExists");
       context.go(AppRoutes.login);
     }
   }

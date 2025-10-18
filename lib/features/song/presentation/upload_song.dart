@@ -85,7 +85,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
       create: (context) => getIt<SongCubit>(),
       child: BlocListener<SongCubit, SongState>(
         listener: (context, state) {
-          if (state is SongSuccess) {
+          if (state is UploadSongSuccess) {
             _loadingController.stop();
             context.go(AppRoutes.uploadSuccess,
                 extra: state.uploadSongResponse);
@@ -97,7 +97,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             _selectedColorTab = 2;
             _selectedPaletteColor = 0;
             _selectedColorPosition = const Offset(100, 100);
-          } else if (state is SongFailure) {
+          } else if (state is UploadSongFailure) {
             _loadingController.stop();
             showToast(title: 'Upload failed: ${state.error}');
           }
@@ -110,7 +110,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                   // Main content
                   _buildMainContent(context),
                   // Loading overlay
-                  if (state is SongLoading) _buildLoadingOverlay(context),
+                  if (state is UploadSongLoading) _buildLoadingOverlay(context),
                 ],
               ),
             );
@@ -283,7 +283,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
         BlocBuilder<SongCubit, SongState>(
           builder: (context, state) {
             return IconButton(
-              onPressed: state is SongLoading
+              onPressed: state is UploadSongLoading
                   ? null
                   : () {
                       if (_selectedThumbnail != null &&
@@ -306,7 +306,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                       }
                     },
               icon: Icon(Icons.cloud_upload_rounded,
-                  color: state is SongLoading
+                  color: state is UploadSongLoading
                       ? textColor.withOpacity(0.5)
                       : textColor,
                   size: 30),
@@ -887,7 +887,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             ),
           ),
           child: ElevatedButton(
-            onPressed: state is SongLoading
+            onPressed: state is UploadSongLoading
                 ? null
                 : () {
                     if (_selectedThumbnail != null &&

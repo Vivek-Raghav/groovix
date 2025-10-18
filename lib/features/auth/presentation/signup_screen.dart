@@ -1,8 +1,3 @@
-// Flutter imports:
-import 'package:flutter/material.dart';
-
-// Project imports:
-import 'package:groovix/core/shared/domain/method/methods.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
@@ -20,6 +15,17 @@ class _SignupScreenState extends State<SignupScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _secretKeyController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _secretKeyController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,9 @@ class _SignupScreenState extends State<SignupScreen> {
       bloc: getIt<AuthBloc>(),
       listener: (context, state) {
         if (state is AuthSignupSuccess) {
-          context.go(AppRoutes.bottomNav);
+          state.data.role == "admin"
+              ? context.go(AppRoutes.cmsDashboard)
+              : context.go(AppRoutes.bottomNav);
         } else if (state is AuthSignupFailure) {
           showToast(title: state.error);
         }
@@ -150,6 +158,19 @@ class _SignupScreenState extends State<SignupScreen> {
                           return null;
                         },
                       ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _secretKeyController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Additional Information',
+                          prefixIcon: const Icon(Icons.lock_outline),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.surface,
+                        ),
+                      ),
                       const SizedBox(height: 24),
                       ElevatedButton(
                         onPressed: () async {
@@ -158,7 +179,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 params: SignUpParams(
                                     name: _nameController.text,
                                     email: _emailController.text,
-                                    password: _passwordController.text)));
+                                    password: _passwordController.text,
+                                    secretKey: _secretKeyController.text)));
                           }
                         },
                         style: ElevatedButton.styleFrom(

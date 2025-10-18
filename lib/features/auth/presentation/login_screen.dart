@@ -29,7 +29,9 @@ class _LoginScreenState extends State<LoginScreen> {
       bloc: getIt<AuthBloc>(),
       listener: (context, state) {
         if (state is AuthLoginSuccess) {
-          context.go(AppRoutes.bottomNav);
+          state.data.role == "admin"
+              ? context.go(AppRoutes.cmsDashboard)
+              : context.go(AppRoutes.bottomNav);
         } else if (state is AuthLoginFailure) {
           showToast(title: state.error);
         }

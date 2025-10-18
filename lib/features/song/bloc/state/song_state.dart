@@ -9,18 +9,18 @@ abstract class SongState extends Equatable {
 
 class SongInitial extends SongState {}
 
-class SongLoading extends SongState {}
+class UploadSongLoading extends SongState {}
 
-class SongSuccess extends SongState {
+class UploadSongSuccess extends SongState {
   final UploadSongResponse uploadSongResponse;
-  const SongSuccess({required this.uploadSongResponse});
+  const UploadSongSuccess({required this.uploadSongResponse});
   @override
   List<Object?> get props => [uploadSongResponse];
 }
 
-class SongFailure extends SongState {
+class UploadSongFailure extends SongState {
   final String error;
-  const SongFailure({required this.error});
+  const UploadSongFailure({required this.error});
   @override
   List<Object?> get props => [error];
 }

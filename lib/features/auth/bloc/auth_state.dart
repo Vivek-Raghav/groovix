@@ -1,10 +1,15 @@
+import 'package:groovix/features/auth/domain/models/signup_params.dart';
+
 class AuthState {}
 
 class AuthInitial extends AuthState {}
 
 class AuthLoginLoading extends AuthState {}
 
-class AuthLoginSuccess extends AuthState {}
+class AuthLoginSuccess extends AuthState {
+  final AuthResponse data;
+  AuthLoginSuccess({required this.data});
+}
 
 class AuthLoginFailure extends AuthState {
   final String error;
@@ -13,7 +18,10 @@ class AuthLoginFailure extends AuthState {
 
 class AuthSignupLoading extends AuthState {}
 
-class AuthSignupSuccess extends AuthState {}
+class AuthSignupSuccess extends AuthState {
+  final AuthResponse data;
+  AuthSignupSuccess({required this.data});
+}
 
 class AuthSignupFailure extends AuthState {
   final String error;

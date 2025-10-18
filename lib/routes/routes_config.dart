@@ -1,4 +1,5 @@
 // Project imports:
+import 'package:groovix/features/cms/presentation/screens/cms_screen.dart';
 import 'package:groovix/features/song/presentation/screens/full_music_screen.dart';
 import 'package:groovix/routes/routes_index.dart';
 
@@ -11,6 +12,14 @@ final GoRouter appRouter = GoRouter(
         context: context,
         state: state,
         child: const SplashScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.cmsDashboard,
+      pageBuilder: (context, state) => customTransitionPage(
+        context: context,
+        state: state,
+        child: const CMSScreen(),
       ),
     ),
     GoRoute(

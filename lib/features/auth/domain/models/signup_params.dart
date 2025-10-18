@@ -9,10 +9,14 @@ class SignUpParams {
   final String email;
   final String password;
 
+  @JsonKey(name: 'secret_key')
+  String? secretKey;
+
   SignUpParams({
     required this.name,
     required this.email,
     required this.password,
+    this.secretKey,
   });
 
   /// From JSON
@@ -28,11 +32,13 @@ class AuthResponse {
   final String id;
   final String name;
   final String email;
+  final String role;
 
   AuthResponse({
     required this.id,
     required this.name,
     required this.email,
+    required this.role,
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) =>

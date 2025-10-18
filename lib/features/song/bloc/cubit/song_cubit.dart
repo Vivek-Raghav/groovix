@@ -8,10 +8,10 @@ class SongCubit extends Cubit<SongState> {
   final SongListUc songListUc;
 
   Future<void> uploadSong(UploadSongModel uploadSongModel) async {
-    emit(SongLoading());
+    emit(UploadSongLoading());
     final result = await uploadSongUc.call(uploadSongModel);
-    result.fold((failure) => emit(SongFailure(error: failure.toString())),
-        (success) => emit(SongSuccess(uploadSongResponse: success)));
+    result.fold((failure) => emit(UploadSongFailure(error: failure.toString())),
+        (success) => emit(UploadSongSuccess(uploadSongResponse: success)));
   }
 
   Future<void> getSongList(SongsQueryModel songPaginationModel) async {
