@@ -1,4 +1,4 @@
-import '../../cms_index.dart';
+import '../../../cms_index.dart';
 
 class CMSSongsScreen extends StatefulWidget {
   const CMSSongsScreen({super.key});
@@ -35,15 +35,6 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
         foregroundColor: ThemeColors.white,
         elevation: 0,
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              // Navigate to add song screen
-              _navigateToAddSong();
-            },
-          ),
-        ],
       ),
       body: Column(
         children: [

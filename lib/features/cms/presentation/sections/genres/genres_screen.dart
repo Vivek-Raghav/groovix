@@ -1,4 +1,4 @@
-import '../../cms_index.dart';
+import '../../../cms_index.dart';
 
 class GenresScreen extends StatefulWidget {
   const GenresScreen({super.key});
@@ -21,15 +21,6 @@ class _GenresScreenState extends State<GenresScreen> {
         foregroundColor: ThemeColors.white,
         elevation: 0,
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              // Navigate to add genre screen
-              _navigateToAddGenre();
-            },
-          ),
-        ],
       ),
       body: _buildGenresList(context),
       floatingActionButton: FloatingActionButton(

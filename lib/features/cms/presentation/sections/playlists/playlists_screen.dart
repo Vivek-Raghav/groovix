@@ -1,4 +1,4 @@
-import '../../cms_index.dart';
+import '../../../cms_index.dart';
 
 class PlaylistsScreen extends StatefulWidget {
   const PlaylistsScreen({super.key});
@@ -21,15 +21,6 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
         foregroundColor: ThemeColors.white,
         elevation: 0,
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              // Navigate to add playlist screen
-              _navigateToAddPlaylist();
-            },
-          ),
-        ],
       ),
       body: _buildPlaylistsList(context),
       floatingActionButton: FloatingActionButton(

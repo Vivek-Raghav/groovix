@@ -28,3 +28,5 @@ export 'package:groovix/routes/routes_index.dart';
 
 // Injection
 export 'package:groovix/injection_container/injection_initializer.dart';
+export 'package:groovix/core/shared/utils/generic_enums.dart';
+export 'package:groovix/features/auth/domain/models/signup_params.dart';

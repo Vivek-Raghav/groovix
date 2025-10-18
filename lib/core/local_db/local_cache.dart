@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 // Package imports:
+import 'package:groovix/core/constants/pref_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalCache {
@@ -48,6 +49,9 @@ class LocalCache {
   }
 
   void clearAllStorage() {
-    storage.clear();
+    storage.remove(PrefKeys.token);
+    storage.remove(PrefKeys.isLoggedIn);
+    storage.remove(PrefKeys.userDetails);
+    storage.remove(PrefKeys.themeMode);
   }
 }

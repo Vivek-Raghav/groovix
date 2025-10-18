@@ -1,7 +1,7 @@
 // Project imports:
+
 import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/gen/assets.gen.dart';
-import 'package:groovix/main/main_index.dart';
 
 /// LoginScreen - Figma-inspired UI only (no logic)
 class LoginScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       bloc: getIt<AuthBloc>(),
       listener: (context, state) {
         if (state is AuthLoginSuccess) {
-          state.data.role == "admin"
+          state.data.role == Role.cms.name
               ? context.go(AppRoutes.cmsDashboard)
               : context.go(AppRoutes.bottomNav);
         } else if (state is AuthLoginFailure) {

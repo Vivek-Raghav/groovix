@@ -1,4 +1,4 @@
-import '../../cms_index.dart';
+import '../../../cms_index.dart';
 
 class CMSAddGenreScreen extends StatefulWidget {
   const CMSAddGenreScreen({super.key});

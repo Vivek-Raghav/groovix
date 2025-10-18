@@ -1,7 +1,4 @@
-// Project imports:
-import 'package:groovix/core/core_index.dart';
 import 'package:groovix/features/auth/auth_index.dart';
-import 'package:groovix/routes/routes_index.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -196,7 +193,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 child: Column(
                   children: [
-                    // Theme Selection
                     AnimatedBuilder(
                       animation: _themeManager,
                       builder: (context, child) {

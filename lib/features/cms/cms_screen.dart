@@ -1,4 +1,4 @@
-import '../../cms_index.dart';
+import 'cms_index.dart';
 
 class CMSScreen extends StatefulWidget {
   const CMSScreen({super.key});
@@ -13,6 +13,7 @@ class _CMSScreenState extends State<CMSScreen> {
   final List<Widget> _screens = [
     const DashboardScreen(),
     const CMSSongsScreen(),
+    const CMSArtistsScreen(),
     const PlaylistsScreen(),
     const GenresScreen(),
     const CMSSettingsScreen(),
@@ -22,12 +23,17 @@ class _CMSScreenState extends State<CMSScreen> {
     const BottomNavigationBarItem(
       icon: Icon(Icons.dashboard_outlined),
       activeIcon: Icon(Icons.dashboard),
-      label: 'Dashboard',
+      label: 'CMS',
     ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.music_note_outlined),
       activeIcon: Icon(Icons.music_note),
       label: 'Songs',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.person_outlined),
+      activeIcon: Icon(Icons.person),
+      label: 'Artists',
     ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.queue_music_outlined),
@@ -65,15 +71,13 @@ class _CMSScreenState extends State<CMSScreen> {
           index: _currentIndex,
           children: _screens,
         ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: ThemeColors.primaryColor.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
+        bottomNavigationBar: SafeArea(
+            child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
           ),
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
@@ -98,7 +102,7 @@ class _CMSScreenState extends State<CMSScreen> {
             ),
             items: _navItems,
           ),
-        ),
+        )),
       ),
     );
   }

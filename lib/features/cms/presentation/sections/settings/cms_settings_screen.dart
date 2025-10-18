@@ -1,4 +1,7 @@
-import '../../cms_index.dart';
+import 'package:groovix/features/auth/bloc/auth_bloc.dart';
+import 'package:groovix/features/auth/bloc/auth_events.dart';
+import 'package:groovix/features/auth/bloc/auth_state.dart';
+import 'package:groovix/routes/routes_index.dart';
 
 class CMSSettingsScreen extends StatefulWidget {
   const CMSSettingsScreen({super.key});
@@ -347,15 +350,15 @@ class _CMSSettingsScreenState extends State<CMSSettingsScreen> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Logout logic would go here
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Logged out successfully'),
-                  backgroundColor: ThemeColors.clrGreen,
-                ),
-              );
+            onPressed: () async {
+              final auth = getIt<AuthBloc>();
+              auth.add(AuthLogoutEvent());
+              if (auth.state is AuthLogoutSuccess) {
+                setState(() {});
+                context.go(AppRoutes.login);
+              } else if (auth.state is AuthLogoutFailure) {
+                showToast(title: "Something went wrong");
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: ThemeColors.red,

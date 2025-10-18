@@ -20,20 +20,31 @@ export 'data/datasources/cms_song_datasource_impl.dart';
 export 'data/repositories/cms_song_repository_impl.dart';
 export 'data/repositories/dashboard_repository_impl.dart';
 
+// CMS Use Cases
+export 'domain/usecase/song_usecases.dart';
+export 'domain/usecase/artist_usecases.dart';
+export 'domain/usecase/playlist_usecases.dart';
+export 'domain/usecase/genre_usecases.dart';
+
 // CMS BLoCs
 export 'presentation/bloc/song_bloc.dart';
 export 'presentation/bloc/dashboard_bloc.dart';
+export 'presentation/bloc/artist_bloc.dart';
+export 'presentation/bloc/playlist_bloc.dart';
+export 'presentation/bloc/genre_bloc.dart';
 
 // CMS Screens
-export 'presentation/screens/cms_screen.dart';
-export 'presentation/screens/dashboard_screen.dart';
-export 'presentation/screens/cms_songs_screen.dart';
-export 'presentation/screens/playlists_screen.dart';
-export 'presentation/screens/genres_screen.dart';
-export 'presentation/screens/cms_settings_screen.dart';
-export 'presentation/screens/cms_add_song_screen.dart';
-export 'presentation/screens/cms_add_playlist_screen.dart';
-export 'presentation/screens/cms_add_genre_screen.dart';
+export 'cms_screen.dart';
+export 'presentation/sections/dashboard/dashboard_screen.dart';
+export 'presentation/sections/songs/cms_songs_screen.dart';
+export 'presentation/sections/artists/cms_artists_screen.dart';
+export 'presentation/sections/playlists/playlists_screen.dart';
+export 'presentation/sections/genres/genres_screen.dart';
+export 'presentation/sections/settings/cms_settings_screen.dart';
+export 'presentation/sections/songs/cms_add_song_screen.dart';
+export 'presentation/sections/artists/cms_add_artist_screen.dart';
+export 'presentation/sections/playlists/cms_add_playlist_screen.dart';
+export 'presentation/sections/genres/cms_add_genre_screen.dart';
 
 // CMS Widgets
 export 'presentation/widgets/stat_card.dart';

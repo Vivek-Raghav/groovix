@@ -1,5 +1,4 @@
 import 'package:groovix/features/auth/auth_index.dart';
-import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
 /// SignupScreen - Figma-inspired UI only (no logic)
 class SignupScreen extends StatefulWidget {
@@ -33,7 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
       bloc: getIt<AuthBloc>(),
       listener: (context, state) {
         if (state is AuthSignupSuccess) {
-          state.data.role == "admin"
+          state.data.role == Role.cms.name
               ? context.go(AppRoutes.cmsDashboard)
               : context.go(AppRoutes.bottomNav);
         } else if (state is AuthSignupFailure) {

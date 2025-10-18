@@ -8,3 +8,9 @@ enum ThemeModeApp {
   Green,
   System
 }
+
+
+enum Role {
+  cms,
+  user
+}

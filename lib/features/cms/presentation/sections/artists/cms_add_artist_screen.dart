@@ -1,59 +1,40 @@
-import '../../cms_index.dart';
+import '../../../cms_index.dart';
 
-class CMSAddPlaylistScreen extends StatefulWidget {
-  const CMSAddPlaylistScreen({super.key});
+class CMSAddArtistScreen extends StatefulWidget {
+  const CMSAddArtistScreen({super.key});
 
   @override
-  State<CMSAddPlaylistScreen> createState() => _CMSAddPlaylistScreenState();
+  State<CMSAddArtistScreen> createState() => _CMSAddArtistScreenState();
 }
 
-class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
+class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _playlistNameController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _artistNameController = TextEditingController();
+  final _bioController = TextEditingController();
+  final _websiteController = TextEditingController();
 
-  List<String> _selectedSongs = [];
-  bool _isPublic = true;
+  List<String> _selectedGenres = [];
+  bool _isVerified = false;
   bool _isSaving = false;
 
-  // Mock songs data
-  final List<Map<String, dynamic>> _availableSongs = [
-    {
-      'id': '1',
-      'name': 'Summer Vibes',
-      'artist': 'Artist One',
-      'duration': '3:45'
-    },
-    {
-      'id': '2',
-      'name': 'Chill Night',
-      'artist': 'Artist Two',
-      'duration': '4:12'
-    },
-    {
-      'id': '3',
-      'name': 'Dance Floor',
-      'artist': 'Artist Three',
-      'duration': '3:28'
-    },
-    {
-      'id': '4',
-      'name': 'Acoustic Dreams',
-      'artist': 'Artist Four',
-      'duration': '4:05'
-    },
-    {
-      'id': '5',
-      'name': 'Electronic Pulse',
-      'artist': 'Artist Five',
-      'duration': '3:52'
-    },
+  final List<String> _availableGenres = [
+    'Pop',
+    'Rock',
+    'Hip Hop',
+    'Electronic',
+    'Jazz',
+    'Classical',
+    'Country',
+    'R&B',
+    'Alternative',
+    'Folk'
   ];
 
   @override
   void dispose() {
-    _playlistNameController.dispose();
-    _descriptionController.dispose();
+    _artistNameController.dispose();
+    _bioController.dispose();
+    _websiteController.dispose();
     super.dispose();
   }
 
@@ -61,14 +42,14 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Playlist'),
+        title: const Text('Add New Artist'),
         backgroundColor: ThemeColors.primaryColor,
         foregroundColor: ThemeColors.white,
         elevation: 0,
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: _isSaving ? null : _savePlaylist,
+            onPressed: _isSaving ? null : _saveArtist,
             child: Text(
               'Save',
               style: TextStyle(
@@ -86,7 +67,7 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Playlist Information Card
+              // Artist Information Card
               Card(
                 elevation: 2,
                 shape: RoundedRectangleBorder(
@@ -98,7 +79,7 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Playlist Information',
+                        'Artist Information',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
@@ -106,30 +87,30 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Playlist Name
+                      // Artist Name
                       TextFormField(
-                        controller: _playlistNameController,
+                        controller: _artistNameController,
                         decoration: const InputDecoration(
-                          labelText: 'Playlist Name *',
-                          hintText: 'Enter playlist name',
+                          labelText: 'Artist Name *',
+                          hintText: 'Enter artist name',
                           border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.queue_music),
+                          prefixIcon: Icon(Icons.person),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter playlist name';
+                            return 'Please enter artist name';
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 16),
 
-                      // Description
+                      // Bio
                       TextFormField(
-                        controller: _descriptionController,
+                        controller: _bioController,
                         decoration: const InputDecoration(
-                          labelText: 'Description',
-                          hintText: 'Enter playlist description',
+                          labelText: 'Biography',
+                          hintText: 'Enter artist biography',
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.description),
                         ),
@@ -137,15 +118,26 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Privacy Setting
+                      // Website
+                      TextFormField(
+                        controller: _websiteController,
+                        decoration: const InputDecoration(
+                          labelText: 'Website',
+                          hintText: 'Enter artist website URL',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.web),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Verified Status
                       SwitchListTile(
-                        title: const Text('Public Playlist'),
-                        subtitle: const Text(
-                            'Make this playlist visible to all users'),
-                        value: _isPublic,
+                        title: const Text('Verified Artist'),
+                        subtitle: const Text('Mark this artist as verified'),
+                        value: _isVerified,
                         onChanged: (value) {
                           setState(() {
-                            _isPublic = value;
+                            _isVerified = value;
                           });
                         },
                         activeColor: ThemeColors.primaryColor,
@@ -157,7 +149,7 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
 
               const SizedBox(height: 16),
 
-              // Cover Image Upload Card
+              // Profile Image Upload Card
               Card(
                 elevation: 2,
                 shape: RoundedRectangleBorder(
@@ -169,7 +161,7 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Cover Image',
+                        'Profile Image',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
@@ -190,13 +182,13 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.image,
+                              Icons.person_add,
                               size: 64,
                               color: ThemeColors.grey,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Upload Cover Image',
+                              'Upload Profile Image',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -224,7 +216,7 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
 
               const SizedBox(height: 16),
 
-              // Songs Selection Card
+              // Genres Selection Card
               Card(
                 elevation: 2,
                 shape: RoundedRectangleBorder(
@@ -235,62 +227,36 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Select Songs',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
+                      Text(
+                        'Artist Genres',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
-                          ),
-                          Text(
-                            '${_selectedSongs.length} selected',
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: ThemeColors.primaryColor,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                          ),
-                        ],
                       ),
                       const SizedBox(height: 16),
-
-                      // Songs List
-                      Container(
-                        height: 300,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: ThemeColors.grey200),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: ListView.builder(
-                          itemCount: _availableSongs.length,
-                          itemBuilder: (context, index) {
-                            final song = _availableSongs[index];
-                            final isSelected =
-                                _selectedSongs.contains(song['id']);
-
-                            return CheckboxListTile(
-                              title: Text(song['name']),
-                              subtitle: Text(
-                                  '${song['artist']} • ${song['duration']}'),
-                              value: isSelected,
-                              onChanged: (value) {
-                                setState(() {
-                                  if (value == true) {
-                                    _selectedSongs.add(song['id']);
-                                  } else {
-                                    _selectedSongs.remove(song['id']);
-                                  }
-                                });
-                              },
-                              activeColor: ThemeColors.primaryColor,
-                            );
-                          },
-                        ),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: _availableGenres.map((genre) {
+                          final isSelected = _selectedGenres.contains(genre);
+                          return FilterChip(
+                            label: Text(genre),
+                            selected: isSelected,
+                            onSelected: (selected) {
+                              setState(() {
+                                if (selected) {
+                                  _selectedGenres.add(genre);
+                                } else {
+                                  _selectedGenres.remove(genre);
+                                }
+                              });
+                            },
+                            selectedColor:
+                                ThemeColors.primaryColor.withOpacity(0.2),
+                            checkmarkColor: ThemeColors.primaryColor,
+                          );
+                        }).toList(),
                       ),
                     ],
                   ),
@@ -303,7 +269,7 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _isSaving ? null : _savePlaylist,
+                  onPressed: _isSaving ? null : _saveArtist,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ThemeColors.primaryColor,
                     foregroundColor: ThemeColors.white,
@@ -323,7 +289,7 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
                           ),
                         )
                       : const Text(
-                          'Create Playlist',
+                          'Create Artist',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -340,18 +306,8 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
     );
   }
 
-  void _savePlaylist() {
+  void _saveArtist() {
     if (_formKey.currentState!.validate()) {
-      if (_selectedSongs.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select at least one song'),
-            backgroundColor: ThemeColors.red,
-          ),
-        );
-        return;
-      }
-
       setState(() {
         _isSaving = true;
       });
@@ -365,7 +321,7 @@ class _CMSAddPlaylistScreenState extends State<CMSAddPlaylistScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content:
-                Text('${_playlistNameController.text} created successfully!'),
+                Text('${_artistNameController.text} created successfully!'),
             backgroundColor: ThemeColors.clrGreen,
           ),
         );
