@@ -75,9 +75,7 @@ class _CMSScreenState extends State<CMSScreen> {
             child: Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12),
-              topRight: Radius.circular(12),
-            ),
+                topLeft: Radius.circular(12), topRight: Radius.circular(12)),
           ),
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
@@ -87,8 +85,8 @@ class _CMSScreenState extends State<CMSScreen> {
               });
             },
             type: BottomNavigationBarType.fixed,
-            backgroundColor:
-                isDark ? ThemeColors.clrBlack50 : ThemeColors.white,
+            elevation: 0,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             selectedItemColor: ThemeColors.primaryColor,
             unselectedItemColor:
                 isDark ? ThemeColors.white70 : ThemeColors.grey600,

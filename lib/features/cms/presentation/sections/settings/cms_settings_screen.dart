@@ -1,6 +1,5 @@
 import 'package:groovix/features/auth/bloc/auth_bloc.dart';
 import 'package:groovix/features/auth/bloc/auth_events.dart';
-import 'package:groovix/features/auth/bloc/auth_state.dart';
 import 'package:groovix/routes/routes_index.dart';
 
 class CMSSettingsScreen extends StatefulWidget {
@@ -353,12 +352,8 @@ class _CMSSettingsScreenState extends State<CMSSettingsScreen> {
             onPressed: () async {
               final auth = getIt<AuthBloc>();
               auth.add(AuthLogoutEvent());
-              if (auth.state is AuthLogoutSuccess) {
-                setState(() {});
-                context.go(AppRoutes.login);
-              } else if (auth.state is AuthLogoutFailure) {
-                showToast(title: "Something went wrong");
-              }
+              Navigator.pop(context);
+              context.go(AppRoutes.login);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: ThemeColors.red,

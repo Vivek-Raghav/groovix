@@ -26,6 +26,6 @@ Future<void> injectBlocs() async {
       ));
 
   // CMS BLoCs
-  getIt.registerLazySingleton<DashboardBloc>(() => DashboardBloc(getIt()));
-  getIt.registerLazySingleton<SongBloc>(() => SongBloc(getIt()));
+  getIt.registerFactory<DashboardBloc>(() => DashboardBloc(getIt()));
+  getIt.registerFactory<SongBloc>(() => SongBloc(getIt()));
 }
