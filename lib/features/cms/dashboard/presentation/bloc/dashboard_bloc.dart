@@ -1,4 +1,4 @@
-import '../../cms_index.dart';
+import '../../../cms_index.dart';
 
 // Events
 abstract class DashboardEvent {}

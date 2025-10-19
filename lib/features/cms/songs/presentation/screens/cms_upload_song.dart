@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'dart:ui';
 import 'package:groovix/core/core_index.dart';
 import 'package:groovix/features/cms/cms_index.dart';
-import 'package:groovix/features/song/presentation/widgets/file_picker.dart';
 
 class UploadSongScreen extends StatefulWidget {
   const UploadSongScreen({super.key});
@@ -140,6 +139,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             _buildColorSection(textColor),
             const SizedBox(height: 24),
             _buildUploadButton(textColor),
+            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -431,39 +431,45 @@ class _UploadSongScreenState extends State<UploadSongScreen>
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              Icon(
-                Icons.music_note_rounded,
-                color: Theme.of(context).colorScheme.primary,
-                size: 24,
-              ),
+              _selectedAudioFile != null
+                  ? const SizedBox.shrink()
+                  : Icon(
+                      Icons.music_note_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 24,
+                    ),
               const SizedBox(width: 16),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Pick Audio File',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontFamily: 'Lexend',
+                child: _selectedAudioFile != null
+                    ? AudioWave(path: _selectedAudioFile!.path)
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Pick Audio File',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Lexend',
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            _selectedAudioFile != null
+                                ? _selectedAudioFile!.path.split('/').last
+                                : 'Choose .mp3, .wav, or .aac',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontFamily: 'Lexend',
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _selectedAudioFile != null
-                          ? _selectedAudioFile!.path.split('/').last
-                          : 'Choose .mp3, .wav, or .aac',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontFamily: 'Lexend',
-                      ),
-                    ),
-                  ],
-                ),
               ),
               if (_selectedAudioFile != null)
                 IconButton(
@@ -615,11 +621,11 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                 height: 36,
                 decoration: BoxDecoration(
                   color: colors[index],
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(5),
                   border: Border.all(
                     color: isSelected
-                        ? const Color.fromARGB(255, 199, 195, 195)
-                        : Theme.of(context).colorScheme.outline,
+                        ? Theme.of(context).textTheme.bodyMedium!.color!
+                        : ThemeColors.clrTransparent,
                     width: isSelected ? 2 : 1,
                   ),
                 ),

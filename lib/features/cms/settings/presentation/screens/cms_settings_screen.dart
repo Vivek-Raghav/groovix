@@ -345,9 +345,8 @@ class _CMSSettingsScreenState extends State<CMSSettingsScreen> {
         content: const Text('Are you sure you want to logout?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () async {
               final auth = getIt<AuthBloc>();
@@ -355,9 +354,7 @@ class _CMSSettingsScreenState extends State<CMSSettingsScreen> {
               Navigator.pop(context);
               context.go(AppRoutes.login);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ThemeColors.red,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: ThemeColors.red),
             child: const Text('Logout'),
           ),
         ],

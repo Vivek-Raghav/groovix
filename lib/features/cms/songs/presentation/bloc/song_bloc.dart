@@ -1,6 +1,4 @@
-import 'package:groovix/features/cms/presentation/sections/songs/domain/usecase/upload_song_uc.dart';
-
-import "package:groovix/features/cms/cms_index.dart";
+import '../../../cms_index.dart';
 
 class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
   final CmsSongRepository _songRepository;

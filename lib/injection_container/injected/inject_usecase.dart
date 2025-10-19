@@ -1,5 +1,5 @@
 // Project imports:
-import 'package:groovix/features/cms/presentation/sections/songs/domain/usecase/upload_song_uc.dart';
+import 'package:groovix/features/cms/songs/domain/usecase/upload_song_uc.dart';
 import 'package:groovix/features/song/domain/usecase/get_song_flags_uc.dart';
 import 'package:groovix/features/song/domain/usecase/update_song_flags_uc.dart';
 import 'package:groovix/injection_container/injection_index.dart';

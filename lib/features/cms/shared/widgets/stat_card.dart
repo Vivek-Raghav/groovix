@@ -95,7 +95,7 @@ class StatCardGrid extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 1.5,
+          childAspectRatio: 1.48,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
         ),
@@ -103,12 +103,11 @@ class StatCardGrid extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return StatCard(
-            title: item.title,
-            value: item.value,
-            icon: item.icon,
-            backgroundColor: item.backgroundColor,
-            iconColor: item.iconColor,
-          );
+              title: item.title,
+              value: item.value,
+              icon: item.icon,
+              backgroundColor: item.backgroundColor,
+              iconColor: item.iconColor);
         },
       ),
     );

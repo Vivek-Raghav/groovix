@@ -1,8 +1,8 @@
 // Project imports:
 import 'package:groovix/features/cms/cms_screen.dart';
-import 'package:groovix/features/cms/presentation/sections/songs/cms_upload_song.dart';
-import 'package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_response.dart';
-import 'package:groovix/features/cms/presentation/sections/songs/song_upload_success_screen.dart';
+import 'package:groovix/features/cms/songs/presentation/screens/cms_upload_song.dart';
+import 'package:groovix/features/cms/songs/domain/models/upload_song_response.dart';
+import 'package:groovix/features/cms/songs/presentation/screens/song_upload_success_screen.dart';
 import 'package:groovix/features/song/presentation/screens/full_music_screen.dart';
 import 'package:groovix/routes/routes_index.dart';
 

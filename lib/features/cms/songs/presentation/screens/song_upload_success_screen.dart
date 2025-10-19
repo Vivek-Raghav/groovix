@@ -2,8 +2,7 @@
 import 'dart:math' as math;
 
 // Project imports:
-import 'package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_response.dart';
-import 'package:groovix/routes/routes_index.dart';
+import '../../../cms_index.dart';
 
 class SongUploadSuccessScreen extends StatefulWidget {
   final UploadSongResponse uploadResponse;
@@ -248,9 +247,7 @@ class _SongUploadSuccessScreenState extends State<SongUploadSuccessScreen>
                             width: double.infinity,
                             height: 56,
                             child: ElevatedButton(
-                              onPressed: () {
-                                context.go(AppRoutes.uploadSong);
-                              },
+                              onPressed: context.pop,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: theme.colorScheme.primary,
                                 foregroundColor: Colors.white,
