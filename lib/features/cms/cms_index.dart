@@ -73,3 +73,8 @@ export "package:groovix/core/services/api/api_urls.dart";
 export 'package:groovix/core/utils/generic_typedef.dart';
 export "package:go_router/go_router.dart";
 export "package:groovix/routes/app_routes.dart";
+
+export 'package:groovix/core/shared/widgets/common_back_button.dart';
+export 'package:groovix/features/cms/presentation/bloc/song_bloc.dart';
+export 'package:groovix/features/cms/presentation/bloc/states/cms_song_state.dart';
+export 'package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_model.dart';

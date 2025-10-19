@@ -2,11 +2,9 @@
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
-import 'package:groovix/features/cms/presentation/bloc/song_bloc.dart';
-import 'package:groovix/features/cms/presentation/bloc/states/cms_song_state.dart';
-import 'package:groovix/features/cms/presentation/sections/songs/domain/models/upload_song_model.dart';
-import 'package:groovix/routes/routes_index.dart';
+import 'package:groovix/core/core_index.dart';
+import 'package:groovix/features/cms/cms_index.dart';
+import 'package:groovix/features/song/presentation/widgets/file_picker.dart';
 
 class UploadSongScreen extends StatefulWidget {
   const UploadSongScreen({super.key});
@@ -21,11 +19,8 @@ class _UploadSongScreenState extends State<UploadSongScreen>
   final TextEditingController _songNameController = TextEditingController();
   final TextEditingController _fileController = TextEditingController();
 
-  Color _selectedColor =
-      const Color(0xFF7C3AED); // Use primary color as default
-  int _selectedColorTab = 2;
-  int _selectedPaletteColor = 0; // Primary color is now at index 0
-  Offset _selectedColorPosition = const Offset(100, 100);
+  Color _selectedColor = const Color(0xFF4DA6FF);
+  int _selectedPaletteColor = 0;
   File? _selectedAudioFile;
   File? _selectedThumbnail;
 
@@ -98,9 +93,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             _artistController.clear();
             _songNameController.clear();
             _selectedColor = const Color(0xFF7C3AED);
-            _selectedColorTab = 2;
             _selectedPaletteColor = 0;
-            _selectedColorPosition = const Offset(100, 100);
           } else if (state is UploadSongFailure) {
             _loadingController.stop();
             showToast(title: 'Upload failed: ${state.error}');
@@ -130,7 +123,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -260,29 +253,15 @@ class _UploadSongScreenState extends State<UploadSongScreen>
 
   Widget _buildHeader(Color textColor) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-            onPressed: context.pop,
-            icon: Icon(CupertinoIcons.back, color: textColor)),
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12)),
-          child: Icon(Icons.music_note,
-              color: Theme.of(context).colorScheme.onPrimary, size: 24),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          'Upload Song',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: textColor,
-            fontFamily: 'Lexend',
-          ),
-        ),
-        const Expanded(child: SizedBox()),
+        const CommonBackButton(),
+        Text('Upload Song',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+                fontFamily: 'Lexend')),
         BlocBuilder<CmsSongBloc, CmsSongState>(
           builder: (context, state) {
             return IconButton(
@@ -351,20 +330,17 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                   borderRadius: BorderRadius.circular(16),
                   child: Stack(
                     children: [
-                      Image.file(
-                        _selectedThumbnail!,
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
+                      Image.file(_selectedThumbnail!,
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.cover),
                       Positioned(
                         top: 12,
                         right: 12,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                              color: Colors.black.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(8)),
                           child: IconButton(
                             onPressed: () {
                               setState(() {
@@ -596,10 +572,6 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             fontFamily: 'Lexend',
           ),
         ),
-        const SizedBox(height: 16),
-        _buildTabButtons(),
-        const SizedBox(height: 20),
-        if (_selectedColorTab == 2) _buildColorWheel(textColor),
         const SizedBox(height: 20),
         _buildColorPalette(textColor),
         const SizedBox(height: 20),
@@ -608,140 +580,18 @@ class _UploadSongScreenState extends State<UploadSongScreen>
     );
   }
 
-  Widget _buildTabButtons() {
-    final tabs = ['Primary', 'Accent', 'Wheel'];
-    return Row(
-      children: tabs.asMap().entries.map((entry) {
-        final index = entry.key;
-        final tab = entry.value;
-        final isSelected = _selectedColorTab == index;
-
-        return Expanded(
-          child: Container(
-            margin: EdgeInsets.only(
-              right: index < tabs.length - 1 ? 8 : 0,
-            ),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedColorTab = index;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-                child: Text(
-                  tab,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: isSelected
-                        ? Colors.white
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Lexend',
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildColorWheel(Color textColor) {
-    return Container(
-      height: 200,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Theme.of(context).colorScheme.outline),
-      ),
-      child: GestureDetector(
-        onTapDown: (details) {
-          _handleColorWheelTap(details.localPosition);
-        },
-        onPanUpdate: (details) {
-          _handleColorWheelTap(details.localPosition);
-        },
-        child: Stack(
-          children: [
-            // Color wheel background
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: const SweepGradient(
-                  colors: [
-                    Color(0xFFEF4444), // Red
-                    Color(0xFFF59E0B), // Orange
-                    Color(0xFFEAB308), // Yellow
-                    Color(0xFF10B981), // Green
-                    Color(0xFF06B6D4), // Cyan
-                    Color(0xFF3B82F6), // Blue
-                    Color(0xFF8B5CF6), // Purple
-                    Color(0xFFEC4899), // Pink
-                    Color(0xFFEF4444), // Red (complete circle)
-                  ],
-                ),
-              ),
-            ),
-            // Brightness control overlay
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.3),
-                  ],
-                ),
-              ),
-            ),
-            // Selection indicator - shows current selected color position
-            Positioned(
-              left: _selectedColorPosition.dx - 6,
-              top: _selectedColorPosition.dy - 6,
-              child: Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: textColor,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      width: 2),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildColorPalette(Color textColor) {
     final colors = [
-      const Color(0xFFFFFFFF), // White
-      const Color(0xFFFF0000), // Red
-      const Color(0xFF00FF00), // Green
-      const Color(0xFF0000FF), // Blue
-      const Color(0xFFFFFF00), // Yellow
-      const Color(0xFFFF00FF), // Magenta
-      const Color(0xFF00FFFF), // Cyan
-      const Color(0xFF808080), // Gray
-      const Color(0xFF000000), // Black
-      const Color(0xFFFFA500), // Orange
+      const Color(0xFF4DA6FF), // Sky Blue
+      const Color(0xFF8A5BE7), // Royal Purple
+      const Color(0xFFFF6B6B), // Coral Red
+      const Color(0xFF00BFA6), // Teal Green
+      const Color(0xFFFFB84D), // Amber
+      const Color(0xFFE056FD), // Violet Pink
+      const Color(0xFF6C757D), // Slate Gray
+      const Color(0xFF40E0D0), // Soft Cyan
+      const Color(0xFF3F51B5), // Indigo Blue
+      const Color(0xFFFFD966), // Warm yellow
     ];
 
     return Column(
@@ -758,8 +608,6 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                 setState(() {
                   _selectedPaletteColor = index;
                   _selectedColor = colors[index];
-                  // Reset wheel position when palette color is selected
-                  _selectedColorPosition = const Offset(100, 100);
                 });
               },
               child: Container(
@@ -770,9 +618,9 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: isSelected
-                        ? Theme.of(context).colorScheme.primary
+                        ? const Color.fromARGB(255, 199, 195, 195)
                         : Theme.of(context).colorScheme.outline,
-                    width: isSelected ? 3 : 1,
+                    width: isSelected ? 2 : 1,
                   ),
                 ),
               ),
@@ -781,47 +629,6 @@ class _UploadSongScreenState extends State<UploadSongScreen>
         ),
       ],
     );
-  }
-
-  void _handleColorWheelTap(Offset position) {
-    // Add haptic feedback for better user experience
-    HapticFeedback.lightImpact();
-
-    setState(() {
-      _selectedColorPosition = position;
-      _selectedColor = _getColorFromPosition(position);
-    });
-  }
-
-  Color _getColorFromPosition(Offset position) {
-    // Get the container dimensions (assuming 200 height and full width)
-    final containerWidth =
-        MediaQuery.of(context).size.width - 32; // Account for padding
-    final containerHeight = 200.0;
-
-    // Calculate the center of the color wheel
-    final centerX = containerWidth / 2;
-    final centerY = containerHeight / 2;
-
-    // Calculate distance from center
-    final dx = position.dx - centerX;
-    final dy = position.dy - centerY;
-    final distance = math.sqrt(dx * dx + dy * dy);
-
-    // Calculate angle (0 to 2π)
-    double angle = math.atan2(dy, dx);
-    if (angle < 0) angle += 2 * math.pi;
-
-    // Calculate brightness based on distance from center (0 to 1)
-    final maxDistance = math.min(centerX, centerY);
-    final brightness =
-        math.max(0.0, math.min(1.0, 1.0 - (distance / maxDistance) * 0.5));
-
-    // Map angle to hue (0 to 360)
-    final hue = (angle * 180 / math.pi) % 360;
-
-    // Convert HSV to RGB
-    return HSVColor.fromAHSV(1.0, hue, 1.0, brightness).toColor();
   }
 
   Color _getContrastColor(Color color) {
