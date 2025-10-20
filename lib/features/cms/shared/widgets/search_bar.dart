@@ -22,7 +22,7 @@ class SearchBar extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      margin: margin,
+      margin: margin ?? const EdgeInsets.only(left: 16, right: 16, top: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [

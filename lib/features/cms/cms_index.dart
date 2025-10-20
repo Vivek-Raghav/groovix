@@ -13,7 +13,7 @@ export 'songs/domain/models/upload_song_model.dart';
 export 'songs/domain/models/upload_song_response.dart';
 export 'songs/domain/repositories/cms_song_repository.dart';
 export 'songs/domain/usecase/song_usecases.dart';
-export 'songs/domain/usecase/upload_song_uc.dart';
+export 'songs/domain/usecase/cms_upload_song_uc.dart';
 export 'songs/data/datasource/cms_song_datasource.dart';
 export 'songs/data/datasource/cms_song_remote_datasource_impl.dart';
 export 'songs/data/repositories/cms_song_repository_impl.dart';

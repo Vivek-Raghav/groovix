@@ -8,43 +8,40 @@ abstract class CmsSongState extends Equatable {
   List<Object> get props => [];
 }
 
-class SongInitial extends CmsSongState {}
+class CmsSongInitial extends CmsSongState {}
 
-class SongLoading extends CmsSongState {}
 
-class SongUploadLoading extends CmsSongState {}
+// Get All Songs
 
-class SongLoaded extends CmsSongState {
+class CmsSongLoading extends CmsSongState {}
+
+class CmsSongLoaded extends CmsSongState {
   final List<SongModel> songs;
-  const SongLoaded(this.songs);
+  const CmsSongLoaded(this.songs);
 }
 
-class SongError extends CmsSongState {
+class CmsSongError extends CmsSongState {
   final String message;
-  const SongError(this.message);
+  const CmsSongError(this.message);
 }
 
-class SongCreated extends CmsSongState {
-  final SongModel song;
-  const SongCreated(this.song);
-}
+// Delete Song states
 
-class SongUpdated extends CmsSongState {
-  final SongModel song;
-  const SongUpdated(this.song);
-}
-
-class SongUploadSuccess extends CmsSongState {
-  final SongModel song;
-  const SongUploadSuccess(this.song);
-}
+class SongDeletedLoading extends CmsSongState {}
 
 class SongDeleted extends CmsSongState {
   final String songId;
   const SongDeleted(this.songId);
 }
 
-class UploadSongLoading extends CmsSongState {}
+class SongDeletedError extends CmsSongState {
+  final String message;
+  const SongDeletedError(this.message);
+}
+
+// Upload Song states
+
+class UploadCmsSongLoading extends CmsSongState {}
 
 class UploadSongSuccess extends CmsSongState {
   final UploadSongResponse uploadSongResponse;
@@ -58,4 +55,12 @@ class UploadSongFailure extends CmsSongState {
   const UploadSongFailure({required this.error});
   @override
   List<Object> get props => [error];
+}
+
+
+// Update Song states
+
+class CmsSongUpdated extends CmsSongState {
+  final SongModel song;
+  const CmsSongUpdated(this.song);
 }

@@ -128,7 +128,8 @@ class MiniMusicScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 2),
                   height: 6,
                   child: _buildProgressBar(context, state, musicPlayerBloc),
-                )
+                ),
+                const SizedBox(height: 1.8)
               ],
             )));
   }
@@ -142,11 +143,13 @@ class MiniMusicScreen extends StatelessWidget {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
           padding: EdgeInsets.zero,
-          activeTrackColor: Theme.of(context).colorScheme.primary,
-          inactiveTrackColor: ThemeColors.clrWhite.withOpacity(0.4),
+          activeTrackColor: ThemeColors.clrWhite,
+          inactiveTrackColor: ThemeColors.clrWhite.withOpacity(0.7),
           thumbColor: Theme.of(context).colorScheme.primary,
           thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
-          trackHeight: 1.2),
+          overlayShape: SliderComponentShape.noOverlay,
+          trackShape: const RoundedRectSliderTrackShape(),
+          trackHeight: 1.5),
       child: Slider(
         value: progress.clamp(0.0, 1.0),
         onChanged: (value) {

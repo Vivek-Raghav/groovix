@@ -1,5 +1,6 @@
 // Events
-import 'package:groovix/core/shared/model/song_model.dart';
+import 'package:groovix/features/cms/songs/domain/models/upload_song_model.dart';
+import 'package:groovix/features/navigation_bar/navigation_index.dart';
 
 abstract class SongEvent {}
 
@@ -28,4 +29,14 @@ class DeleteSong extends SongEvent {
 class LoadRecentSongs extends SongEvent {
   final int limit;
   LoadRecentSongs({this.limit = 10});
+}
+
+class UploadSong extends SongEvent {
+  final UploadSongModel uploadSongModel;
+  UploadSong(this.uploadSongModel);
+}
+
+class FetchSongList extends SongEvent {
+  final SongsQueryModel songsQueryModel;
+  FetchSongList(this.songsQueryModel);
 }

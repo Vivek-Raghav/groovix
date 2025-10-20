@@ -1,7 +1,7 @@
 import 'package:groovix/features/song/song_index.dart';
 
 class SongCubit extends Cubit<SongState> {
-  SongCubit({required this.songListUc}) : super(SongInitial());
+  SongCubit({required this.songListUc}) : super(CmsSongInitial());
 
   final SongListUc songListUc;
 

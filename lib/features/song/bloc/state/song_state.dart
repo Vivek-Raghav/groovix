@@ -7,7 +7,7 @@ abstract class SongState extends Equatable {
   List<Object?> get props => [];
 }
 
-class SongInitial extends SongState {}
+class CmsSongInitial extends SongState {}
 
 class SongListLoading extends SongState {}
 

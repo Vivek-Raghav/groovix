@@ -284,7 +284,7 @@ class _SongUploadSuccessScreenState extends State<SongUploadSuccessScreen>
                             height: 56,
                             child: OutlinedButton(
                               onPressed: () {
-                                context.go(AppRoutes.bottomNav);
+                                context.go(AppRoutes.cmsDashboard);
                               },
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: textColor,

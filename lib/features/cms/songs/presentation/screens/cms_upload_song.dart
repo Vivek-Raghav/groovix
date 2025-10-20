@@ -106,7 +106,8 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                   // Main content
                   _buildMainContent(context),
                   // Loading overlay
-                  if (state is UploadSongLoading) _buildLoadingOverlay(context),
+                  if (state is UploadCmsSongLoading)
+                    _buildLoadingOverlay(context),
                 ],
               ),
             );
@@ -265,7 +266,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
         BlocBuilder<CmsSongBloc, CmsSongState>(
           builder: (context, state) {
             return IconButton(
-              onPressed: state is UploadSongLoading
+              onPressed: state is UploadCmsSongLoading
                   ? null
                   : () {
                       if (_selectedThumbnail != null &&
@@ -273,7 +274,9 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                           _artistController.text.isNotEmpty &&
                           _songNameController.text.isNotEmpty) {
                         _loadingController.repeat();
-                        context.read<CmsSongBloc>().uploadSong(UploadSongModel(
+                        context
+                            .read<CmsSongBloc>()
+                            .add(UploadSong(UploadSongModel(
                               thumbnailFile: _selectedThumbnail!,
                               song: _selectedAudioFile!,
                               artist: _artistController.text,
@@ -282,13 +285,13 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                                   .toRadixString(16)
                                   .substring(2)
                                   .toUpperCase(),
-                            ));
+                            )));
                       } else {
                         showToast(title: 'Please fill all the fields');
                       }
                     },
               icon: Icon(Icons.cloud_upload_rounded,
-                  color: state is UploadSongLoading
+                  color: state is UploadCmsSongLoading
                       ? textColor.withOpacity(0.5)
                       : textColor,
                   size: 30),
@@ -703,7 +706,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
             ),
           ),
           child: ElevatedButton(
-            onPressed: state is UploadSongLoading
+            onPressed: state is UploadCmsSongLoading
                 ? null
                 : () {
                     if (_selectedThumbnail != null &&
@@ -711,7 +714,9 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                         _artistController.text.isNotEmpty &&
                         _songNameController.text.isNotEmpty) {
                       _loadingController.repeat();
-                      context.read<CmsSongBloc>().uploadSong(UploadSongModel(
+                      context
+                          .read<CmsSongBloc>()
+                          .add(UploadSong(UploadSongModel(
                             thumbnailFile: _selectedThumbnail!,
                             song: _selectedAudioFile!,
                             artist: _artistController.text,
@@ -720,7 +725,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                                 .toRadixString(16)
                                 .substring(2)
                                 .toUpperCase(),
-                          ));
+                          )));
                     } else {
                       showToast(title: 'Please fill all the fields');
                     }

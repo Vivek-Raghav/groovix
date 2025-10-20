@@ -1,4 +1,5 @@
 import "package:groovix/features/cms/cms_index.dart";
+import "package:groovix/features/song/domain/models/song_query_model.dart";
 
 class CMSSongsScreen extends StatefulWidget {
   const CMSSongsScreen({super.key});
@@ -13,7 +14,9 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<CmsSongBloc>().add(LoadSongs());
+    context
+        .read<CmsSongBloc>()
+        .add(FetchSongList(SongsQueryModel(page: 1, size: 100)));
   }
 
   @override
@@ -51,15 +54,12 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
           Expanded(
             child: BlocBuilder<CmsSongBloc, CmsSongState>(
               builder: (context, state) {
-                if (state is SongUploadLoading) {
+                if (state is CmsSongLoading) {
                   return const Center(
-                    child: CircularProgressIndicator(
-                      color: ThemeColors.primaryColor,
-                    ),
-                  );
+                      child: CircularProgressIndicator(
+                          color: ThemeColors.primaryColor));
                 }
-
-                if (state is SongError) {
+                if (state is CmsSongError) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -91,11 +91,9 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                     ),
                   );
                 }
-
-                if (state is SongLoaded) {
+                if (state is CmsSongLoaded) {
                   return _buildSongsList(context, state.songs);
                 }
-
                 return const SizedBox.shrink();
               },
             ),

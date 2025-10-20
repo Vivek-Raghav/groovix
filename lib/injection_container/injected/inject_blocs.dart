@@ -25,5 +25,5 @@ Future<void> injectBlocs() async {
   // CMS BLoCs
   getIt.registerFactory<DashboardBloc>(() => DashboardBloc(getIt()));
   getIt.registerFactory<CmsSongBloc>(
-      () => CmsSongBloc(getIt(), uploadSongUc: getIt()));
+      () => CmsSongBloc(getIt(), uploadSongUc: getIt(), songListUc: getIt()));
 }
