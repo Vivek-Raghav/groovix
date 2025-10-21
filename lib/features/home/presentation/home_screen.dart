@@ -1,3 +1,4 @@
+import 'package:groovix/core/constants/size_const.dart';
 import 'package:groovix/features/home/home_index.dart';
 import 'package:groovix/features/song/song_index.dart';
 
@@ -155,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             return const SizedBox.shrink();
           }),
+          hMiniMusic
         ],
       ),
     );

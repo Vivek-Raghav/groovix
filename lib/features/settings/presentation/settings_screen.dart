@@ -310,14 +310,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.error,
                           fontWeight: FontWeight.w500)),
-                  onTap: () async {
-                    getIt<AuthBloc>().add(AuthLogoutEvent());
-                  },
+                  onTap: () => _showLogoutConfirmation(context),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel')),
+          ElevatedButton(
+            onPressed: () {
+              getIt<AuthBloc>().add(AuthLogoutEvent());
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: ThemeColors.red),
+            child: const Text('Logout'),
+          ),
+        ],
       ),
     );
   }
