@@ -73,10 +73,3 @@ class UpdateSongFieldsFailure extends CmsSongState {
   @override
   List<Object> get props => [error];
 }
-
-// Update Song states
-
-class CmsSongUpdated extends CmsSongState {
-  final SongModel song;
-  const CmsSongUpdated(this.song);
-}

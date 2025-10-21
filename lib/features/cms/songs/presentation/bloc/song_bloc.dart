@@ -1,4 +1,5 @@
-
+import 'package:groovix/features/home/home_index.dart';
+import 'package:groovix/features/song/domain/models/song_query_model.dart';
 
 import '../../../cms_index.dart';
 
@@ -8,13 +9,12 @@ class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
   CmsSongBloc(this._songRepository,
       {required this.uploadSongUc,
       required this.songListUc,
-      required this.updateSongFieldsUc})
+      required this.updateSongFieldsUc,
+      required this.deleteSongUc})
       : super(CmsSongInitial()) {
     on<SearchSongs>(_onSearchSongs);
-    on<UpdateSong>(_onUpdateSong);
     on<UpdateSongFields>(_onUpdateSongFields);
     on<DeleteSong>(_onDeleteSong);
-    on<LoadRecentSongs>(_onLoadRecentSongs);
     on<UploadSong>(_uploadSong);
     on<FetchSongList>(_loadSongList);
   }
@@ -22,6 +22,7 @@ class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
   final UploadSongUc uploadSongUc;
   final SongListUc songListUc;
   final UpdateSongFieldsUseCase updateSongFieldsUc;
+  final DeleteSongUc deleteSongUc;
 
   Future<void> _loadSongList(
       FetchSongList event, Emitter<CmsSongState> emit) async {
@@ -49,16 +50,6 @@ class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
     }
   }
 
-  Future<void> _onUpdateSong(
-      UpdateSong event, Emitter<CmsSongState> emit) async {
-    try {
-      final song = await _songRepository.updateSong(event.song);
-      emit(CmsSongUpdated(song));
-    } catch (e) {
-      emit(CmsSongError(e.toString()));
-    }
-  }
-
   Future<void> _onUpdateSongFields(
       UpdateSongFields event, Emitter<CmsSongState> emit) async {
     emit(UpdateSongFieldsLoading());
@@ -73,21 +64,14 @@ class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
 
   Future<void> _onDeleteSong(
       DeleteSong event, Emitter<CmsSongState> emit) async {
-    try {
-      await _songRepository.deleteSong(event.songId);
-      emit(SongDeleted(event.songId));
-    } catch (e) {
-      emit(CmsSongError(e.toString()));
-    }
-  }
-
-  Future<void> _onLoadRecentSongs(
-      LoadRecentSongs event, Emitter<CmsSongState> emit) async {
-    try {
-      final songs = await _songRepository.getRecentSongs(limit: event.limit);
-      emit(CmsSongLoaded(songs));
-    } catch (e) {
-      emit(CmsSongError(e.toString()));
-    }
+    emit(SongDeletedLoading());
+    final result = await deleteSongUc.call(event.songId);
+    result.fold(
+      (failure) => emit(SongDeletedError(failure.toString())),
+      (success) {
+        add(FetchSongList(SongsQueryModel(page: 1, size: 100)));
+        showToast(title: "Successfully Deleted");
+      },
+    );
   }
 }

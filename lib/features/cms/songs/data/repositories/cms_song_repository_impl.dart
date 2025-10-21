@@ -9,28 +9,8 @@ class CmsSongRepositoryImpl extends CmsSongRepository {
   final CmsSongRemoteDataSource cmsSongRemoteDataSource;
 
   @override
-  Future<List<SongModel>> getAllSongs() async {
-    return await cmsSongRemoteDataSource.getAllSongs();
-  }
-
-  @override
-  Future<SongModel?> getSongById(String id) async {
-    return await cmsSongRemoteDataSource.getSongById(id);
-  }
-
-  @override
   Future<List<SongModel>> searchSongs(String query) async {
     return await cmsSongRemoteDataSource.searchSongs(query);
-  }
-
-  @override
-  Future<SongModel> createSong(SongModel song) async {
-    return await cmsSongRemoteDataSource.createSong(song);
-  }
-
-  @override
-  Future<SongModel> updateSong(SongModel song) async {
-    return await cmsSongRemoteDataSource.updateSong(song);
   }
 
   @override
@@ -40,13 +20,18 @@ class CmsSongRepositoryImpl extends CmsSongRepository {
   }
 
   @override
-  Future<void> deleteSong(String id) async {
-    return await cmsSongRemoteDataSource.deleteSong(id);
-  }
-
-  @override
-  Future<List<SongModel>> getRecentSongs({int limit = 10}) async {
-    return await cmsSongRemoteDataSource.getRecentSongs(limit: limit);
+  EitherDynamic<dynamic> deleteSong(String id) async {
+    try {
+      final data = await cmsSongRemoteDataSource.deleteSong(id);
+      if (data != null) {
+        return Right(data);
+      } else {
+        return Left(
+            ServerFailure(error: StringConstants.strSomethingWentWrong));
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(error: e.error));
+    }
   }
 
   @override

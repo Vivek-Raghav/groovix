@@ -54,7 +54,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
           Expanded(
             child: BlocBuilder<CmsSongBloc, CmsSongState>(
               builder: (context, state) {
-                if (state is CmsSongLoading) {
+                if (state is CmsSongLoading || state is SongDeletedLoading) {
                   return const Center(
                       child: CircularProgressIndicator(
                           color: ThemeColors.primaryColor));
@@ -83,7 +83,8 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
-                            context.read<CmsSongBloc>().add(LoadSongs());
+                            context.read<CmsSongBloc>().add(FetchSongList(
+                                SongsQueryModel(page: 1, size: 100)));
                           },
                           child: const Text('Retry'),
                         ),
@@ -203,7 +204,8 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                 _navigateToEditSong(song);
                 break;
               case 'delete':
-                _showDeleteConfirmation(context, song);
+                _showDeleteConfirmation(
+                    context, song, context.read<CmsSongBloc>());
                 break;
             }
           },
@@ -238,10 +240,11 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
   }
 
   void _navigateToEditSong(SongModel song) {
-    context.go(AppRoutes.editSong, extra: song);
+    context.push(AppRoutes.editSong, extra: song);
   }
 
-  void _showDeleteConfirmation(BuildContext context, SongModel song) {
+  void _showDeleteConfirmation(
+      BuildContext context, SongModel song, CmsSongBloc cmsSongBloc) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -254,14 +257,10 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              context.read<CmsSongBloc>().add(DeleteSong(song.id));
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${song.songName} deleted successfully'),
-                  backgroundColor: ThemeColors.clrGreen,
-                ),
-              );
+              cmsSongBloc.add(DeleteSong(song.id));
+              Future.delayed(const Duration(milliseconds: 200), () {
+                Navigator.pop(context);
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: ThemeColors.red,
