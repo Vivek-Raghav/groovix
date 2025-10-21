@@ -1,6 +1,8 @@
 // Project imports:
 import 'package:groovix/features/cms/cms_screen.dart';
 import 'package:groovix/features/cms/songs/presentation/screens/cms_upload_song.dart';
+import 'package:groovix/features/cms/songs/presentation/screens/cms_edit_song_screen.dart';
+import 'package:groovix/features/cms/shared/screens/universal_edit_success_screen.dart';
 import 'package:groovix/features/cms/songs/domain/models/upload_song_response.dart';
 import 'package:groovix/features/cms/songs/presentation/screens/song_upload_success_screen.dart';
 import 'package:groovix/features/song/presentation/screens/full_music_screen.dart';
@@ -87,6 +89,31 @@ final GoRouter appRouter = GoRouter(
           state: state,
           child: SongUploadSuccessScreen(uploadResponse: uploadResponse!),
         );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.editSong,
+      pageBuilder: (context, state) {
+        final song = state.extra as SongModel;
+        return customTransitionPage(
+          context: context,
+          state: state,
+          child: EditSongScreen(song: song),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.editSuccess,
+      pageBuilder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+        return customTransitionPage(
+            context: context,
+            state: state,
+            child: UniversalEditSuccessScreen(
+                type: data['type'],
+                title: data['title'],
+                message: data['message'],
+                data: data));
       },
     ),
     GoRoute(

@@ -82,14 +82,14 @@ class ApiService {
     }
   }
 
-  Future<Response<T>> put<T>(
-    String path, {
+  Future<Response<T>> put<T>({
+    required String url,
     dynamic data,
     Map<String, dynamic>? headers,
   }) async {
     try {
       return await _dio.put<T>(
-        path,
+        url,
         data: data,
         options: Options(headers: headers),
       );

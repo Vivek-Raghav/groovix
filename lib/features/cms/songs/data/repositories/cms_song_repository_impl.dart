@@ -2,6 +2,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:groovix/core/error/failure.dart';
 import "package:groovix/features/cms/cms_index.dart";
+import "package:groovix/features/cms/songs/domain/models/cms_song_update_model.dart";
 
 class CmsSongRepositoryImpl extends CmsSongRepository {
   CmsSongRepositoryImpl({required this.cmsSongRemoteDataSource});
@@ -30,6 +31,12 @@ class CmsSongRepositoryImpl extends CmsSongRepository {
   @override
   Future<SongModel> updateSong(SongModel song) async {
     return await cmsSongRemoteDataSource.updateSong(song);
+  }
+
+  @override
+  Future<SongModel> updateSongFields(
+      String songId, CmsSongUpdateModel updateModel) async {
+    return await cmsSongRemoteDataSource.updateSongFields(songId, updateModel);
   }
 
   @override

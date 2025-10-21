@@ -20,6 +20,11 @@ class ThemeColors {
   static const Color darkAppColor = Color(0xFF0D0E25);
   static const Color secondaryColor = Color(0xFF00CFFF);
 
+  // Dark theme specific colors
+  static const Color darkSurfaceColor = Color(0xFF1E1E1E);
+  static const Color white30 = Color(0x4DFFFFFF);
+  static const Color grey300 = Color(0xFFE0E0E0);
+
   // Added Flutter Material Colors
   static const Color deepPurple = Color(0xFF673AB7);
   static const Color deepPurple50 = Color(0xFFEDE7F6);

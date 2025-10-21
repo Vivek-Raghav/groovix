@@ -1,13 +1,18 @@
+
+
 import '../../../cms_index.dart';
 
 class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
   final CmsSongRepository _songRepository;
 
   CmsSongBloc(this._songRepository,
-      {required this.uploadSongUc, required this.songListUc})
+      {required this.uploadSongUc,
+      required this.songListUc,
+      required this.updateSongFieldsUc})
       : super(CmsSongInitial()) {
     on<SearchSongs>(_onSearchSongs);
     on<UpdateSong>(_onUpdateSong);
+    on<UpdateSongFields>(_onUpdateSongFields);
     on<DeleteSong>(_onDeleteSong);
     on<LoadRecentSongs>(_onLoadRecentSongs);
     on<UploadSong>(_uploadSong);
@@ -16,6 +21,7 @@ class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
 
   final UploadSongUc uploadSongUc;
   final SongListUc songListUc;
+  final UpdateSongFieldsUseCase updateSongFieldsUc;
 
   Future<void> _loadSongList(
       FetchSongList event, Emitter<CmsSongState> emit) async {
@@ -50,6 +56,18 @@ class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
       emit(CmsSongUpdated(song));
     } catch (e) {
       emit(CmsSongError(e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateSongFields(
+      UpdateSongFields event, Emitter<CmsSongState> emit) async {
+    emit(UpdateSongFieldsLoading());
+    try {
+      final song =
+          await updateSongFieldsUc.call(event.songId, event.updateModel);
+      emit(UpdateSongFieldsSuccess(song));
+    } catch (e) {
+      emit(UpdateSongFieldsFailure(error: e.toString()));
     }
   }
 

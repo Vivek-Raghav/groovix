@@ -10,7 +10,6 @@ abstract class CmsSongState extends Equatable {
 
 class CmsSongInitial extends CmsSongState {}
 
-
 // Get All Songs
 
 class CmsSongLoading extends CmsSongState {}
@@ -57,6 +56,23 @@ class UploadSongFailure extends CmsSongState {
   List<Object> get props => [error];
 }
 
+// Update Song Fields states
+
+class UpdateSongFieldsLoading extends CmsSongState {}
+
+class UpdateSongFieldsSuccess extends CmsSongState {
+  final SongModel song;
+  const UpdateSongFieldsSuccess(this.song);
+  @override
+  List<Object> get props => [song];
+}
+
+class UpdateSongFieldsFailure extends CmsSongState {
+  final String error;
+  const UpdateSongFieldsFailure({required this.error});
+  @override
+  List<Object> get props => [error];
+}
 
 // Update Song states
 

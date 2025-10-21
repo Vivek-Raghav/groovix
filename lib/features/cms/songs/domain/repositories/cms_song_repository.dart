@@ -1,4 +1,5 @@
 import "package:groovix/features/cms/cms_index.dart";
+import "package:groovix/features/cms/songs/domain/models/cms_song_update_model.dart";
 
 abstract class CmsSongRepository {
   Future<List<SongModel>> getAllSongs();
@@ -6,6 +7,8 @@ abstract class CmsSongRepository {
   Future<List<SongModel>> searchSongs(String query);
   Future<SongModel> createSong(SongModel song);
   Future<SongModel> updateSong(SongModel song);
+  Future<SongModel> updateSongFields(
+      String songId, CmsSongUpdateModel updateModel);
   Future<void> deleteSong(String id);
   Future<List<SongModel>> getRecentSongs({int limit = 10});
   EitherDynamic<UploadSongResponse> uploadSong(UploadSongModel params);

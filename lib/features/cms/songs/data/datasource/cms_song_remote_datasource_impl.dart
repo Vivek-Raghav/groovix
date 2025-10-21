@@ -1,6 +1,7 @@
 // Project imports:
 
 import "package:groovix/features/cms/cms_index.dart";
+import "package:groovix/features/cms/songs/domain/models/cms_song_update_model.dart";
 
 class CmsSongRemoteDatasourceImpl extends CmsSongRemoteDataSource {
   final apiService = getIt<ApiService>();
@@ -102,6 +103,24 @@ class CmsSongRemoteDatasourceImpl extends CmsSongRemoteDataSource {
       return song;
     }
     throw Exception('Song not found');
+  }
+
+  @override
+  Future<SongModel> updateSongFields(
+      String songId, CmsSongUpdateModel updateModel) async {
+    try {
+      final response = await apiService.put(
+          url: "/songs/update/$songId", data: updateModel.toJson());
+
+      if (response.statusCode == 200) {
+        return SongModel.fromJson(response.data);
+      } else {
+        throw ServerException(error: 'Failed to update song');
+      }
+    } catch (e) {
+      debugPrint("Update Song Fields Error: $e");
+      throw ServerException(error: 'Failed to update song: ${e.toString()}');
+    }
   }
 
   @override

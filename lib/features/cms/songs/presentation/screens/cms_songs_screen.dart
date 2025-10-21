@@ -238,12 +238,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
   }
 
   void _navigateToEditSong(SongModel song) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Edit ${song.songName} - To be implemented'),
-        backgroundColor: ThemeColors.primaryColor,
-      ),
-    );
+    context.go(AppRoutes.editSong, extra: song);
   }
 
   void _showDeleteConfirmation(BuildContext context, SongModel song) {
