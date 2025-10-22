@@ -1,4 +1,6 @@
 // lib/features/song/domain/models/song_flag_response.dart
+
+// Package imports:
 import 'package:json_annotation/json_annotation.dart';
 
 part 'song_flag_response.g.dart';

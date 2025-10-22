@@ -1,5 +1,10 @@
+// Dart imports:
 import 'dart:math' as math;
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:groovix/core/core_index.dart';
 import 'package:groovix/routes/routes_index.dart';
 

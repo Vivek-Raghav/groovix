@@ -1,3 +1,4 @@
+// Project imports:
 import '../models/artist_model.dart';
 
 abstract class ArtistRepository {

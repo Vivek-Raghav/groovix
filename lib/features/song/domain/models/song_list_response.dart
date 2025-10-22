@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:groovix/core/shared/model/song_model.dart';
 
 class SongsListResponse {

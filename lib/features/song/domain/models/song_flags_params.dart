@@ -1,4 +1,6 @@
 // lib/features/song/domain/models/song_flags_params.dart
+
+// Package imports:
 import 'package:json_annotation/json_annotation.dart';
 
 part 'song_flags_params.g.dart';

@@ -1,5 +1,9 @@
 // States
+
+// Package imports:
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import "package:groovix/features/cms/cms_index.dart";
 
 abstract class CmsSongState extends Equatable {

@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import '../../domain/models/artist_model.dart';
 import '../../domain/usecase/artist_usecases.dart';
 

@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:groovix/features/auth/domain/models/signup_params.dart';
 
 class AuthState {}

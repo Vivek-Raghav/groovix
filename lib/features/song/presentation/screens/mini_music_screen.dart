@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:groovix/routes/routes_index.dart';
 
 class MiniMusicScreen extends StatelessWidget {

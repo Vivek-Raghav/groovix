@@ -1,11 +1,18 @@
+// Dart imports:
 import 'dart:async';
+
+// Flutter imports:
 import 'package:flutter/foundation.dart';
+
+// Package imports:
+import 'package:just_audio/just_audio.dart';
+
+// Project imports:
 import 'package:groovix/core/core_index.dart';
 import 'package:groovix/features/song/domain/models/song_flags_params.dart';
 import 'package:groovix/features/song/domain/usecase/get_song_flags_uc.dart';
 import 'package:groovix/features/song/domain/usecase/update_song_flags_uc.dart';
 import 'package:groovix/injection_container/injected/inject_blocs.dart';
-import 'package:just_audio/just_audio.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final MusicPlayerManager _manager;

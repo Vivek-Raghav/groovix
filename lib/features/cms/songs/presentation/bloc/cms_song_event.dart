@@ -1,6 +1,8 @@
 // Events
-import 'package:groovix/features/cms/songs/domain/models/upload_song_model.dart';
+
+// Project imports:
 import 'package:groovix/features/cms/songs/domain/models/cms_song_update_model.dart';
+import 'package:groovix/features/cms/songs/domain/models/upload_song_model.dart';
 import 'package:groovix/features/navigation_bar/navigation_index.dart';
 
 abstract class SongEvent {}
