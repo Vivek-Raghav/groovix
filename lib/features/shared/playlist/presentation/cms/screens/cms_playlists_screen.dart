@@ -1,14 +1,13 @@
-// Project imports:
-import '../../../cms_index.dart';
+import 'package:groovix/features/cms/cms_index.dart';
 
-class PlaylistsScreen extends StatefulWidget {
-  const PlaylistsScreen({super.key});
+class CmsPlaylistsScreen extends StatefulWidget {
+  const CmsPlaylistsScreen({super.key});
 
   @override
-  State<PlaylistsScreen> createState() => _PlaylistsScreenState();
+  State<CmsPlaylistsScreen> createState() => _CmsPlaylistsScreenState();
 }
 
-class _PlaylistsScreenState extends State<PlaylistsScreen> {
+class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

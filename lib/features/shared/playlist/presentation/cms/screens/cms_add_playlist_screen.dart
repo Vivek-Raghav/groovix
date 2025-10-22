@@ -1,5 +1,5 @@
 // Project imports:
-import '../../../cms_index.dart';
+import 'package:groovix/features/cms/cms_index.dart';
 
 class CMSAddPlaylistScreen extends StatefulWidget {
   const CMSAddPlaylistScreen({super.key});

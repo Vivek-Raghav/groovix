@@ -15,7 +15,7 @@ class _CMSScreenState extends State<CMSScreen> {
     const DashboardScreen(),
     const CMSSongsScreen(),
     const CMSArtistsScreen(),
-    const PlaylistsScreen(),
+    const CmsPlaylistsScreen(),
     const GenresScreen(),
     const CMSSettingsScreen(),
   ];

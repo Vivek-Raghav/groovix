@@ -1,15 +1,16 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-class PlaylistScreen extends StatelessWidget {
-  const PlaylistScreen({super.key});
+class UserPlaylistScreen extends StatelessWidget {
+  const UserPlaylistScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('My Playlists'),
-          backgroundColor: Theme.of(context).colorScheme.primary),
+        title: const Text('My Playlists'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -17,7 +18,7 @@ class PlaylistScreen extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              Theme.of(context).colorScheme.surface
+              Theme.of(context).colorScheme.surface,
             ],
           ),
         ),

@@ -35,13 +35,13 @@ export 'artists/presentation/bloc/artist_bloc.dart';
 export 'artists/presentation/screens/cms_artists_screen.dart';
 export 'artists/presentation/screens/cms_add_artist_screen.dart';
 
-// Playlists Module
-export 'playlists/domain/models/playlist_model.dart';
-export 'playlists/domain/repositories/playlist_repository.dart';
-export 'playlists/domain/usecase/playlist_usecases.dart';
-export 'playlists/presentation/bloc/playlist_bloc.dart';
-export 'playlists/presentation/screens/playlists_screen.dart';
-export 'playlists/presentation/screens/cms_add_playlist_screen.dart';
+// Playlists Module (from shared)
+export '../shared/playlist/domain/models/playlist_model.dart';
+export '../shared/playlist/domain/repositories/playlist_repository.dart';
+export '../shared/playlist/domain/usecase/playlist_usecases.dart';
+export '../shared/playlist/bloc/playlist_bloc.dart';
+export '../shared/playlist/presentation/cms/screens/cms_playlists_screen.dart';
+export '../shared/playlist/presentation/cms/screens/cms_add_playlist_screen.dart';
 
 // Genres Module
 export 'genres/domain/models/genre_model.dart';
