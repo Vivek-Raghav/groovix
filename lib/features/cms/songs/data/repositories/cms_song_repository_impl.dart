@@ -9,8 +9,15 @@ class CmsSongRepositoryImpl extends CmsSongRepository {
   final CmsSongRemoteDataSource cmsSongRemoteDataSource;
 
   @override
-  Future<List<SongModel>> searchSongs(String query) async {
-    return await cmsSongRemoteDataSource.searchSongs(query);
+  EitherDynamic<List<SongModel>> searchSongs(String query) async {
+    try {
+      final data = await cmsSongRemoteDataSource.searchSongs(query);
+      return Right(data);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(error: e.error));
+    } catch (e) {
+      return Left(ServerFailure(error: StringConstants.strSomethingWentWrong));
+    }
   }
 
   @override

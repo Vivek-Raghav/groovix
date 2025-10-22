@@ -2,6 +2,7 @@
 import 'package:groovix/features/cms/songs/domain/usecase/cms_upload_song_uc.dart';
 import 'package:groovix/features/cms/songs/domain/usecase/update_song_field_uc.dart';
 import 'package:groovix/features/cms/songs/domain/usecase/delete_song_uc.dart';
+import 'package:groovix/features/cms/songs/domain/usecase/search_song_uc.dart';
 import 'package:groovix/features/song/domain/usecase/get_song_flags_uc.dart';
 import 'package:groovix/features/song/domain/usecase/update_song_flags_uc.dart';
 import 'package:groovix/injection_container/injection_index.dart';
@@ -16,6 +17,8 @@ Future<void> injectUsecases() async {
       .registerLazySingleton<LogoutUc>(() => LogoutUc(authRepository: getIt()));
   getIt.registerLazySingleton<UploadSongUc>(
       () => UploadSongUc(cmsSongRepository: getIt()));
+  getIt.registerLazySingleton<SearchSongUc>(
+      () => SearchSongUc(cmsSongRepository: getIt()));
   getIt.registerLazySingleton<SongListUc>(
       () => SongListUc(songRepository: getIt()));
   getIt.registerLazySingleton<UpdateSongFieldsUseCase>(

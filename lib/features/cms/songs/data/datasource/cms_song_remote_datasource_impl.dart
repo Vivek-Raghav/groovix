@@ -9,17 +9,17 @@ class CmsSongRemoteDatasourceImpl extends CmsSongRemoteDataSource {
   @override
   Future<List<SongModel>> searchSongs(String query) async {
     try {
-      final response = await apiService.get('songs/search?q=$query');
+      final response = await apiService.get('/songs/search/$query');
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((json) => SongModel.fromJson(json))
             .toList();
       } else {
-        return [];
+        throw ServerException(error: 'Failed to search songs');
       }
     } catch (e) {
       debugPrint("Search Songs Error: $e");
-      return [];
+      throw ServerException(error: 'Failed to search songs: ${e.toString()}');
     }
   }
 

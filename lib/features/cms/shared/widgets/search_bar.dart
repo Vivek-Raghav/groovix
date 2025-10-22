@@ -2,16 +2,18 @@ import '../../cms_index.dart';
 
 class SearchBar extends StatelessWidget {
   final String placeholder;
+  final ValueChanged<String>? onSearch;
   final ValueChanged<String>? onChanged;
-  final VoidCallback? onSearch;
+  final VoidCallback? onClear;
   final EdgeInsetsGeometry? margin;
   final TextEditingController? controller;
 
   const SearchBar({
     super.key,
     required this.placeholder,
-    this.onChanged,
     this.onSearch,
+    this.onChanged,
+    this.onClear,
     this.margin,
     this.controller,
   });
@@ -35,28 +37,29 @@ class SearchBar extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
-        onChanged: onChanged,
-        onSubmitted: (_) => onSearch?.call(),
+        onChanged: (value) => onChanged?.call(value),
+        onSubmitted: (query) => onSearch?.call(query),
         decoration: InputDecoration(
           hintText: placeholder,
           hintStyle: TextStyle(
             color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
             fontFamily: ThemeFonts.lexend,
           ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: ThemeColors.primaryColor,
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              Icons.clear,
-              color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
-            ),
-            onPressed: () {
-              controller?.clear();
-              onChanged?.call('');
-            },
-          ),
+          prefixIcon: const Icon(Icons.search, color: ThemeColors.primaryColor),
+          suffixIcon: controller?.text.isEmpty == true
+              ? const SizedBox.shrink()
+              : IconButton(
+                  icon: Icon(Icons.clear,
+                      color:
+                          isDark ? ThemeColors.white70 : ThemeColors.grey600),
+                  onPressed: () {
+                    onClear?.call();
+                    controller?.clear();
+                    Future.delayed(const Duration(milliseconds: 200), () {
+                      FocusScope.of(context).unfocus();
+                    });
+                  },
+                ),
           filled: true,
           fillColor: isDark ? ThemeColors.clrBlack50 : ThemeColors.white,
           border: OutlineInputBorder(

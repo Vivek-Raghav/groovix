@@ -10,6 +10,7 @@ class CMSSongsScreen extends StatefulWidget {
 
 class _CMSSongsScreenState extends State<CMSSongsScreen> {
   final TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -43,12 +44,21 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
         children: [
           // Search Bar
           SearchBar(
-            placeholder: 'Search songs by name, artist, or album...',
-            controller: _searchController,
-            onChanged: (query) {
-              context.read<CmsSongBloc>().add(SearchSongs(query));
-            },
-          ),
+              placeholder: 'Search songs by name, artist, or album...',
+              controller: _searchController,
+              onChanged: (value) {
+                _isSearching = true;
+              },
+              onSearch: (query) {
+                _isSearching = false;
+                context.read<CmsSongBloc>().add(SearchSongs(query));
+              },
+              onClear: _isSearching 
+                  ? () {}
+                  : () {
+                      context.read<CmsSongBloc>().add(
+                          FetchSongList(SongsQueryModel(page: 1, size: 100)));
+                    }),
 
           // Songs List
           Expanded(

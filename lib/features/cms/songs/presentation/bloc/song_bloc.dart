@@ -4,13 +4,12 @@ import 'package:groovix/features/song/domain/models/song_query_model.dart';
 import '../../../cms_index.dart';
 
 class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
-  final CmsSongRepository _songRepository;
-
-  CmsSongBloc(this._songRepository,
+  CmsSongBloc(
       {required this.uploadSongUc,
       required this.songListUc,
       required this.updateSongFieldsUc,
-      required this.deleteSongUc})
+      required this.deleteSongUc,
+      required this.searchSongUc})
       : super(CmsSongInitial()) {
     on<SearchSongs>(_onSearchSongs);
     on<UpdateSongFields>(_onUpdateSongFields);
@@ -23,6 +22,7 @@ class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
   final SongListUc songListUc;
   final UpdateSongFieldsUseCase updateSongFieldsUc;
   final DeleteSongUc deleteSongUc;
+  final SearchSongUc searchSongUc;
 
   Future<void> _loadSongList(
       FetchSongList event, Emitter<CmsSongState> emit) async {
@@ -42,12 +42,11 @@ class CmsSongBloc extends Bloc<SongEvent, CmsSongState> {
   Future<void> _onSearchSongs(
       SearchSongs event, Emitter<CmsSongState> emit) async {
     emit(CmsSongLoading());
-    try {
-      final songs = await _songRepository.searchSongs(event.query);
-      emit(CmsSongLoaded(songs));
-    } catch (e) {
-      emit(CmsSongError(e.toString()));
-    }
+    final result = await searchSongUc.call(event.query);
+    result.fold(
+      (failure) => emit(CmsSongError(failure.toString())),
+      (songs) => emit(CmsSongLoaded(songs)),
+    );
   }
 
   Future<void> _onUpdateSongFields(
