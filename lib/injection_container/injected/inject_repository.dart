@@ -14,4 +14,6 @@ Future<void> injectRepositories() async {
       () => CmsSongRepositoryImpl(cmsSongRemoteDataSource: getIt()));
   getIt.registerLazySingleton<DashboardRepository>(
       () => DashboardRepositoryImpl());
+  getIt.registerLazySingleton<ArtistRepository>(
+      () => ArtistRepositoryImpl(datasource: getIt()));
 }

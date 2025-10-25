@@ -12,4 +12,6 @@ Future<void> injectDatasources() async {
   // CMS DataSources
   getIt.registerLazySingleton<CmsSongRemoteDataSource>(
       () => CmsSongRemoteDatasourceImpl());
+  getIt.registerLazySingleton<ArtistDatasource>(
+      () => ArtistRemoteDatasourceImpl(apiService: getIt()));
 }

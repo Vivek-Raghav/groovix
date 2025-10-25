@@ -28,9 +28,22 @@ export 'songs/presentation/widgets/audio_wave.dart';
 export 'songs/presentation/widgets/file_picker.dart';
 
 // Artists Module
-export 'artists/domain/models/artist_model.dart';
+export 'artists/domain/models/artist_params.dart';
+export 'artists/domain/models/artist_update.dart';
+export 'artists/domain/models/artists_list_response.dart';
+export 'artists/domain/models/artists_query_model.dart';
+export 'artists/domain/models/update_artist_params.dart';
+export 'artists/domain/models/delete_response.dart';
+export '../../core/models/pagination_info.dart';
 export 'artists/domain/repositories/artist_repository.dart';
-export 'artists/domain/usecase/artist_usecases.dart';
+export 'artists/domain/usecase/create_artist_uc.dart';
+export 'artists/domain/usecase/get_artists_list_uc.dart';
+export 'artists/domain/usecase/get_artist_by_id_uc.dart';
+export 'artists/domain/usecase/update_artist_uc.dart';
+export 'artists/domain/usecase/delete_artist_uc.dart';
+export 'artists/data/datasource/artist_datasource.dart';
+export 'artists/data/datasource/artist_remote_datasource_impl.dart';
+export 'artists/data/repositories/artist_repository_impl.dart';
 export 'artists/presentation/bloc/artist_bloc.dart';
 export 'artists/presentation/screens/cms_artists_screen.dart';
 export 'artists/presentation/screens/cms_add_artist_screen.dart';
@@ -73,6 +86,7 @@ export 'package:groovix/core/models/song_model.dart';
 // Core Services
 export 'package:groovix/core/constants/string_constants.dart';
 export 'package:groovix/core/error/server_exception.dart';
+export 'package:groovix/core/error/failure.dart';
 export 'package:groovix/core/services/api/api_service.dart';
 export 'package:groovix/core/services/api/api_urls.dart';
 export 'package:groovix/core/utils/generic_typedef.dart';
@@ -84,3 +98,5 @@ export 'package:groovix/routes/app_routes.dart';
 // Common Widgets
 export 'package:groovix/core/shared/widgets/common_back_button.dart';
 export 'package:groovix/features/cms/songs/domain/usecase/update_song_field_uc.dart';
+export 'package:groovix/core/models/artist_model.dart';
+export 'package:groovix/core/shared/domain/usecase/usecase.dart';

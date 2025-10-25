@@ -1,9 +1,10 @@
 // Project imports:
+import 'package:groovix/core/models/pagination_info.dart';
 import 'package:groovix/core/models/song_model.dart';
 
 class SongsListResponse {
   final List<SongModel> songs;
-  final SongPaginationModel pagination;
+  final PaginationInfo pagination;
 
   SongsListResponse({
     required this.songs,
@@ -16,7 +17,7 @@ class SongsListResponse {
               ?.map((song) => SongModel.fromJson(song))
               .toList() ??
           [],
-      pagination: SongPaginationModel.fromJson(json['pagination'] ?? {}),
+      pagination: PaginationInfo.fromJson(json['pagination'] ?? {}),
     );
   }
 
@@ -24,46 +25,6 @@ class SongsListResponse {
     return {
       'songs': songs.map((song) => song.toJson()).toList(),
       'pagination': pagination.toJson(),
-    };
-  }
-}
-
-class SongPaginationModel {
-  final int total;
-  final int page;
-  final int size;
-  final int totalPages;
-  final bool hasNext;
-  final bool hasPrevious;
-
-  SongPaginationModel({
-    required this.total,
-    required this.page,
-    required this.size,
-    required this.totalPages,
-    required this.hasNext,
-    required this.hasPrevious,
-  });
-
-  factory SongPaginationModel.fromJson(Map<String, dynamic> json) {
-    return SongPaginationModel(
-      total: json['total'] ?? 0,
-      page: json['page'] ?? 1,
-      size: json['size'] ?? 10,
-      totalPages: json['total_pages'] ?? 0,
-      hasNext: json['has_next'] ?? false,
-      hasPrevious: json['has_previous'] ?? false,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'total': total,
-      'page': page,
-      'size': size,
-      'total_pages': totalPages,
-      'has_next': hasNext,
-      'has_previous': hasPrevious,
     };
   }
 }

@@ -1,11 +1,9 @@
-// Project imports:
-import '../models/artist_model.dart';
+import 'package:groovix/features/cms/cms_index.dart';
 
 abstract class ArtistRepository {
-  Future<List<ArtistModel>> getAllArtists();
-  Future<ArtistModel?> getArtistById(String id);
-  Future<List<ArtistModel>> searchArtists(String query);
-  Future<ArtistModel> createArtist(ArtistModel artist);
-  Future<ArtistModel> updateArtist(ArtistModel artist);
-  Future<void> deleteArtist(String id);
+  EitherDynamic<ArtistModel> createArtist(ArtistParams params);
+  EitherDynamic<ArtistsListResponse> getArtistsList(ArtistsQueryModel params);
+  EitherDynamic<ArtistModel> getArtistById(String artistId);
+  EitherDynamic<ArtistModel> updateArtist(String artistId, ArtistUpdate update);
+  EitherDynamic<DeleteResponse> deleteArtist(String artistId);
 }

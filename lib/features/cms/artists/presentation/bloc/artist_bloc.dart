@@ -1,33 +1,33 @@
-// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-// Project imports:
-import '../../domain/models/artist_model.dart';
-import '../../domain/usecase/artist_usecases.dart';
+import 'package:groovix/features/cms/cms_index.dart';
 
 // Events
 abstract class ArtistEvent {}
 
-class LoadArtists extends ArtistEvent {}
+class LoadArtists extends ArtistEvent {
+  final ArtistsQueryModel params;
+  LoadArtists(this.params);
+}
 
-class SearchArtists extends ArtistEvent {
-  final String query;
-  SearchArtists(this.query);
+class GetArtistById extends ArtistEvent {
+  final String artistId;
+  GetArtistById(this.artistId);
 }
 
 class CreateArtist extends ArtistEvent {
-  final ArtistModel artist;
-  CreateArtist(this.artist);
+  final ArtistParams params;
+  CreateArtist(this.params);
 }
 
 class UpdateArtist extends ArtistEvent {
-  final ArtistModel artist;
-  UpdateArtist(this.artist);
+  final String artistId;
+  final ArtistUpdate update;
+  UpdateArtist(this.artistId, this.update);
 }
 
 class DeleteArtist extends ArtistEvent {
-  final String id;
-  DeleteArtist(this.id);
+  final String artistId;
+  DeleteArtist(this.artistId);
 }
 
 // States
@@ -37,9 +37,14 @@ class ArtistInitial extends ArtistState {}
 
 class ArtistLoading extends ArtistState {}
 
+class ArtistsLoaded extends ArtistState {
+  final ArtistsListResponse response;
+  ArtistsLoaded(this.response);
+}
+
 class ArtistLoaded extends ArtistState {
-  final List<ArtistModel> artists;
-  ArtistLoaded(this.artists);
+  final ArtistModel artist;
+  ArtistLoaded(this.artist);
 }
 
 class ArtistError extends ArtistState {
@@ -58,32 +63,32 @@ class ArtistUpdated extends ArtistState {
 }
 
 class ArtistDeleted extends ArtistState {
-  final String id;
-  ArtistDeleted(this.id);
+  final String artistId;
+  ArtistDeleted(this.artistId);
 }
 
 // BLoC
 class ArtistBloc extends Bloc<ArtistEvent, ArtistState> {
-  final GetAllArtistsUseCase _getAllArtistsUseCase;
-  final SearchArtistsUseCase _searchArtistsUseCase;
-  final CreateArtistUseCase _createArtistUseCase;
-  final UpdateArtistUseCase _updateArtistUseCase;
-  final DeleteArtistUseCase _deleteArtistUseCase;
+  final CreateArtistUc _createArtistUc;
+  final GetArtistsListUc _getArtistsListUc;
+  final GetArtistByIdUc _getArtistByIdUc;
+  final UpdateArtistUc _updateArtistUc;
+  final DeleteArtistUc _deleteArtistUc;
 
   ArtistBloc({
-    required GetAllArtistsUseCase getAllArtistsUseCase,
-    required SearchArtistsUseCase searchArtistsUseCase,
-    required CreateArtistUseCase createArtistUseCase,
-    required UpdateArtistUseCase updateArtistUseCase,
-    required DeleteArtistUseCase deleteArtistUseCase,
-  })  : _getAllArtistsUseCase = getAllArtistsUseCase,
-        _searchArtistsUseCase = searchArtistsUseCase,
-        _createArtistUseCase = createArtistUseCase,
-        _updateArtistUseCase = updateArtistUseCase,
-        _deleteArtistUseCase = deleteArtistUseCase,
+    required CreateArtistUc createArtistUc,
+    required GetArtistsListUc getArtistsListUc,
+    required GetArtistByIdUc getArtistByIdUc,
+    required UpdateArtistUc updateArtistUc,
+    required DeleteArtistUc deleteArtistUc,
+  })  : _createArtistUc = createArtistUc,
+        _getArtistsListUc = getArtistsListUc,
+        _getArtistByIdUc = getArtistByIdUc,
+        _updateArtistUc = updateArtistUc,
+        _deleteArtistUc = deleteArtistUc,
         super(ArtistInitial()) {
     on<LoadArtists>(_onLoadArtists);
-    on<SearchArtists>(_onSearchArtists);
+    on<GetArtistById>(_onGetArtistById);
     on<CreateArtist>(_onCreateArtist);
     on<UpdateArtist>(_onUpdateArtist);
     on<DeleteArtist>(_onDeleteArtist);
@@ -92,52 +97,65 @@ class ArtistBloc extends Bloc<ArtistEvent, ArtistState> {
   Future<void> _onLoadArtists(
       LoadArtists event, Emitter<ArtistState> emit) async {
     emit(ArtistLoading());
-    try {
-      final artists = await _getAllArtistsUseCase();
-      emit(ArtistLoaded(artists));
-    } catch (e) {
-      emit(ArtistError(e.toString()));
-    }
+
+    final result = await _getArtistsListUc(event.params);
+    result.fold(
+      (failure) => emit(ArtistError(_mapFailureToMessage(failure))),
+      (response) => emit(ArtistsLoaded(response)),
+    );
   }
 
-  Future<void> _onSearchArtists(
-      SearchArtists event, Emitter<ArtistState> emit) async {
+  Future<void> _onGetArtistById(
+      GetArtistById event, Emitter<ArtistState> emit) async {
     emit(ArtistLoading());
-    try {
-      final artists = await _searchArtistsUseCase(event.query);
-      emit(ArtistLoaded(artists));
-    } catch (e) {
-      emit(ArtistError(e.toString()));
-    }
+
+    final result = await _getArtistByIdUc(event.artistId);
+    result.fold(
+      (failure) => emit(ArtistError(_mapFailureToMessage(failure))),
+      (artist) => emit(ArtistLoaded(artist)),
+    );
   }
 
   Future<void> _onCreateArtist(
       CreateArtist event, Emitter<ArtistState> emit) async {
-    try {
-      final artist = await _createArtistUseCase(event.artist);
-      emit(ArtistCreated(artist));
-    } catch (e) {
-      emit(ArtistError(e.toString()));
-    }
+    final result = await _createArtistUc(event.params);
+    result.fold(
+      (failure) => emit(ArtistError(_mapFailureToMessage(failure))),
+      (artist) => emit(ArtistCreated(artist)),
+    );
   }
 
   Future<void> _onUpdateArtist(
       UpdateArtist event, Emitter<ArtistState> emit) async {
-    try {
-      final artist = await _updateArtistUseCase(event.artist);
-      emit(ArtistUpdated(artist));
-    } catch (e) {
-      emit(ArtistError(e.toString()));
-    }
+    final params = UpdateArtistParams(
+      artistId: event.artistId,
+      update: event.update,
+    );
+
+    final result = await _updateArtistUc(params);
+    result.fold(
+      (failure) => emit(ArtistError(_mapFailureToMessage(failure))),
+      (artist) => emit(ArtistUpdated(artist)),
+    );
   }
 
   Future<void> _onDeleteArtist(
       DeleteArtist event, Emitter<ArtistState> emit) async {
-    try {
-      await _deleteArtistUseCase(event.id);
-      emit(ArtistDeleted(event.id));
-    } catch (e) {
-      emit(ArtistError(e.toString()));
+    final result = await _deleteArtistUc(event.artistId);
+    result.fold(
+      (failure) => emit(ArtistError(_mapFailureToMessage(failure))),
+      (response) => emit(ArtistDeleted(event.artistId)),
+    );
+  }
+
+  String _mapFailureToMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        return 'Server error: ${failure.toString()}';
+      case GeneralFailure:
+        return 'Error: ${failure.toString()}';
+      default:
+        return 'Unexpected error: ${failure.toString()}';
     }
   }
 }
