@@ -68,7 +68,7 @@ export 'package:groovix/core/services/theme/theme_manager.dart';
 export 'package:groovix/injection_container/injection_index.dart';
 
 // Shared Models
-export 'package:groovix/core/shared/model/song_model.dart';
+export 'package:groovix/core/models/song_model.dart';
 
 // Core Services
 export 'package:groovix/core/constants/string_constants.dart';

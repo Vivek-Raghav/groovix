@@ -199,7 +199,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          song.artist,
+          song.artistName,
           style: theme.textTheme.bodySmall?.copyWith(
             color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
           ),

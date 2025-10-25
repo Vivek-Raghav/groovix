@@ -28,7 +28,7 @@ export 'theme/app_theme.dart';
 // Core shared utilities
 export 'shared/domain/method/methods.dart';
 export 'shared/domain/usecase/usecase.dart';
-export 'shared/model/liked_song_model.dart';
+export 'models/liked_song_model.dart';
 
 // Core utils
 export 'utils/generic_typedef.dart';
@@ -45,4 +45,4 @@ export 'services/music_player/bloc/music_player_bloc.dart';
 export 'services/music_player/bloc/music_player_state.dart';
 export 'services/music_player/bloc/player_event.dart';
 export 'services/music_player/music_player_manager.dart';
-export 'shared/model/song_model.dart';
+export 'models/song_model.dart';

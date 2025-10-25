@@ -84,7 +84,7 @@ class MiniMusicScreen extends StatelessWidget {
                                   color: ThemeColors.clrWhite,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500)),
-                          Text(song.artist,
+                          Text(song.artistName,
                               style: const TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   color: ThemeColors.clrWhite,

@@ -2,7 +2,7 @@
 import 'package:just_audio/just_audio.dart';
 
 // Project imports:
-import 'package:groovix/core/shared/model/song_model.dart';
+import 'package:groovix/core/models/song_model.dart';
 
 class MusicPlayerManager {
   static final MusicPlayerManager _instance = MusicPlayerManager._internal();

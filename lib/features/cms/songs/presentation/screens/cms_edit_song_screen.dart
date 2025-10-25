@@ -47,7 +47,7 @@ class _EditSongScreenState extends State<EditSongScreen>
   }
 
   void _initializeFields() {
-    _artistController.text = widget.song.artist;
+    _artistController.text = widget.song.artistName;
     _songNameController.text = widget.song.songName;
 
     // Parse hexcode to color
@@ -339,7 +339,7 @@ class _EditSongScreenState extends State<EditSongScreen>
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    widget.song.artist,
+                    widget.song.artistName,
                     style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,

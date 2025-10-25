@@ -245,7 +245,7 @@ class FullMusicScreen extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              song.artist,
+              song.artistName,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.white70,

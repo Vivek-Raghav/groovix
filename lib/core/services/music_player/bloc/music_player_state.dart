@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:just_audio/just_audio.dart';
 
 // Project imports:
-import 'package:groovix/core/shared/model/song_model.dart';
+import 'package:groovix/core/models/song_model.dart';
 
 class MusicPlayerState extends Equatable {
   final SongModel? currentSong;

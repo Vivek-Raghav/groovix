@@ -25,7 +25,7 @@ class SongListTile extends StatelessWidget {
             }
           },
           title: Text(
-            songs[currentIndex].artist,
+            songs[currentIndex].artistName,
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
