@@ -55,10 +55,12 @@ class CmsArtistBloc extends Bloc<ArtistEvent, CmsArtistState> {
 
     final result = await _createArtistUc(event.artistParams);
     result.fold(
-      (failure) =>
-          emit(CreateArtistFailure(error: _mapFailureToMessage(failure))),
-      (artist) => emit(CreateArtistSuccess(artist: artist)),
-    );
+        (failure) =>
+            emit(CreateArtistFailure(error: _mapFailureToMessage(failure))),
+        (artist) {
+      emit(CreateArtistSuccess(artist: artist));
+      add(FetchArtistsList(ArtistsQueryModel(page: 1, size: 10)));
+    });
   }
 
   Future<void> _onUpdateArtist(
@@ -87,9 +89,11 @@ class CmsArtistBloc extends Bloc<ArtistEvent, CmsArtistState> {
 
     final result = await _deleteArtistUc(event.artistId);
     result.fold(
-      (failure) => emit(ArtistDeletedError(_mapFailureToMessage(failure))),
-      (response) => emit(ArtistDeleted(event.artistId)),
-    );
+        (failure) => emit(ArtistDeletedError(_mapFailureToMessage(failure))),
+        (response) {
+      emit(ArtistDeleted(event.artistId));
+      add(FetchArtistsList(ArtistsQueryModel(page: 1, size: 10)));
+    });
   }
 
   String _mapFailureToMessage(Failure failure) {

@@ -4,14 +4,14 @@ import 'dart:io';
 class UploadSongModel {
   File thumbnailFile;
   File song;
-  String artist;
+  String artistId;
   String songName;
   String hexcode;
 
   UploadSongModel({
     required this.thumbnailFile,
     required this.song,
-    required this.artist,
+    required this.artistId,
     required this.songName,
     required this.hexcode,
   });
@@ -20,7 +20,7 @@ class UploadSongModel {
     return UploadSongModel(
       thumbnailFile: File(json['thumbnail'] as String),
       song: File(json['song'] as String),
-      artist: json['artist_name'] as String,
+      artistId: json['artist_id'] as String,
       songName: json['song_name'] as String,
       hexcode: json['hexcode'] as String,
     );
@@ -30,9 +30,9 @@ class UploadSongModel {
     return {
       'thumbnailFile': thumbnailFile.path,
       'song': song.path,
-      'artist_name': artist,
+      'artist_id': artistId,
       'song_name': songName,
-      'selectedColor': hexcode,
+      'hexcode': hexcode,
     };
   }
 }

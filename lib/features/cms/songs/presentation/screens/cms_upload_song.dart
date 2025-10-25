@@ -16,7 +16,6 @@ class UploadSongScreen extends StatefulWidget {
 
 class _UploadSongScreenState extends State<UploadSongScreen>
     with TickerProviderStateMixin {
-  final TextEditingController _artistController = TextEditingController();
   final TextEditingController _songNameController = TextEditingController();
   final TextEditingController _fileController = TextEditingController();
 
@@ -24,6 +23,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
   int _selectedPaletteColor = 0;
   File? _selectedAudioFile;
   File? _selectedThumbnail;
+  ArtistModel? _selectedArtist;
 
   late AnimationController _loadingController;
   late Animation<double> _rotationAnimation;
@@ -50,11 +50,16 @@ class _UploadSongScreenState extends State<UploadSongScreen>
       parent: _loadingController,
       curve: Curves.easeInOut,
     ));
+
+    // Initialize artists list
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getIt<CmsArtistBloc>()
+          .add(FetchArtistsList(ArtistsQueryModel(page: 1, size: 100)));
+    });
   }
 
   @override
   void dispose() {
-    _artistController.dispose();
     _songNameController.dispose();
     _fileController.dispose();
     _loadingController.dispose();
@@ -81,8 +86,11 @@ class _UploadSongScreenState extends State<UploadSongScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CmsSongBloc>(
-      create: (context) => getIt<CmsSongBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CmsSongBloc>.value(value: getIt<CmsSongBloc>()),
+        BlocProvider<CmsArtistBloc>.value(value: getIt<CmsArtistBloc>()),
+      ],
       child: BlocListener<CmsSongBloc, CmsSongState>(
         listener: (context, state) {
           if (state is UploadSongSuccess) {
@@ -91,7 +99,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                 extra: state.uploadSongResponse);
             _selectedThumbnail = null;
             _selectedAudioFile = null;
-            _artistController.clear();
+            _selectedArtist = null;
             _songNameController.clear();
             _selectedColor = const Color(0xFF7C3AED);
             _selectedPaletteColor = 0;
@@ -273,7 +281,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                   : () {
                       if (_selectedThumbnail != null &&
                           _selectedAudioFile != null &&
-                          _artistController.text.isNotEmpty &&
+                          _selectedArtist != null &&
                           _songNameController.text.isNotEmpty) {
                         _loadingController.repeat();
                         context
@@ -281,7 +289,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                             .add(UploadSong(UploadSongModel(
                               thumbnailFile: _selectedThumbnail!,
                               song: _selectedAudioFile!,
-                              artist: _artistController.text,
+                              artistId: _selectedArtist!.id,
                               songName: _songNameController.text,
                               hexcode: _selectedColor.value
                                   .toRadixString(16)
@@ -499,15 +507,10 @@ class _UploadSongScreenState extends State<UploadSongScreen>
   Widget _buildInputGroup(Color textColor) {
     return Column(
       children: [
-        _buildInputField(
-          label: 'Artist Name',
-          placeholder: 'Enter Artist Name',
-          controller: _artistController,
-          icon: Icons.person_outline,
-        ),
+        _buildArtistSelector(textColor),
         const SizedBox(height: 12),
         _buildInputField(
-          label: 'Song Title',
+          label: 'Song Name',
           placeholder: 'Enter Song Name',
           controller: _songNameController,
           icon: Icons.music_note_outlined,
@@ -565,6 +568,97 @@ class _UploadSongScreenState extends State<UploadSongScreen>
               ),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildArtistSelector(Color textColor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Select Artist',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Lexend',
+          ),
+        ),
+        const SizedBox(height: 8),
+        BlocBuilder<CmsArtistBloc, CmsArtistState>(
+          builder: (context, state) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+                border:
+                    Border.all(color: Theme.of(context).colorScheme.outline),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<ArtistModel>(
+                  value: _selectedArtist,
+                  hint: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'Choose an artist',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontFamily: 'Lexend',
+                      ),
+                    ),
+                  ),
+                  icon: Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: Icon(
+                      Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  isExpanded: true,
+                  items: state is CmsArtistLoaded
+                      ? state.artists.map((ArtistModel artist) {
+                          return DropdownMenuItem<ArtistModel>(
+                            value: artist,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.person,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      artist.name,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                        fontFamily: 'Lexend',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList()
+                      : [],
+                  onChanged: (ArtistModel? newValue) {
+                    setState(() {
+                      _selectedArtist = newValue;
+                    });
+                  },
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -713,7 +807,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                 : () {
                     if (_selectedThumbnail != null &&
                         _selectedAudioFile != null &&
-                        _artistController.text.isNotEmpty &&
+                        _selectedArtist != null &&
                         _songNameController.text.isNotEmpty) {
                       _loadingController.repeat();
                       context
@@ -721,7 +815,7 @@ class _UploadSongScreenState extends State<UploadSongScreen>
                           .add(UploadSong(UploadSongModel(
                             thumbnailFile: _selectedThumbnail!,
                             song: _selectedAudioFile!,
-                            artist: _artistController.text,
+                            artistId: _selectedArtist!.id,
                             songName: _songNameController.text,
                             hexcode: _selectedColor.value
                                 .toRadixString(16)

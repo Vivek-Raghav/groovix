@@ -65,7 +65,7 @@ class CmsSongRemoteDatasourceImpl extends CmsSongRemoteDataSource {
         'song': params.song,
         'thumbnail': params.thumbnailFile,
       }, fields: {
-        'artist': params.artist,
+        'artist_id': params.artistId,
         'song_name': params.songName,
         'hexcode': params.hexcode,
       });

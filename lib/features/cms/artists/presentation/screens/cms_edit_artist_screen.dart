@@ -104,7 +104,8 @@ class _CMSEditArtistScreenState extends State<CMSEditArtistScreen> {
                             prefixIcon: IconButton(
                               onPressed: () {
                                 Clipboard.setData(
-                                    ClipboardData(text: widget.artist.id));
+                                  ClipboardData(text: widget.artist.id),
+                                );
                                 showToast(title: 'Copied!');
                               },
                               icon: const Icon(Icons.copy),

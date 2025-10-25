@@ -54,7 +54,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                 _isSearching = false;
                 context.read<CmsSongBloc>().add(SearchSongs(query));
               },
-              onClear: _isSearching 
+              onClear: _isSearching
                   ? () {}
                   : () {
                       context.read<CmsSongBloc>().add(
@@ -106,7 +106,32 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                 if (state is CmsSongLoaded) {
                   return _buildSongsList(context, state.songs);
                 }
-                return const SizedBox.shrink();
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    const Text("OOPS SOMETHING WENT WRONG"),
+                    TextButton(
+                        onPressed: () {
+                          context.read<CmsSongBloc>().add(FetchSongList(
+                              SongsQueryModel(page: 1, size: 100)));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .color!
+                                  .withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(8)),
+                          child: const Text("Try Again"),
+                        ))
+                  ],
+                );
               },
             ),
           ),
