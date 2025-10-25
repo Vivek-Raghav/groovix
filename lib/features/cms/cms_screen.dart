@@ -60,9 +60,9 @@ class _CMSScreenState extends State<CMSScreen> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<DashboardBloc>(
-            create: (context) => getIt<DashboardBloc>()),
-        BlocProvider<CmsSongBloc>(create: (context) => getIt<CmsSongBloc>()),
+        BlocProvider<DashboardBloc>.value(value: getIt<DashboardBloc>()),
+        BlocProvider<CmsSongBloc>.value(value: getIt<CmsSongBloc>()),
+        BlocProvider<CmsArtistBloc>.value(value: getIt<CmsArtistBloc>()),
       ],
       child: Scaffold(
         body: IndexedStack(

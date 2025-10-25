@@ -1,5 +1,6 @@
 // Project imports:
-import '../../../cms_index.dart';
+import "package:groovix/features/cms/cms_index.dart";
+import "package:groovix/features/cms/artists/domain/models/artists_query_model.dart";
 
 class CMSArtistsScreen extends StatefulWidget {
   const CMSArtistsScreen({super.key});
@@ -9,9 +10,30 @@ class CMSArtistsScreen extends StatefulWidget {
 }
 
 class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<CmsArtistBloc>()
+        .add(FetchArtistsList(ArtistsQueryModel(page: 1, size: 100)));
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
+      backgroundColor: isDark ? ThemeColors.darkAppColor : ThemeColors.white,
       appBar: AppBar(
         title: const Text('Artists'),
         backgroundColor: ThemeColors.primaryColor,
@@ -19,10 +41,83 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: _buildArtistsList(context),
+      body: Column(
+        children: [
+          // Search Bar
+          SearchBar(
+              placeholder: 'Search artists by name...',
+              controller: _searchController,
+              onChanged: (value) {
+                _isSearching = true;
+              },
+              onSearch: (query) {
+                _isSearching = false;
+                context.read<CmsArtistBloc>().add(SearchArtists(query));
+              },
+              onClear: _isSearching
+                  ? () {}
+                  : () {
+                      context.read<CmsArtistBloc>().add(FetchArtistsList(
+                          ArtistsQueryModel(page: 1, size: 100)));
+                    }),
+
+          // Artists List
+          Expanded(
+            child: BlocBuilder<CmsArtistBloc, CmsArtistState>(
+              builder: (context, state) {
+                if (state is CmsArtistLoading ||
+                    state is ArtistDeletedLoading) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          color: ThemeColors.primaryColor));
+                }
+                if (state is CmsArtistError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: ThemeColors.red,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Error loading artists',
+                          style: theme.textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          state.message,
+                          style: theme.textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<CmsArtistBloc>().add(FetchArtistsList(
+                                ArtistsQueryModel(page: 1, size: 100)));
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                if (state is CmsArtistLoaded) {
+                  return _buildArtistsList(context, state.artists);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         heroTag: "cms_artists_fab",
-        onPressed: _navigateToAddArtist,
+        onPressed: () {
+          context.push(AppRoutes.addArtist);
+        },
         backgroundColor: ThemeColors.primaryColor,
         foregroundColor: ThemeColors.white,
         child: const Icon(Icons.add),
@@ -30,46 +125,34 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
     );
   }
 
-  Widget _buildArtistsList(BuildContext context) {
-    // Mock artists data
-    final artists = [
-      {
-        'id': '1',
-        'name': 'Taylor Swift',
-        'songCount': 45,
-        'followers': '2.5M',
-        'imageUrl': 'https://example.com/artist1.jpg',
-        'genres': ['Pop', 'Country'],
-        'createdAt': DateTime.now().subtract(const Duration(days: 5)),
-      },
-      {
-        'id': '2',
-        'name': 'Ed Sheeran',
-        'songCount': 32,
-        'followers': '1.8M',
-        'imageUrl': 'https://example.com/artist2.jpg',
-        'genres': ['Pop', 'Folk'],
-        'createdAt': DateTime.now().subtract(const Duration(days: 3)),
-      },
-      {
-        'id': '3',
-        'name': 'Billie Eilish',
-        'songCount': 28,
-        'followers': '3.2M',
-        'imageUrl': 'https://example.com/artist3.jpg',
-        'genres': ['Alternative', 'Pop'],
-        'createdAt': DateTime.now().subtract(const Duration(days: 7)),
-      },
-      {
-        'id': '4',
-        'name': 'The Weeknd',
-        'songCount': 38,
-        'followers': '2.1M',
-        'imageUrl': 'https://example.com/artist4.jpg',
-        'genres': ['R&B', 'Pop'],
-        'createdAt': DateTime.now().subtract(const Duration(days: 2)),
-      },
-    ];
+  Widget _buildArtistsList(BuildContext context, List<ArtistModel> artists) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    if (artists.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.person_off,
+              size: 64,
+              color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'No artists found',
+              style: theme.textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Add your first artist to get started',
+              style: theme.textTheme.bodyMedium,
+            ),
+          ],
+        ),
+      );
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -81,8 +164,9 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
     );
   }
 
-  Widget _buildArtistCard(BuildContext context, Map<String, dynamic> artist) {
+  Widget _buildArtistCard(BuildContext context, ArtistModel artist) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -95,17 +179,15 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
         leading: CircleAvatar(
           radius: 30,
           backgroundColor: ThemeColors.primaryColor.withOpacity(0.1),
-          backgroundImage: NetworkImage(artist['imageUrl']),
-          child: artist['imageUrl'] == null
-              ? Icon(
-                  Icons.person,
-                  size: 30,
-                  color: ThemeColors.primaryColor,
-                )
+          backgroundImage:
+              artist.avatarUrl != null ? NetworkImage(artist.avatarUrl!) : null,
+          child: artist.avatarUrl == null
+              ? const Icon(Icons.person,
+                  size: 30, color: ThemeColors.primaryColor)
               : null,
         ),
         title: Text(
-          artist['name'],
+          artist.name,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -115,34 +197,19 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
           children: [
             const SizedBox(height: 4),
             Text(
-              '${artist['songCount']} Songs • ${artist['followers']} Followers',
+              artist.bio != null ? artist.bio! : 'No biography available',
               style: theme.textTheme.bodySmall?.copyWith(
-                color: ThemeColors.grey600,
+                color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
               ),
-            ),
-            const SizedBox(height: 4),
-            Wrap(
-              spacing: 4,
-              children: (artist['genres'] as List<String>).map((genre) {
-                return Chip(
-                  label: Text(
-                    genre,
-                    style: const TextStyle(fontSize: 10),
-                  ),
-                  backgroundColor: ThemeColors.primaryColor.withOpacity(0.1),
-                  labelStyle: TextStyle(
-                    color: ThemeColors.primaryColor,
-                    fontSize: 10,
-                  ),
-                );
-              }).toList(),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
         trailing: PopupMenuButton<String>(
           icon: Icon(
             Icons.more_vert,
-            color: ThemeColors.grey600,
+            color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
           ),
           onSelected: (value) {
             switch (value) {
@@ -150,7 +217,8 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
                 _navigateToEditArtist(artist);
                 break;
               case 'delete':
-                _showDeleteConfirmation(context, artist);
+                _showDeleteConfirmation(
+                    context, artist, context.read<CmsArtistBloc>());
                 break;
             }
           },
@@ -184,32 +252,17 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
     );
   }
 
-  void _navigateToAddArtist() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CMSAddArtistScreen(),
-      ),
-    );
-  }
-
-  void _navigateToEditArtist(Map<String, dynamic> artist) {
-    // TODO: Implement edit artist screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Edit ${artist['name']} - To be implemented'),
-        backgroundColor: ThemeColors.primaryColor,
-      ),
-    );
+  void _navigateToEditArtist(ArtistModel artist) {
+    context.push(AppRoutes.editArtist, extra: artist);
   }
 
   void _showDeleteConfirmation(
-      BuildContext context, Map<String, dynamic> artist) {
+      BuildContext context, ArtistModel artist, CmsArtistBloc cmsArtistBloc) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Artist'),
-        content: Text('Are you sure you want to delete "${artist['name']}"?'),
+        content: Text('Are you sure you want to delete "${artist.name}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -218,12 +271,7 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${artist['name']} deleted successfully'),
-                  backgroundColor: ThemeColors.clrGreen,
-                ),
-              );
+              cmsArtistBloc.add(DeleteArtist(artist.id));
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: ThemeColors.red,

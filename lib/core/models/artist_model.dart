@@ -7,14 +7,16 @@ part 'artist_model.g.dart';
 class ArtistModel {
   final String id;
   final String name;
+  @JsonKey(name: 'avatar_url')
   final String avatarUrl;
   final String bio;
 
-  ArtistModel(
-      {required this.id,
-      required this.name,
-      required this.avatarUrl,
-      required this.bio});
+  ArtistModel({
+    required this.id,
+    required this.name,
+    required this.avatarUrl,
+    required this.bio,
+  });
 
   factory ArtistModel.fromJson(Map<String, dynamic> json) =>
       _$ArtistModelFromJson(json);

@@ -2,9 +2,9 @@
 import 'package:groovix/core/services/music_player/bloc/music_player_bloc.dart';
 import 'package:groovix/core/services/music_player/music_player_manager.dart';
 import 'package:groovix/features/auth/bloc/auth_bloc.dart';
+import 'package:groovix/features/cms/artists/presentation/bloc/artist_bloc.dart';
 import 'package:groovix/features/cms/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:groovix/features/cms/songs/presentation/bloc/song_bloc.dart';
-import 'package:groovix/features/cms/artists/presentation/bloc/artist_bloc.dart';
 import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
 import 'package:groovix/injection_container/injection_index.dart';
 
@@ -24,14 +24,14 @@ Future<void> injectBlocs() async {
       ));
 
   // CMS BLoCs
-  getIt.registerFactory<DashboardBloc>(() => DashboardBloc(getIt()));
-  getIt.registerFactory<CmsSongBloc>(() => CmsSongBloc(
+  getIt.registerLazySingleton<DashboardBloc>(() => DashboardBloc(getIt()));
+  getIt.registerLazySingleton<CmsSongBloc>(() => CmsSongBloc(
       uploadSongUc: getIt(),
       songListUc: getIt(),
       updateSongFieldsUc: getIt(),
       deleteSongUc: getIt(),
       searchSongUc: getIt()));
-  getIt.registerFactory<ArtistBloc>(() => ArtistBloc(
+  getIt.registerLazySingleton<CmsArtistBloc>(() => CmsArtistBloc(
       createArtistUc: getIt(),
       getArtistsListUc: getIt(),
       getArtistByIdUc: getIt(),

@@ -16,4 +16,6 @@ class AppRoutes {
   static const String editSong = '/edit-song';
   static const String editSuccess = '/edit-success';
   static const String cmsDashboard = '/cms-dashboard';
+  static const String addArtist = '/add-artist';
+  static const String editArtist = '/edit-artist';
 }

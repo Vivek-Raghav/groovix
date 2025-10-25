@@ -18,9 +18,9 @@ class UploadSongModel {
 
   factory UploadSongModel.fromJson(Map<String, dynamic> json) {
     return UploadSongModel(
-      thumbnailFile: File(json['thumbnailFile'] as String),
+      thumbnailFile: File(json['thumbnail'] as String),
       song: File(json['song'] as String),
-      artist: json['artist'] as String,
+      artist: json['artist_name'] as String,
       songName: json['song_name'] as String,
       hexcode: json['hexcode'] as String,
     );
@@ -30,7 +30,7 @@ class UploadSongModel {
     return {
       'thumbnailFile': thumbnailFile.path,
       'song': song.path,
-      'artist': artist,
+      'artist_name': artist,
       'song_name': songName,
       'selectedColor': hexcode,
     };

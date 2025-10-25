@@ -45,8 +45,11 @@ export 'artists/data/datasource/artist_datasource.dart';
 export 'artists/data/datasource/artist_remote_datasource_impl.dart';
 export 'artists/data/repositories/artist_repository_impl.dart';
 export 'artists/presentation/bloc/artist_bloc.dart';
+export 'artists/presentation/bloc/cms_artist_event.dart';
+export 'artists/presentation/bloc/cms_artist_state.dart';
 export 'artists/presentation/screens/cms_artists_screen.dart';
 export 'artists/presentation/screens/cms_add_artist_screen.dart';
+export 'artists/presentation/screens/cms_edit_artist_screen.dart';
 
 // Playlists Module (from shared)
 export '../shared/playlist/domain/models/playlist_model.dart';

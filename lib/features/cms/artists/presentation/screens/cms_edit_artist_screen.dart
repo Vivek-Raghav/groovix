@@ -1,18 +1,31 @@
 // Project imports:
 import '../../../cms_index.dart';
 
-class CMSAddArtistScreen extends StatefulWidget {
-  const CMSAddArtistScreen({super.key});
+class CMSEditArtistScreen extends StatefulWidget {
+  final ArtistModel artist;
+
+  const CMSEditArtistScreen({
+    super.key,
+    required this.artist,
+  });
 
   @override
-  State<CMSAddArtistScreen> createState() => _CMSAddArtistScreenState();
+  State<CMSEditArtistScreen> createState() => _CMSEditArtistScreenState();
 }
 
-class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
+class _CMSEditArtistScreenState extends State<CMSEditArtistScreen> {
   final _formKey = GlobalKey<FormState>();
   final _artistNameController = TextEditingController();
   final _bioController = TextEditingController();
   final _avatarUrlController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _artistNameController.text = widget.artist.name;
+    _bioController.text = widget.artist.bio ?? '';
+    _avatarUrlController.text = widget.artist.avatarUrl ?? '';
+  }
 
   @override
   void dispose() {
@@ -29,7 +42,7 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
           ? ThemeColors.darkAppColor
           : ThemeColors.white,
       appBar: AppBar(
-        title: const Text('Add New Artist'),
+        title: const Text('Edit Artist'),
         backgroundColor: ThemeColors.primaryColor,
         foregroundColor: ThemeColors.white,
         elevation: 0,
@@ -41,15 +54,15 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
       ),
       body: BlocListener<CmsArtistBloc, CmsArtistState>(
         listener: (context, state) {
-          if (state is CreateArtistSuccess) {
+          if (state is UpdateArtistSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('${state.artist.name} created successfully!'),
+                content: Text('${state.artist.name} updated successfully!'),
                 backgroundColor: ThemeColors.clrGreen,
               ),
             );
             Navigator.pop(context);
-          } else if (state is CreateArtistFailure) {
+          } else if (state is UpdateArtistFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error: ${state.error}'),
@@ -133,15 +146,15 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
 
                 const SizedBox(height: 32),
 
-                // Save Button
+                // Update Button
                 BlocBuilder<CmsArtistBloc, CmsArtistState>(
                   builder: (context, state) {
-                    final isLoading = state is CreateArtistLoading;
+                    final isLoading = state is UpdateArtistLoading;
 
                     return SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: isLoading ? null : _saveArtist,
+                        onPressed: isLoading ? null : _updateArtist,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: ThemeColors.primaryColor,
                           foregroundColor: ThemeColors.white,
@@ -161,7 +174,7 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
                                 ),
                               )
                             : const Text(
-                                'Create Artist',
+                                'Update Artist',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -181,15 +194,17 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
     );
   }
 
-  void _saveArtist() {
+  void _updateArtist() {
     if (_formKey.currentState!.validate()) {
-      final artistParams = ArtistParams(
+      final artistUpdate = ArtistUpdate(
         name: _artistNameController.text.trim(),
         avatarUrl: _avatarUrlController.text.trim(),
         bio: _bioController.text.trim(),
       );
 
-      context.read<CmsArtistBloc>().add(CreateArtist(artistParams));
+      context
+          .read<CmsArtistBloc>()
+          .add(UpdateArtist(widget.artist.id, artistUpdate));
     }
   }
 }
