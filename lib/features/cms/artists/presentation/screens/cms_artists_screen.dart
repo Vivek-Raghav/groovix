@@ -1,6 +1,7 @@
 // Project imports:
+// ignore_for_file: unnecessary_null_comparison
+
 import "package:groovix/features/cms/cms_index.dart";
-import "package:groovix/features/cms/artists/domain/models/artists_query_model.dart";
 
 class CMSArtistsScreen extends StatefulWidget {
   const CMSArtistsScreen({super.key});
@@ -197,10 +198,9 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
           children: [
             const SizedBox(height: 4),
             Text(
-              artist.bio != null ? artist.bio! : 'No biography available',
+              artist.bio ?? "",
               style: theme.textTheme.bodySmall?.copyWith(
-                color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
-              ),
+                  color: isDark ? ThemeColors.white70 : ThemeColors.grey600),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

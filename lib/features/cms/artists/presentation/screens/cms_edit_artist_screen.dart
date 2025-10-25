@@ -1,13 +1,12 @@
 // Project imports:
-import '../../../cms_index.dart';
+import 'package:flutter/services.dart';
+import 'package:groovix/core/shared/domain/method/methods.dart';
+import 'package:groovix/features/cms/cms_index.dart';
 
 class CMSEditArtistScreen extends StatefulWidget {
   final ArtistModel artist;
 
-  const CMSEditArtistScreen({
-    super.key,
-    required this.artist,
-  });
+  const CMSEditArtistScreen({super.key, required this.artist});
 
   @override
   State<CMSEditArtistScreen> createState() => _CMSEditArtistScreenState();
@@ -17,21 +16,18 @@ class _CMSEditArtistScreenState extends State<CMSEditArtistScreen> {
   final _formKey = GlobalKey<FormState>();
   final _artistNameController = TextEditingController();
   final _bioController = TextEditingController();
-  final _avatarUrlController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _artistNameController.text = widget.artist.name;
     _bioController.text = widget.artist.bio ?? '';
-    _avatarUrlController.text = widget.artist.avatarUrl ?? '';
   }
 
   @override
   void dispose() {
     _artistNameController.dispose();
     _bioController.dispose();
-    _avatarUrlController.dispose();
     super.dispose();
   }
 
@@ -99,6 +95,24 @@ class _CMSEditArtistScreenState extends State<CMSEditArtistScreen> {
                         const SizedBox(height: 16),
 
                         // Artist Name
+
+                        TextFormField(
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            labelText: widget.artist.id,
+                            border: const OutlineInputBorder(),
+                            prefixIcon: IconButton(
+                              onPressed: () {
+                                Clipboard.setData(
+                                    ClipboardData(text: widget.artist.id));
+                                showToast(title: 'Copied!');
+                              },
+                              icon: const Icon(Icons.copy),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        // Artist Name
                         TextFormField(
                           controller: _artistNameController,
                           decoration: const InputDecoration(
@@ -129,15 +143,76 @@ class _CMSEditArtistScreenState extends State<CMSEditArtistScreen> {
                         ),
                         const SizedBox(height: 16),
 
-                        // Avatar URL
-                        TextFormField(
-                          controller: _avatarUrlController,
-                          decoration: const InputDecoration(
-                            labelText: 'Avatar URL',
-                            hintText: 'Enter avatar image URL',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.image),
+                        // Current Avatar Display
+                        Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: ThemeColors.grey200,
+                              style: BorderStyle.solid,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: (widget.artist.avatarUrl?.isNotEmpty ?? false)
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    widget.artist.avatarUrl!,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        color: ThemeColors.grey200,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.person,
+                                              size: 64,
+                                              color: ThemeColors.grey,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Failed to load image',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: ThemeColors.grey600,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              : Container(
+                                  color: ThemeColors.grey200,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.person,
+                                        size: 64,
+                                        color: ThemeColors.grey,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'No avatar image',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: ThemeColors.grey600,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -198,7 +273,6 @@ class _CMSEditArtistScreenState extends State<CMSEditArtistScreen> {
     if (_formKey.currentState!.validate()) {
       final artistUpdate = ArtistUpdate(
         name: _artistNameController.text.trim(),
-        avatarUrl: _avatarUrlController.text.trim(),
         bio: _bioController.text.trim(),
       );
 

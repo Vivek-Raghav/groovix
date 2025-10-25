@@ -1,5 +1,9 @@
+// Dart imports:
+import 'dart:io';
+
 // Project imports:
 import '../../../cms_index.dart';
+import '../../../../cms/songs/presentation/widgets/file_picker.dart';
 
 class CMSAddArtistScreen extends StatefulWidget {
   const CMSAddArtistScreen({super.key});
@@ -12,14 +16,23 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
   final _formKey = GlobalKey<FormState>();
   final _artistNameController = TextEditingController();
   final _bioController = TextEditingController();
-  final _avatarUrlController = TextEditingController();
+
+  File? _selectedAvatarFile;
 
   @override
   void dispose() {
     _artistNameController.dispose();
     _bioController.dispose();
-    _avatarUrlController.dispose();
     super.dispose();
+  }
+
+  void _pickAvatarFromStorage() async {
+    final image = await pickImageFromStorage();
+    if (image != null) {
+      setState(() {
+        _selectedAvatarFile = image;
+      });
+    }
   }
 
   @override
@@ -116,15 +129,87 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
                         ),
                         const SizedBox(height: 16),
 
-                        // Avatar URL
-                        TextFormField(
-                          controller: _avatarUrlController,
-                          decoration: const InputDecoration(
-                            labelText: 'Avatar URL',
-                            hintText: 'Enter avatar image URL',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.image),
+                        // Avatar Upload Section
+                        Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: ThemeColors.grey200,
+                              style: BorderStyle.solid,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: _selectedAvatarFile != null
+                              ? Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        _selectedAvatarFile!,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 8,
+                                      right: 8,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedAvatarFile = null;
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.black54,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : GestureDetector(
+                                  onTap: _pickAvatarFromStorage,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.person_add,
+                                        size: 64,
+                                        color: ThemeColors.grey,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Upload Avatar Image',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: ThemeColors.grey600,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'JPG, PNG supported • Recommended: 500x500px',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color: ThemeColors.grey,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -183,9 +268,19 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
 
   void _saveArtist() {
     if (_formKey.currentState!.validate()) {
+      if (_selectedAvatarFile == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please select an avatar image'),
+            backgroundColor: ThemeColors.red,
+          ),
+        );
+        return;
+      }
+
       final artistParams = ArtistParams(
         name: _artistNameController.text.trim(),
-        avatarUrl: _avatarUrlController.text.trim(),
+        avatarFile: _selectedAvatarFile!,
         bio: _bioController.text.trim(),
       );
 

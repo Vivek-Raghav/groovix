@@ -8,8 +8,8 @@ class ArtistModel {
   final String id;
   final String name;
   @JsonKey(name: 'avatar_url')
-  final String avatarUrl;
-  final String bio;
+  final String? avatarUrl;
+  final String? bio;
 
   ArtistModel({
     required this.id,

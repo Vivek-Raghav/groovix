@@ -9,9 +9,15 @@ class ArtistRemoteDatasourceImpl implements ArtistDatasource {
   @override
   Future<ArtistModel> createArtist(ArtistParams params) async {
     try {
-      final response = await _apiService.post(
-        ApiUrls.artistsCreate,
-        data: params.toJson(),
+      final response = await _apiService.postMultipart(
+        url: ApiUrls.artistsCreate,
+        files: {
+          'avatar_url': params.avatarFile,
+        },
+        fields: {
+          'name': params.name,
+          'bio': params.bio,
+        },
       );
 
       if (response.statusCode == 201) {
