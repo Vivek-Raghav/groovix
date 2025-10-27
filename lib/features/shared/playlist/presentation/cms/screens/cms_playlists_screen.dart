@@ -1,4 +1,8 @@
-import 'package:groovix/features/cms/cms_index.dart';
+import 'package:groovix/core/models/playlist_model.dart';
+import 'package:groovix/features/cms/cms_index.dart' hide PlaylistModel;
+import 'package:groovix/features/shared/playlist/bloc/playlist_event.dart';
+import 'package:groovix/features/shared/playlist/bloc/playlist_state.dart';
+import 'package:groovix/features/shared/playlist/domain/models/playlists_query_model.dart';
 
 class CmsPlaylistsScreen extends StatefulWidget {
   const CmsPlaylistsScreen({super.key});
@@ -8,6 +12,34 @@ class CmsPlaylistsScreen extends StatefulWidget {
 }
 
 class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<PlaylistBloc>()
+        .add(FetchPlaylistsList(PlaylistsQueryModel(page: 1, size: 100)));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refetch playlists when screen becomes visible again
+    if (ModalRoute.of(context)?.isCurrent == true) {
+      context
+          .read<PlaylistBloc>()
+          .add(FetchPlaylistsList(PlaylistsQueryModel(page: 1, size: 100)));
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -22,7 +54,119 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: _buildPlaylistsList(context),
+      body: Column(
+        children: [
+          SearchBar(
+              placeholder: 'Search playlists...',
+              controller: _searchController,
+              onChanged: (value) {
+                _isSearching = true;
+              },
+              onSearch: (query) {
+                _isSearching = false;
+                getIt<PlaylistBloc>().add(SearchPlaylists(query));
+              },
+              onClear: _isSearching
+                  ? () {}
+                  : () {
+                      getIt<PlaylistBloc>().add(FetchPlaylistsList(
+                          PlaylistsQueryModel(page: 1, size: 100)));
+                    }),
+          Expanded(
+            child: BlocListener<PlaylistBloc, PlaylistState>(
+              listener: (context, state) {
+                if (state is CreatePlaylistLoaded) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                          Text('${state.playlist.name} created successfully'),
+                      backgroundColor: ThemeColors.clrGreen,
+                    ),
+                  );
+                  Navigator.pop(context);
+                  getIt<PlaylistBloc>().add(FetchPlaylistsList(
+                      PlaylistsQueryModel(page: 1, size: 100)));
+                } else if (state is UpdatePlaylistLoaded) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                          Text('${state.playlist.name} updated successfully'),
+                      backgroundColor: ThemeColors.clrGreen,
+                    ),
+                  );
+                  Navigator.pop(context);
+                } else if (state is PlaylistDeletedSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Playlist deleted successfully'),
+                      backgroundColor: ThemeColors.clrGreen,
+                    ),
+                  );
+                  getIt<PlaylistBloc>().add(FetchPlaylistsList(
+                      PlaylistsQueryModel(page: 1, size: 100)));
+                } else if (state is CreatePlaylistError ||
+                    state is UpdatePlaylistError ||
+                    state is PlaylistDeletedError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          (state as dynamic).message ?? 'An error occurred'),
+                      backgroundColor: ThemeColors.red,
+                    ),
+                  );
+                }
+              },
+              child: BlocBuilder<PlaylistBloc, PlaylistState>(
+                builder: (context, state) {
+                  if (state is PlaylistLoading ||
+                      state is DeletePlaylistLoading) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                            color: ThemeColors.primaryColor));
+                  }
+                  if (state is PlaylistError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: ThemeColors.red,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Error loading playlists',
+                            style: theme.textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            state.message,
+                            style: theme.textTheme.bodyMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              getIt<PlaylistBloc>().add(FetchPlaylistsList(
+                                  PlaylistsQueryModel(page: 1, size: 100)));
+                            },
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  if (state is PlaylistLoaded) {
+                    return _buildPlaylistsList(context, state.playlists);
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         heroTag: "cms_playlists_fab",
         onPressed: _navigateToAddPlaylist,
@@ -33,34 +177,10 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
     );
   }
 
-  Widget _buildPlaylistsList(BuildContext context) {
+  Widget _buildPlaylistsList(
+      BuildContext context, List<PlaylistModel> playlists) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-
-    // Mock playlists data
-    final playlists = [
-      {
-        'id': '1',
-        'name': 'Summer Hits 2024',
-        'songCount': 12,
-        'coverImageUrl': 'https://example.com/playlist1.jpg',
-        'createdAt': DateTime.now().subtract(const Duration(days: 3)),
-      },
-      {
-        'id': '2',
-        'name': 'Chill Vibes',
-        'songCount': 8,
-        'coverImageUrl': 'https://example.com/playlist2.jpg',
-        'createdAt': DateTime.now().subtract(const Duration(days: 7)),
-      },
-      {
-        'id': '3',
-        'name': 'Workout Mix',
-        'songCount': 15,
-        'coverImageUrl': 'https://example.com/playlist3.jpg',
-        'createdAt': DateTime.now().subtract(const Duration(days: 10)),
-      },
-    ];
 
     if (playlists.isEmpty) {
       return Center(
@@ -97,8 +217,7 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
     );
   }
 
-  Widget _buildPlaylistCard(
-      BuildContext context, Map<String, dynamic> playlist) {
+  Widget _buildPlaylistCard(BuildContext context, PlaylistModel playlist) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -113,11 +232,11 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
         leading: CircleAvatar(
           radius: 24,
           backgroundColor: ThemeColors.primaryColor.withOpacity(0.1),
-          backgroundImage: playlist['coverImageUrl'] != null
-              ? NetworkImage(playlist['coverImageUrl'])
+          backgroundImage: playlist.coverUrl.isNotEmpty
+              ? NetworkImage(playlist.coverUrl)
               : null,
-          child: playlist['coverImageUrl'] == null
-              ? Icon(
+          child: playlist.coverUrl.isEmpty
+              ? const Icon(
                   Icons.queue_music,
                   color: ThemeColors.primaryColor,
                   size: 24,
@@ -125,7 +244,7 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
               : null,
         ),
         title: Text(
-          playlist['name'],
+          playlist.name,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: isDark ? ThemeColors.white : ThemeColors.black,
@@ -134,10 +253,12 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          '${playlist['songCount']} Songs',
+          playlist.bio,
           style: theme.textTheme.bodySmall?.copyWith(
             color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
           ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         trailing: PopupMenuButton<String>(
           icon: Icon(
@@ -146,6 +267,9 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
           ),
           onSelected: (value) {
             switch (value) {
+              case 'add_songs':
+                _navigateToAddSongs(playlist);
+                break;
               case 'edit':
                 _navigateToEditPlaylist(playlist);
                 break;
@@ -155,6 +279,17 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
             }
           },
           itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'add_songs',
+              child: Row(
+                children: [
+                  Icon(Icons.add_circle_outline,
+                      color: ThemeColors.primaryColor),
+                  SizedBox(width: 8),
+                  Text('Add Songs'),
+                ],
+              ),
+            ),
             const PopupMenuItem(
               value: 'edit',
               child: Row(
@@ -178,37 +313,34 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
           ],
         ),
         onTap: () {
-          // Navigate to playlist details
+          _navigateToPlaylistSongs(playlist);
         },
       ),
     );
   }
 
   void _navigateToAddPlaylist() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CMSAddPlaylistScreen(),
-      ),
-    );
+    context.push(AppRoutes.addPlaylist);
   }
 
-  void _navigateToEditPlaylist(Map<String, dynamic> playlist) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditPlaylistScreen(playlist: playlist),
-      ),
-    );
+  void _navigateToAddSongs(PlaylistModel playlist) {
+    context.push(AppRoutes.addSongsToPlaylist, extra: playlist);
   }
 
-  void _showDeleteConfirmation(
-      BuildContext context, Map<String, dynamic> playlist) {
+  void _navigateToEditPlaylist(PlaylistModel playlist) {
+    context.push(AppRoutes.editPlaylist, extra: playlist);
+  }
+
+  void _navigateToPlaylistSongs(PlaylistModel playlist) {
+    context.push(AppRoutes.playlistSongs, extra: playlist);
+  }
+
+  void _showDeleteConfirmation(BuildContext context, PlaylistModel playlist) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Playlist'),
-        content: Text('Are you sure you want to delete "${playlist['name']}"?'),
+        content: Text('Are you sure you want to delete "${playlist.name}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -216,13 +348,10 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${playlist['name']} deleted successfully'),
-                  backgroundColor: ThemeColors.clrGreen,
-                ),
-              );
+              getIt<PlaylistBloc>().add(DeletePlaylist(playlist.id));
+              Future.delayed(const Duration(milliseconds: 200), () {
+                Navigator.pop(context);
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: ThemeColors.red,
@@ -230,45 +359,6 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
             child: const Text('Delete'),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// Placeholder screens
-class AddPlaylistScreen extends StatelessWidget {
-  const AddPlaylistScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Playlist'),
-        backgroundColor: ThemeColors.primaryColor,
-        foregroundColor: ThemeColors.white,
-      ),
-      body: const Center(
-        child: Text('Add Playlist Form - To be implemented'),
-      ),
-    );
-  }
-}
-
-class EditPlaylistScreen extends StatelessWidget {
-  final Map<String, dynamic> playlist;
-
-  const EditPlaylistScreen({super.key, required this.playlist});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Playlist'),
-        backgroundColor: ThemeColors.primaryColor,
-        foregroundColor: ThemeColors.white,
-      ),
-      body: Center(
-        child: Text('Edit Playlist Form for: ${playlist['name']}'),
       ),
     );
   }

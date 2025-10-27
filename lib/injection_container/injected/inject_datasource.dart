@@ -1,5 +1,6 @@
 // Project imports:
 import 'package:groovix/features/cms/cms_index.dart';
+import 'package:groovix/features/shared/playlist/playlist_index.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -14,4 +15,8 @@ Future<void> injectDatasources() async {
       () => CmsSongRemoteDatasourceImpl());
   getIt.registerLazySingleton<ArtistDatasource>(
       () => ArtistRemoteDatasourceImpl(apiService: getIt()));
+  getIt.registerLazySingleton<GenreDatasource>(
+      () => GenreRemoteDatasourceImpl());
+  getIt.registerLazySingleton<PlaylistDatasource>(
+      () => PlaylistRemoteDatasourceImpl());
 }

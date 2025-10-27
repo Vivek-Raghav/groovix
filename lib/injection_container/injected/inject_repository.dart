@@ -1,5 +1,6 @@
 // Project imports:
 import 'package:groovix/features/cms/cms_index.dart';
+import 'package:groovix/features/shared/playlist/playlist_index.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -16,4 +17,8 @@ Future<void> injectRepositories() async {
       () => DashboardRepositoryImpl());
   getIt.registerLazySingleton<ArtistRepository>(
       () => ArtistRepositoryImpl(datasource: getIt()));
+  getIt.registerLazySingleton<GenreRepository>(
+      () => GenreRepositoryImpl(datasource: getIt()));
+  getIt.registerLazySingleton<PlaylistRepository>(
+      () => PlaylistRepositoryImpl(datasource: getIt()));
 }

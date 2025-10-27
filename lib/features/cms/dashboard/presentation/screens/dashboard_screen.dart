@@ -12,7 +12,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<DashboardBloc>().add(LoadDashboardStats());
+    getIt<DashboardBloc>().add(LoadDashboardStats());
   }
 
   @override
@@ -63,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<DashboardBloc>().add(LoadDashboardStats());
+                      getIt<DashboardBloc>().add(LoadDashboardStats());
                     },
                     child: const Text('Retry'),
                   ),

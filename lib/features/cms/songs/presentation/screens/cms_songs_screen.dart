@@ -52,12 +52,12 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
               },
               onSearch: (query) {
                 _isSearching = false;
-                context.read<CmsSongBloc>().add(SearchSongs(query));
+                getIt<CmsSongBloc>().add(SearchSongs(query));
               },
               onClear: _isSearching
                   ? () {}
                   : () {
-                      context.read<CmsSongBloc>().add(
+                      getIt<CmsSongBloc>().add(
                           FetchSongList(SongsQueryModel(page: 1, size: 100)));
                     }),
 
@@ -94,7 +94,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
-                            context.read<CmsSongBloc>().add(FetchSongList(
+                            getIt<CmsSongBloc>().add(FetchSongList(
                                 SongsQueryModel(page: 1, size: 100)));
                           },
                           child: const Text('Retry'),
@@ -115,7 +115,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                     const Text("OOPS SOMETHING WENT WRONG"),
                     TextButton(
                         onPressed: () {
-                          context.read<CmsSongBloc>().add(FetchSongList(
+                          getIt<CmsSongBloc>().add(FetchSongList(
                               SongsQueryModel(page: 1, size: 100)));
                         },
                         child: Container(
@@ -240,8 +240,7 @@ class _CMSSongsScreenState extends State<CMSSongsScreen> {
                 _navigateToEditSong(song);
                 break;
               case 'delete':
-                _showDeleteConfirmation(
-                    context, song, context.read<CmsSongBloc>());
+                _showDeleteConfirmation(context, song, getIt<CmsSongBloc>());
                 break;
             }
           },

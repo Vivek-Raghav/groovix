@@ -1,6 +1,5 @@
-// Project imports:
-import 'package:groovix/features/home/home_index.dart';
-import 'package:groovix/features/song/song_index.dart';
+import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
+import 'package:groovix/routes/routes_index.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,6 +10,8 @@ class HomePage extends StatelessWidget {
       providers: [
         BlocProvider.value(value: getIt<MusicPlayerBloc>()),
         BlocProvider.value(value: getIt<SongCubit>()),
+        BlocProvider.value(value: getIt<PlaylistBloc>()),
+        BlocProvider.value(value: getIt<CmsGenreBloc>())
       ],
       child: const HomeScreen(),
     );

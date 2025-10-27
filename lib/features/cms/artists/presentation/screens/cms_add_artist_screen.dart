@@ -284,7 +284,7 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
         bio: _bioController.text.trim(),
       );
 
-      context.read<CmsArtistBloc>().add(CreateArtist(artistParams));
+      getIt<CmsArtistBloc>().add(CreateArtist(artistParams));
     }
   }
 }

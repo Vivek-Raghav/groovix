@@ -1,16 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
-enum ThemeModeApp {
-  Light,
-  Dark,
-  Grey,
-  Red,
-  Green,
-  System
-}
+enum ThemeModeApp { Light, Dark, Grey, Red, Green, System }
 
+enum Role { cms, user }
 
-enum Role {
-  cms,
-  user
-}
+enum SongListContext { search, playlist, genre, artist }

@@ -1,12 +1,7 @@
-// Project imports:
-import 'package:groovix/core/services/music_player/bloc/music_player_bloc.dart';
-import 'package:groovix/core/services/music_player/music_player_manager.dart';
 import 'package:groovix/features/auth/bloc/auth_bloc.dart';
-import 'package:groovix/features/cms/artists/presentation/bloc/artist_bloc.dart';
-import 'package:groovix/features/cms/dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'package:groovix/features/cms/songs/presentation/bloc/song_bloc.dart';
+import 'package:groovix/features/cms/cms_index.dart';
+import 'package:groovix/features/shared/playlist/playlist_index.dart';
 import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
-import 'package:groovix/injection_container/injection_index.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -37,4 +32,22 @@ Future<void> injectBlocs() async {
       getArtistByIdUc: getIt(),
       updateArtistUc: getIt(),
       deleteArtistUc: getIt()));
+  getIt.registerLazySingleton<CmsGenreBloc>(() => CmsGenreBloc(
+      createGenreUc: getIt(),
+      getGenresListUc: getIt(),
+      getGenreByIdUc: getIt(),
+      updateGenreUc: getIt(),
+      deleteGenreUc: getIt(),
+      assignSongsToGenreUc: getIt(),
+      removeSongsFromGenreUc: getIt(),
+      getGenreSongsUc: getIt()));
+  getIt.registerLazySingleton<PlaylistBloc>(() => PlaylistBloc(
+      createPlaylistUc: getIt(),
+      getPlaylistsListUc: getIt(),
+      getPlaylistByIdUc: getIt(),
+      updatePlaylistUc: getIt(),
+      deletePlaylistUc: getIt(),
+      addSongsToPlaylistUc: getIt(),
+      removeSongsFromPlaylistUc: getIt(),
+      getPlaylistSongsUc: getIt()));
 }

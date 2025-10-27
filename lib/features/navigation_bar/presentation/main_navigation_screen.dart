@@ -1,5 +1,6 @@
 // Project imports:
 import 'package:groovix/features/navigation_bar/navigation_index.dart';
+import 'package:groovix/features/shared/playlist/presentation/user/screens/user_playlist_page.dart';
 import 'package:groovix/features/song/presentation/screens/mini_music_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -23,9 +24,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     const HomePage(),
     const ExploreScreen(),
-    const PlaylistScreen(),
-    const PlaylistScreen(),
-    const SettingsScreen(),
+    const LibraryScreen(),
+    const UserPlaylistPage(),
+    const SettingsScreen()
   ];
 
   @override

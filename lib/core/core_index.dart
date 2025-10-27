@@ -46,3 +46,7 @@ export 'services/music_player/bloc/music_player_state.dart';
 export 'services/music_player/bloc/player_event.dart';
 export 'services/music_player/music_player_manager.dart';
 export 'models/song_model.dart';
+export 'models/artist_model.dart';
+export 'models/genre_model.dart';
+export 'models/playlist_model.dart';
+export 'models/pagination_info.dart';

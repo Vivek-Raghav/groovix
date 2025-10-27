@@ -12,7 +12,7 @@ class CMSArtistsScreen extends StatefulWidget {
 
 class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
   final TextEditingController _searchController = TextEditingController();
-  bool _isSearching = false;
+  // bool _isSearching = false;
 
   @override
   void initState() {
@@ -36,31 +36,30 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
     return Scaffold(
       backgroundColor: isDark ? ThemeColors.darkAppColor : ThemeColors.white,
       appBar: AppBar(
-        title: const Text('Artists'),
-        backgroundColor: ThemeColors.primaryColor,
-        foregroundColor: ThemeColors.white,
-        elevation: 0,
-        centerTitle: true,
-      ),
+          title: const Text('Artists'),
+          backgroundColor: ThemeColors.primaryColor,
+          foregroundColor: ThemeColors.white,
+          elevation: 0,
+          centerTitle: true),
       body: Column(
         children: [
           // Search Bar
-          SearchBar(
-              placeholder: 'Search artists by name...',
-              controller: _searchController,
-              onChanged: (value) {
-                _isSearching = true;
-              },
-              onSearch: (query) {
-                _isSearching = false;
-                context.read<CmsArtistBloc>().add(SearchArtists(query));
-              },
-              onClear: _isSearching
-                  ? () {}
-                  : () {
-                      context.read<CmsArtistBloc>().add(FetchArtistsList(
-                          ArtistsQueryModel(page: 1, size: 100)));
-                    }),
+          // SearchBar(
+          //     placeholder: 'Search artists by name...',
+          //     controller: _searchController,
+          //     onChanged: (value) {
+          //       _isSearching = true;
+          //     },
+          //     onSearch: (query) {
+          //       _isSearching = false;
+          //       getIt<CmsArtistBloc>().add(SearchArtists(query));
+          //     },
+          //     onClear: _isSearching
+          //         ? () {}
+          //         : () {
+          //             getIt<CmsArtistBloc>().add(FetchArtistsList(
+          //                 ArtistsQueryModel(page: 1, size: 100)));
+          //           }),
 
           // Artists List
           Expanded(
@@ -96,7 +95,7 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
-                            context.read<CmsArtistBloc>().add(FetchArtistsList(
+                            getIt<CmsArtistBloc>().add(FetchArtistsList(
                                 ArtistsQueryModel(page: 1, size: 100)));
                           },
                           child: const Text('Retry'),
@@ -134,6 +133,7 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               Icons.person_off,
@@ -170,13 +170,11 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        contentPadding: const EdgeInsets.all(16),
+        contentPadding: const EdgeInsets.all(8),
         leading: CircleAvatar(
           radius: 30,
           backgroundColor: ThemeColors.primaryColor.withOpacity(0.1),
@@ -189,9 +187,8 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
         ),
         title: Text(
           artist.name,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: theme.textTheme.titleMedium
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +215,7 @@ class _CMSArtistsScreenState extends State<CMSArtistsScreen> {
                 break;
               case 'delete':
                 _showDeleteConfirmation(
-                    context, artist, context.read<CmsArtistBloc>());
+                    context, artist, getIt<CmsArtistBloc>());
                 break;
             }
           },

@@ -1,5 +1,5 @@
 // Project imports:
-import 'package:groovix/core/models/artist_model.dart';
+import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/features/cms/cms_screen.dart';
 import 'package:groovix/features/cms/shared/screens/universal_edit_success_screen.dart';
 import 'package:groovix/features/cms/songs/domain/models/upload_song_response.dart';
@@ -9,8 +9,17 @@ import 'package:groovix/features/cms/songs/presentation/screens/song_upload_succ
 import 'package:groovix/features/cms/artists/presentation/screens/cms_add_artist_screen.dart';
 import 'package:groovix/features/cms/artists/presentation/screens/cms_edit_artist_screen.dart';
 import 'package:groovix/features/cms/artists/presentation/bloc/artist_bloc.dart';
+import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
+import 'package:groovix/features/cms/songs/presentation/bloc/song_bloc.dart';
+import 'package:groovix/features/cms/genres/presentation/screens/cms_add_genre_screen.dart';
+import 'package:groovix/features/cms/genres/presentation/screens/cms_edit_genre_screen.dart';
+import 'package:groovix/features/cms/genres/presentation/screens/add_songs_to_genre_screen.dart';
+import 'package:groovix/features/shared/playlist/presentation/cms/screens/cms_edit_playlist_screen.dart';
+import 'package:groovix/features/shared/playlist/presentation/cms/screens/add_songs_to_playlist_screen.dart';
+import 'package:groovix/features/shared/playlist/presentation/cms/screens/playlist_songs_screen.dart';
+import 'package:groovix/features/cms/genres/presentation/screens/genre_songs_screen.dart';
 import 'package:groovix/features/song/presentation/screens/full_music_screen.dart';
-import 'package:groovix/routes/routes_index.dart';
+import 'package:groovix/features/song/presentation/screens/songs_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.initial,
@@ -148,6 +157,130 @@ final GoRouter appRouter = GoRouter(
             child: CMSEditArtistScreen(artist: artist),
           ),
         );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.addGenre,
+      pageBuilder: (context, state) => customTransitionPage(
+        context: context,
+        state: state,
+        child: BlocProvider.value(
+          value: getIt<CmsGenreBloc>(),
+          child: const CMSAddGenreScreen(),
+        ),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.editGenre,
+      pageBuilder: (context, state) {
+        final genre = state.extra as GenreModel;
+        return customTransitionPage(
+          context: context,
+          state: state,
+          child: BlocProvider.value(
+            value: getIt<CmsGenreBloc>(),
+            child: CMSEditGenreScreen(genre: genre),
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.addSongsToGenre,
+      pageBuilder: (context, state) {
+        final genre = state.extra as GenreModel;
+        return customTransitionPage(
+          context: context,
+          state: state,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: getIt<CmsGenreBloc>()),
+              BlocProvider.value(value: getIt<CmsSongBloc>()),
+            ],
+            child: AddSongsToGenreScreen(genre: genre),
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.addPlaylist,
+      pageBuilder: (context, state) => customTransitionPage(
+        context: context,
+        state: state,
+        child: BlocProvider.value(
+          value: getIt<PlaylistBloc>(),
+          child: const CMSAddPlaylistScreen(),
+        ),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.editPlaylist,
+      pageBuilder: (context, state) {
+        final playlist = state.extra as PlaylistModel;
+        return customTransitionPage(
+          context: context,
+          state: state,
+          child: BlocProvider.value(
+            value: getIt<PlaylistBloc>(),
+            child: CMSEditPlaylistScreen(playlist: playlist),
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.addSongsToPlaylist,
+      pageBuilder: (context, state) {
+        final playlist = state.extra as PlaylistModel;
+        return customTransitionPage(
+          context: context,
+          state: state,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: getIt<PlaylistBloc>()),
+              BlocProvider.value(value: getIt<CmsSongBloc>()),
+            ],
+            child: AddSongsToPlaylistScreen(playlist: playlist),
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.playlistSongs,
+      pageBuilder: (context, state) {
+        final playlist = state.extra as PlaylistModel;
+        return customTransitionPage(
+          context: context,
+          state: state,
+          child: BlocProvider.value(
+              value: getIt<PlaylistBloc>(),
+              child: PlaylistSongsScreen(playlist: playlist)),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.genreSongs,
+      pageBuilder: (context, state) {
+        final genre = state.extra as GenreModel;
+        return customTransitionPage(
+          context: context,
+          state: state,
+          child: BlocProvider.value(
+            value: getIt<CmsGenreBloc>(),
+            child: GenreSongsScreen(genre: genre),
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.songListScreen,
+      name: AppRoutes.songListScreen,
+      pageBuilder: (context, state) {
+        final query = state.extra as String?;
+        final songListContext =
+            SongListContext.values.byName(query ?? "search");
+        return customTransitionPage(
+            context: context,
+            state: state,
+            child: SongsPage(songListContext: songListContext));
       },
     ),
   ],

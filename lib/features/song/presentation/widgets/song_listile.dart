@@ -14,10 +14,13 @@ class SongListTile extends StatelessWidget {
 
     return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
       builder: (context, state) {
+        final currentMusicSong = musicPlayerBloc.state.currentSong;
+
+        // print("SongListTile: $currentMusicSong == ${songs[currentIndex]}");
         return ListTile(
           contentPadding: EdgeInsets.zero,
           onTap: () {
-            if (musicPlayerBloc.state.currentSong == songs[currentIndex]) {
+            if (currentMusicSong == songs[currentIndex]) {
               context.push(AppRoutes.fullMusic);
             } else {
               musicPlayerBloc.add(PlaySongEvent(songs, currentIndex));
@@ -45,7 +48,7 @@ class SongListTile extends StatelessWidget {
           ),
           trailing: IconButton(
             onPressed: () {
-              if (musicPlayerBloc.state.currentSong == songs[currentIndex]) {
+              if (currentMusicSong == songs[currentIndex]) {
                 if (musicPlayerBloc.state.isPlaying) {
                   musicPlayerBloc.add(PauseSongEvent());
                 } else {
@@ -55,7 +58,7 @@ class SongListTile extends StatelessWidget {
                 musicPlayerBloc.add(PlaySongEvent(songs, currentIndex));
               }
             },
-            icon: musicPlayerBloc.state.currentSong == songs[currentIndex] &&
+            icon: currentMusicSong == songs[currentIndex] &&
                     musicPlayerBloc.state.isPlaying
                 ? Icon(Icons.pause,
                     color: Theme.of(context).colorScheme.primary)

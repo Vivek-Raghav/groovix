@@ -1,4 +1,5 @@
 // Project imports:
+
 import 'cms_index.dart';
 
 class CMSScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _CMSScreenState extends State<CMSScreen> {
     const CMSArtistsScreen(),
     const CmsPlaylistsScreen(),
     const GenresScreen(),
-    const CMSSettingsScreen(),
+    const SettingsScreen(),
   ];
 
   final List<BottomNavigationBarItem> _navItems = [
@@ -63,12 +64,11 @@ class _CMSScreenState extends State<CMSScreen> {
         BlocProvider<DashboardBloc>.value(value: getIt<DashboardBloc>()),
         BlocProvider<CmsSongBloc>.value(value: getIt<CmsSongBloc>()),
         BlocProvider<CmsArtistBloc>.value(value: getIt<CmsArtistBloc>()),
+        BlocProvider<PlaylistBloc>.value(value: getIt<PlaylistBloc>()),
+        BlocProvider<CmsGenreBloc>.value(value: getIt<CmsGenreBloc>()),
       ],
       child: Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _screens,
-        ),
+        body: _screens[_currentIndex],
         bottomNavigationBar: SafeArea(
             child: Container(
           decoration: const BoxDecoration(

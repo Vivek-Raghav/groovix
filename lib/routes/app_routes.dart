@@ -18,4 +18,14 @@ class AppRoutes {
   static const String cmsDashboard = '/cms-dashboard';
   static const String addArtist = '/add-artist';
   static const String editArtist = '/edit-artist';
+  static const String addGenre = '/add-genre';
+  static const String editGenre = '/edit-genre';
+  static const String addSongsToGenre = '/add-songs-to-genre';
+  static const String addPlaylist = '/add-playlist';
+  static const String editPlaylist = '/edit-playlist';
+  static const String addSongsToPlaylist = '/add-songs-to-playlist';
+  static const String playlistSongs = '/playlist-songs';
+  static const String genreSongs = '/genre-songs';
+  static const String songListScreen = '/songs-list-screen';
+
 }

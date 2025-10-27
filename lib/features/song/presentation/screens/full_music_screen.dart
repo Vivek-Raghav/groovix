@@ -120,7 +120,7 @@ class FullMusicScreen extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
           icon: const Icon(Icons.keyboard_arrow_down, size: 28),
         ),
         Expanded(

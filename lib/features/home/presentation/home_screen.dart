@@ -1,7 +1,11 @@
 // Project imports:
 import 'package:groovix/core/constants/size_const.dart';
-import 'package:groovix/features/home/home_index.dart';
-import 'package:groovix/features/song/song_index.dart';
+import 'package:groovix/features/auth/auth_index.dart';
+import 'package:groovix/features/cms/genres/domain/models/genres_query_model.dart';
+import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
+import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_event.dart';
+import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_state.dart';
+import 'package:groovix/features/home/presentation/widgets/genre_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,6 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void initCalls() {
     songCubit.getSongList(SongsQueryModel(page: currentPage, size: pageSize));
+    getIt<CmsGenreBloc>()
+        .add(FetchGenresList(GenresQueryModel(page: 1, size: 100)));
+    getIt<PlaylistBloc>()
+        .add(FetchPlaylistsList(PlaylistsQueryModel(page: 1, size: 100)));
   }
 
   @override
@@ -65,36 +73,42 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          // Category Chips (horizontal)
-          SizedBox(
-            height: 40,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                for (final cat in [
-                  'All',
-                  'Pop',
-                  'Rock',
-                  'Hip-Hop',
-                  'Jazz',
-                  'Classical'
-                ])
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Chip(
-                      label: Text(cat),
-                      backgroundColor: cat == 'All'
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.surface,
-                      labelStyle: TextStyle(
-                          color: cat == 'All'
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : Theme.of(context).colorScheme.onSurface),
-                    ),
-                  ),
-              ],
-            ),
-          ),
+          BlocBuilder<CmsGenreBloc, CmsGenreState>(builder: (context, state) {
+            if (state is CmsGenreLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: ThemeColors.primaryColor,
+                ),
+              );
+            } else if (state is CmsGenreLoaded) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Genres',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: state.genres
+                        .map((e) => GestureDetector(
+                            onTap: () {
+                              getIt<CmsGenreBloc>().add(FetchGenreSongs(e.id));
+                              context.push(AppRoutes.songListScreen,
+                                  extra: SongListContext.genre.name);
+                            },
+                            child: GenreCard(genre: e)))
+                        .toList(),
+                  )
+                ],
+              );
+            }
+            return const SizedBox.shrink();
+          }),
           const SizedBox(height: 24),
           SizedBox(
             height: 180,
@@ -194,15 +208,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.search,
-              color: Theme.of(context).colorScheme.onPrimary),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.notifications_none,
-              color: Theme.of(context).colorScheme.onPrimary),
-          onPressed: () {},
-        ),
+            icon: Icon(Icons.notifications_none,
+                color: Theme.of(context).colorScheme.onPrimary),
+            onPressed: () {}),
       ],
     );
   }

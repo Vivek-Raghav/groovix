@@ -1,5 +1,5 @@
-// Project imports:
-import '../../../cms_index.dart';
+import 'package:groovix/features/cms/cms_index.dart';
+import 'package:groovix/core/models/genre_model.dart';
 
 class GenresScreen extends StatefulWidget {
   const GenresScreen({super.key});
@@ -9,6 +9,34 @@ class GenresScreen extends StatefulWidget {
 }
 
 class _GenresScreenState extends State<GenresScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<CmsGenreBloc>()
+        .add(FetchGenresList(GenresQueryModel(page: 1, size: 100)));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refetch genres when screen becomes visible again
+    if (ModalRoute.of(context)?.isCurrent == true) {
+      context
+          .read<CmsGenreBloc>()
+          .add(FetchGenresList(GenresQueryModel(page: 1, size: 100)));
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,7 +51,119 @@ class _GenresScreenState extends State<GenresScreen> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: _buildGenresList(context),
+      body: Column(
+        children: [
+          // Search Bar
+          SearchBar(
+              placeholder: 'Search genres by name...',
+              controller: _searchController,
+              onChanged: (value) {
+                _isSearching = true;
+              },
+              onSearch: (query) {
+                _isSearching = false;
+                getIt<CmsGenreBloc>().add(SearchGenres(query));
+              },
+              onClear: _isSearching
+                  ? () {}
+                  : () {
+                      getIt<CmsGenreBloc>().add(FetchGenresList(
+                          GenresQueryModel(page: 1, size: 100)));
+                    }),
+
+          // Genres List
+          Expanded(
+            child: BlocListener<CmsGenreBloc, CmsGenreState>(
+              listener: (context, state) {
+                if (state is CreateGenreLoaded) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${state.genre.name} created successfully'),
+                      backgroundColor: ThemeColors.clrGreen,
+                    ),
+                  );
+                  Navigator.pop(context);
+                  getIt<CmsGenreBloc>().add(
+                      FetchGenresList(GenresQueryModel(page: 1, size: 100)));
+                } else if (state is UpdateGenreLoaded) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${state.genre.name} updated successfully'),
+                      backgroundColor: ThemeColors.clrGreen,
+                    ),
+                  );
+                  Navigator.pop(context);
+                } else if (state is GenreDeletedSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Genre deleted successfully'),
+                      backgroundColor: ThemeColors.clrGreen,
+                    ),
+                  );
+                  getIt<CmsGenreBloc>().add(
+                      FetchGenresList(GenresQueryModel(page: 1, size: 100)));
+                } else if (state is CreateGenreError ||
+                    state is UpdateGenreError ||
+                    state is GenreDeletedError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          (state as dynamic).message ?? 'An error occurred'),
+                      backgroundColor: ThemeColors.red,
+                    ),
+                  );
+                }
+              },
+              child: BlocBuilder<CmsGenreBloc, CmsGenreState>(
+                builder: (context, state) {
+                  if (state is CmsGenreLoading || state is DeleteGenreLoading) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                            color: ThemeColors.primaryColor));
+                  }
+                  if (state is CmsGenreError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: ThemeColors.red,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Error loading genres',
+                            style: theme.textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            state.message,
+                            style: theme.textTheme.bodyMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              getIt<CmsGenreBloc>().add(FetchGenresList(
+                                  GenresQueryModel(page: 1, size: 100)));
+                            },
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  if (state is CmsGenreLoaded) {
+                    return _buildGenresList(context, state.genres);
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         heroTag: "cms_genres_fab",
         onPressed: _navigateToAddGenre,
@@ -34,55 +174,9 @@ class _GenresScreenState extends State<GenresScreen> {
     );
   }
 
-  Widget _buildGenresList(BuildContext context) {
+  Widget _buildGenresList(BuildContext context, List<GenreModel> genres) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-
-    // Mock genres data
-    final genres = [
-      {
-        'id': '1',
-        'name': 'Pop',
-        'songCount': 45,
-        'color': '#FF6B6B',
-        'icon': 'Icons.music_note',
-      },
-      {
-        'id': '2',
-        'name': 'Rock',
-        'songCount': 32,
-        'color': '#4ECDC4',
-        'icon': 'Icons.guitar',
-      },
-      {
-        'id': '3',
-        'name': 'Hip Hop',
-        'songCount': 28,
-        'color': '#45B7D1',
-        'icon': 'Icons.mic',
-      },
-      {
-        'id': '4',
-        'name': 'Electronic',
-        'songCount': 22,
-        'color': '#96CEB4',
-        'icon': 'Icons.speaker',
-      },
-      {
-        'id': '5',
-        'name': 'Jazz',
-        'songCount': 18,
-        'color': '#FFEAA7',
-        'icon': 'Icons.piano',
-      },
-      {
-        'id': '6',
-        'name': 'Classical',
-        'songCount': 15,
-        'color': '#DDA0DD',
-        'icon': 'Icons.audiotrack',
-      },
-    ];
 
     if (genres.isEmpty) {
       return Center(
@@ -119,7 +213,7 @@ class _GenresScreenState extends State<GenresScreen> {
     );
   }
 
-  Widget _buildGenreCard(BuildContext context, Map<String, dynamic> genre) {
+  Widget _buildGenreCard(BuildContext context, GenreModel genre) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -135,17 +229,27 @@ class _GenresScreenState extends State<GenresScreen> {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: Color(int.parse(genre['color'].replaceFirst('#', '0xFF'))),
             borderRadius: BorderRadius.circular(12),
+            image: genre.coverUrl.isNotEmpty
+                ? DecorationImage(
+                    image: NetworkImage(genre.coverUrl),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+            color: genre.coverUrl.isEmpty
+                ? ThemeColors.primaryColor.withOpacity(0.1)
+                : null,
           ),
-          child: Icon(
-            _getIconFromString(genre['icon']),
-            color: ThemeColors.white,
-            size: 24,
-          ),
+          child: genre.coverUrl.isEmpty
+              ? const Icon(
+                  Icons.category,
+                  color: ThemeColors.primaryColor,
+                  size: 24,
+                )
+              : null,
         ),
         title: Text(
-          genre['name'],
+          genre.name,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: isDark ? ThemeColors.white : ThemeColors.black,
@@ -154,10 +258,12 @@ class _GenresScreenState extends State<GenresScreen> {
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          '${genre['songCount']} Songs',
+          genre.bio,
           style: theme.textTheme.bodySmall?.copyWith(
             color: isDark ? ThemeColors.white70 : ThemeColors.grey600,
           ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         trailing: PopupMenuButton<String>(
           icon: Icon(
@@ -166,6 +272,9 @@ class _GenresScreenState extends State<GenresScreen> {
           ),
           onSelected: (value) {
             switch (value) {
+              case 'add_songs':
+                _navigateToAddSongs(genre);
+                break;
               case 'edit':
                 _navigateToEditGenre(genre);
                 break;
@@ -175,6 +284,17 @@ class _GenresScreenState extends State<GenresScreen> {
             }
           },
           itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'add_songs',
+              child: Row(
+                children: [
+                  Icon(Icons.add_circle_outline,
+                      color: ThemeColors.primaryColor),
+                  SizedBox(width: 8),
+                  Text('Add Songs'),
+                ],
+              ),
+            ),
             const PopupMenuItem(
               value: 'edit',
               child: Row(
@@ -198,56 +318,34 @@ class _GenresScreenState extends State<GenresScreen> {
           ],
         ),
         onTap: () {
-          // Navigate to genre details
+          _navigateToGenreSongs(genre);
         },
       ),
     );
   }
 
-  IconData _getIconFromString(String iconString) {
-    switch (iconString) {
-      case 'Icons.music_note':
-        return Icons.music_note;
-      case 'Icons.guitar':
-        return Icons.music_note; // Using music_note as guitar is not available
-      case 'Icons.mic':
-        return Icons.mic;
-      case 'Icons.speaker':
-        return Icons.speaker;
-      case 'Icons.piano':
-        return Icons.piano;
-      case 'Icons.audiotrack':
-        return Icons.audiotrack;
-      default:
-        return Icons.music_note;
-    }
-  }
-
   void _navigateToAddGenre() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CMSAddGenreScreen(),
-      ),
-    );
+    context.push(AppRoutes.addGenre);
   }
 
-  void _navigateToEditGenre(Map<String, dynamic> genre) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditGenreScreen(genre: genre),
-      ),
-    );
+  void _navigateToAddSongs(GenreModel genre) {
+    context.push(AppRoutes.addSongsToGenre, extra: genre);
   }
 
-  void _showDeleteConfirmation(
-      BuildContext context, Map<String, dynamic> genre) {
+  void _navigateToEditGenre(GenreModel genre) {
+    context.push(AppRoutes.editGenre, extra: genre);
+  }
+
+  void _navigateToGenreSongs(GenreModel genre) {
+    context.push(AppRoutes.genreSongs, extra: genre);
+  }
+
+  void _showDeleteConfirmation(BuildContext context, GenreModel genre) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Genre'),
-        content: Text('Are you sure you want to delete "${genre['name']}"?'),
+        content: Text('Are you sure you want to delete "${genre.name}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -255,13 +353,10 @@ class _GenresScreenState extends State<GenresScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${genre['name']} deleted successfully'),
-                  backgroundColor: ThemeColors.clrGreen,
-                ),
-              );
+              getIt<CmsGenreBloc>().add(DeleteGenre(genre.id));
+              Future.delayed(const Duration(milliseconds: 200), () {
+                Navigator.pop(context);
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: ThemeColors.red,
@@ -269,45 +364,6 @@ class _GenresScreenState extends State<GenresScreen> {
             child: const Text('Delete'),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// Placeholder screens
-class AddGenreScreen extends StatelessWidget {
-  const AddGenreScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Genre'),
-        backgroundColor: ThemeColors.primaryColor,
-        foregroundColor: ThemeColors.white,
-      ),
-      body: const Center(
-        child: Text('Add Genre Form - To be implemented'),
-      ),
-    );
-  }
-}
-
-class EditGenreScreen extends StatelessWidget {
-  final Map<String, dynamic> genre;
-
-  const EditGenreScreen({super.key, required this.genre});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Genre'),
-        backgroundColor: ThemeColors.primaryColor,
-        foregroundColor: ThemeColors.white,
-      ),
-      body: Center(
-        child: Text('Edit Genre Form for: ${genre['name']}'),
       ),
     );
   }

@@ -6,26 +6,29 @@ import 'package:flutter/foundation.dart';
 
 // Package imports:
 import 'package:dio/dio.dart';
+import 'package:groovix/core/constants/pref_keys.dart';
+import 'package:groovix/core/local_db/local_cache.dart';
+import 'package:groovix/injection_container/injection_initializer.dart';
 
 class ApiService {
   final Dio _dio;
 
-  ApiService({required String baseUrl, String? token})
+  ApiService({required String baseUrl})
       : _dio = Dio(BaseOptions(
-          baseUrl: baseUrl,
-          connectTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 15),
-          contentType: Headers.jsonContentType,
-          responseType: ResponseType.json,
-          headers: {
-            if (token != null) 'Authorization': token,
-          },
-        )) {
+            baseUrl: baseUrl,
+            connectTimeout: const Duration(seconds: 10),
+            receiveTimeout: const Duration(seconds: 15),
+            contentType: Headers.jsonContentType,
+            responseType: ResponseType.json)) {
     _initializeInterceptors();
   }
 
   void _initializeInterceptors() {
     _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+      final token = getIt<LocalCache>().getString(PrefKeys.token);
+      if (token != null && token.isNotEmpty) {
+        options.headers['Authorization'] = token;
+      }
       if (kDebugMode) {
         print('headers: ${options.headers}');
         print('[API][REQUEST][URL] => ${options.method} ${options.uri}');
@@ -101,9 +104,11 @@ class ApiService {
   Future<Response<T>> delete<T>(
     String path, {
     Map<String, dynamic>? headers,
+    dynamic data,
   }) async {
     try {
       return await _dio.delete<T>(
+        data: data,
         path,
         options: Options(headers: headers),
       );

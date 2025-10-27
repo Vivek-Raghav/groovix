@@ -1,7 +1,4 @@
-// Flutter imports:
 import "package:flutter/cupertino.dart";
-
-// Project imports:
 import "package:groovix/features/cms/cms_index.dart";
 
 class CommonBackButton extends StatelessWidget {
@@ -15,7 +12,7 @@ class CommonBackButton extends StatelessWidget {
       width: 36,
       decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
           boxShadow: [
             BoxShadow(
               color: ThemeColors.primaryColor.withOpacity(0.3),
@@ -26,7 +23,12 @@ class CommonBackButton extends StatelessWidget {
       child: IconButton(
           padding: EdgeInsets.zero,
           onPressed: onPress ?? context.pop,
-          icon: const Icon(CupertinoIcons.back)),
+          icon: Icon(CupertinoIcons.back,
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color!
+                  .withOpacity(0.7))),
     );
   }
 }
