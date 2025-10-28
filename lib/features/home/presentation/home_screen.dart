@@ -25,6 +25,17 @@ class _HomeScreenState extends State<HomeScreen> {
     initCalls();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (ModalRoute.of(context)?.isCurrent == true) {
+      getIt<CmsGenreBloc>()
+          .add(FetchGenresList(GenresQueryModel(page: 1, size: 100)));
+      getIt<PlaylistBloc>()
+          .add(FetchPlaylistsList(PlaylistsQueryModel(page: 1, size: 100)));
+    }
+  }
+
   void initCalls() {
     songCubit.getSongList(SongsQueryModel(page: currentPage, size: pageSize));
     getIt<CmsGenreBloc>()
@@ -97,9 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: state.genres
                         .map((e) => GestureDetector(
                             onTap: () {
-                              getIt<CmsGenreBloc>().add(FetchGenreSongs(e.id));
                               context.push(AppRoutes.songListScreen,
                                   extra: SongListContext.genre.name);
+                              Future.delayed(const Duration(milliseconds: 200),
+                                  () {
+                                getIt<CmsGenreBloc>()
+                                    .add(FetchGenreSongs(e.id));
+                              });
                             },
                             child: GenreCard(genre: e)))
                         .toList(),
@@ -109,46 +124,71 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             return const SizedBox.shrink();
           }),
-          const SizedBox(height: 24),
-          SizedBox(
-            height: 180,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                for (int i = 0; i < 3; i++)
-                  Container(
-                    width: 140,
-                    margin: const EdgeInsets.only(right: 16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.album,
-                            size: 48,
-                            color: Theme.of(context).colorScheme.primary),
-                        const SizedBox(height: 12),
-                        Text('Playlist ${i + 1}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    Theme.of(context).colorScheme.onSurface)),
-                        Text('Subtitle',
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant)),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-          ),
+          BlocBuilder<PlaylistBloc, PlaylistState>(builder: (context, state) {
+            if (state is PlaylistLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: ThemeColors.primaryColor,
+                ),
+              );
+            } else if (state is PlaylistLoaded) {
+              return Container(
+                padding: const EdgeInsets.only(top: 20),
+                height: 180,
+                child: ListView.builder(
+                  itemCount: state.playlists.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final playlist = state.playlists[index];
+                    return GestureDetector(
+                      onTap: () {
+                        context.push(AppRoutes.songListScreen,
+                            extra: SongListContext.playlist.name);
+                        Future.delayed(const Duration(milliseconds: 200), () {
+                          getIt<PlaylistBloc>()
+                              .add(FetchPlaylistSongs(playlist.id));
+                        });
+                      },
+                      child: Container(
+                        width: 140,
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(24),
+                              child: Image.network(playlist.coverUrl,
+                                  height: 48, width: 48, fit: BoxFit.cover),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(playlist.name,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface)),
+                            Text(playlist.bio,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant)),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
           const SizedBox(height: 32),
           Text('Recently Played',
               style: Theme.of(context)

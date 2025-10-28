@@ -1,7 +1,6 @@
 import 'package:groovix/features/shared/playlist/playlist_index.dart'
     hide PlaylistModel;
 import 'package:groovix/core/models/playlist_model.dart';
-import 'package:groovix/injection_container/injection_initializer.dart';
 import 'package:groovix/routes/app_routes.dart';
 
 class UserPlaylistScreen extends StatefulWidget {
@@ -12,21 +11,15 @@ class UserPlaylistScreen extends StatefulWidget {
 }
 
 class _UserPlaylistScreenState extends State<UserPlaylistScreen> {
-  @override
-  void initState() {
-    super.initState();
-    getIt<PlaylistBloc>()
-        .add(FetchPlaylistsList(PlaylistsQueryModel(page: 1, size: 100)));
-  }
+  int _currentPage = 1;
+  int _pageSize = 10;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Refetch playlists when screen becomes visible again
     if (ModalRoute.of(context)?.isCurrent == true) {
-      context
-          .read<PlaylistBloc>()
-          .add(FetchPlaylistsList(PlaylistsQueryModel(page: 1, size: 100)));
+      context.read<PlaylistBloc>().add(FetchPlaylistsList(
+          PlaylistsQueryModel(page: _currentPage, size: _pageSize)));
     }
   }
 

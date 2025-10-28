@@ -15,6 +15,7 @@ class PlaylistLoading extends PlaylistState {}
 
 class PlaylistLoaded extends PlaylistState {
   final List<PlaylistModel> playlists;
+  
   const PlaylistLoaded(this.playlists);
   @override
   List<Object> get props => [playlists];
