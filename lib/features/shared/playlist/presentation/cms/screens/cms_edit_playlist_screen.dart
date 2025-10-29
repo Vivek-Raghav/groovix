@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:groovix/core/models/playlist_model.dart';
+import 'package:groovix/core/shared/widgets/common_back_button.dart';
 import 'package:groovix/core/theme/app_theme.dart';
 import 'package:groovix/features/shared/playlist/bloc/playlist_bloc.dart';
 import 'package:groovix/features/shared/playlist/bloc/playlist_event.dart';
@@ -51,7 +53,7 @@ class _CMSEditPlaylistScreenState extends State<CMSEditPlaylistScreen> {
               backgroundColor: ThemeColors.clrGreen,
             ),
           );
-          Navigator.pop(context);
+          context.pop(context);
         } else if (state is UpdatePlaylistError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -68,16 +70,12 @@ class _CMSEditPlaylistScreenState extends State<CMSEditPlaylistScreen> {
                 ? ThemeColors.darkAppColor
                 : ThemeColors.white,
             appBar: AppBar(
-              title: const Text('Edit Playlist'),
-              backgroundColor: ThemeColors.primaryColor,
-              foregroundColor: ThemeColors.white,
-              elevation: 0,
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
+                title: const Text('Edit Playlist'),
+                backgroundColor: ThemeColors.primaryColor,
+                foregroundColor: ThemeColors.white,
+                elevation: 0,
+                centerTitle: true,
+                leading: const CommonBackButton()),
             body: Stack(
               children: [
                 SingleChildScrollView(
@@ -98,7 +96,7 @@ class _CMSEditPlaylistScreenState extends State<CMSEditPlaylistScreen> {
                   ),
                 ),
                 if (state is UpdatePlaylistLoading)
-                  LoadingOverlay(
+                  const LoadingOverlay(
                     title: 'Updating Playlist',
                     message: 'Please wait while we update your playlist...',
                   ),

@@ -43,11 +43,7 @@ class _CMSEditArtistScreenState extends State<CMSEditArtistScreen> {
         foregroundColor: ThemeColors.white,
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+        leading: const CommonBackButton()),
       body: BlocListener<CmsArtistBloc, CmsArtistState>(
         listener: (context, state) {
           if (state is UpdateArtistSuccess) {
@@ -57,7 +53,7 @@ class _CMSEditArtistScreenState extends State<CMSEditArtistScreen> {
                 backgroundColor: ThemeColors.clrGreen,
               ),
             );
-            Navigator.pop(context);
+            context.pop(context);
           } else if (state is UpdateArtistFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

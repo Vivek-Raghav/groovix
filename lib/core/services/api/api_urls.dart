@@ -9,6 +9,9 @@ class ApiUrls {
   static String get uploadSong => '/songs/upload';
   static String get getSongList => '/songs/list';
   static String get updateSongFlags => '/flags/update';
+  static String get getRecentSongs => '/songs/recent';
+  static String getSongFlags(String userId, String songId) =>
+      '/flags/user/$userId/song/$songId';
 
   // Artist endpoints
   static String get artistsBase => '/artists';

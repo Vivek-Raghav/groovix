@@ -164,7 +164,8 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     final result = await updateSongFlagsUc.call(UpdateSongFlagParams(
         songId: state.currentSong?.id ?? '',
         userId: userId?['id'] ?? '',
-        isLiked: !state.isFavorite));
+        isLiked: !state.isFavorite,
+        ));
     result.fold((failure) => emit(state.copyWith(isFavorite: false)),
         (success) => emit(state.copyWith(isFavorite: success.isLiked)));
   }

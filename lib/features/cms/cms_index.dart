@@ -18,7 +18,7 @@ export 'songs/domain/usecase/delete_song_uc.dart';
 export 'songs/data/datasource/cms_song_datasource.dart';
 export 'songs/data/datasource/cms_song_remote_datasource_impl.dart';
 export 'songs/data/repositories/cms_song_repository_impl.dart';
-export 'songs/presentation/bloc/song_bloc.dart';
+export 'songs/presentation/bloc/cms_song_bloc.dart';
 export 'songs/presentation/bloc/cms_song_event.dart';
 export 'songs/presentation/bloc/cms_song_state.dart';
 export 'songs/presentation/screens/cms_songs_screen.dart';

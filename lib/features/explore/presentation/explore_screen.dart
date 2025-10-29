@@ -1,8 +1,41 @@
-// Flutter imports:
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_final_fields
 
-class ExploreScreen extends StatelessWidget {
+import 'package:groovix/features/cms/shared/widgets/search_bar.dart' as search;
+import '../../../routes/routes_index.dart';
+
+class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
+
+  @override
+  State<ExploreScreen> createState() => _ExploreScreenState();
+}
+
+class _ExploreScreenState extends State<ExploreScreen> {
+  final _searchController = TextEditingController();
+  ValueNotifier<bool> _isSearching = ValueNotifier(false);
+  int _currentPage = 1;
+  int _pageSize = 10;
+
+  @override
+  initState() {
+    super.initState();
+    defaultCall();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void paginationCall() {
+    getIt<SongCubit>()
+        .getSongList(SongsQueryModel(page: _currentPage, size: _pageSize));
+  }
+
+  void defaultCall() {
+    getIt<SongCubit>().getSongList(SongsQueryModel(page: 1, size: 10));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,128 +54,74 @@ class ExploreScreen extends StatelessWidget {
             ],
           ),
         ),
-        child: ListView(
-          padding: const EdgeInsets.all(20),
+        child: Column(
           children: [
-            // Search bar
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search music, artists, albums...',
-                  hintStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant),
-                  prefixIcon: Icon(Icons.search,
-                      color: Theme.of(context).colorScheme.primary),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.surface,
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            // Trending section
-            Text('Trending',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface)),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 160,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (int i = 0; i < 4; i++)
-                    Container(
-                      width: 120,
-                      margin: const EdgeInsets.only(right: 16),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.1),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.trending_up,
-                              size: 40,
-                              color: Theme.of(context).colorScheme.primary),
-                          const SizedBox(height: 8),
-                          Text('Song ${i + 1}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface)),
-                          Text('Artist',
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant)),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            // Genres section
-            Text('Genres',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface)),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                for (final genre in [
-                  'Pop',
-                  'Rock',
-                  'Hip-Hop',
-                  'Jazz',
-                  'Classical',
-                  'EDM',
-                  'Indie'
-                ])
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text(genre,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).colorScheme.primary)),
-                  )
-              ],
-            ),
+            search.SearchBar(
+                placeholder: 'Search songs by name, artist, or album...',
+                controller: _searchController,
+                onSearch: (query) {
+                  if (_searchController.text.isNotEmpty) {
+                    _isSearching.value = true;
+                    getIt<SongCubit>().onSearchSongs(query);
+                  } else if (_searchController.text.isEmpty) {
+                    _isSearching.value = false;
+                    getIt<SongCubit>().clearSearchSongs();
+                  }
+                  setState(() {});
+                },
+                onClear: () {
+                  _isSearching.value = false;
+                  getIt<SongCubit>().clearSearchSongs();
+                  setState(() {});
+                }),
+            Expanded(
+              child: ValueListenableBuilder(
+                  valueListenable: _isSearching,
+                  builder: (context, isSearching, _) {
+                    return BlocConsumer<SongCubit, SongState>(
+                      listener: (context, state) {
+                        if (state.songsListResponse?.songs != null) {
+                          _currentPage++;
+                          _pageSize++;
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state.isLoading) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        if (state.error != null) {
+                          return Center(child: Text(state.error!));
+                        }
+                        if (isSearching && state.searchSongs != null) {
+                          final songs = state.searchSongs!;
+                          return _buildSongsList(songs);
+                        }
+                        if (!isSearching && state.songsListResponse != null) {
+                          final songs = state.songsListResponse!.songs;
+                          return _buildSongsList(songs);
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    );
+                  }),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSongsList(List<SongModel> songs) {
+    if (songs.isEmpty) {
+      return const Center(child: Text('No songs found'));
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      itemCount: songs.length,
+      itemBuilder: (context, index) {
+        return SongListTile(songs: songs, currentIndex: index);
+      },
     );
   }
 }

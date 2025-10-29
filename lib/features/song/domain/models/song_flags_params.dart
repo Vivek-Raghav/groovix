@@ -39,9 +39,12 @@ class GetSongFlagParams {
   @JsonKey(name: 'user_id')
   final String userId;
 
+  
+
   const GetSongFlagParams({
     required this.songId,
     required this.userId,
+
   });
 
   factory GetSongFlagParams.fromJson(Map<String, dynamic> json) =>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:groovix/core/models/genre_model.dart';
 import 'package:groovix/core/models/song_model.dart';
 import 'package:groovix/core/theme/app_theme.dart';
@@ -74,7 +75,7 @@ class _GenreSongsScreenState extends State<GenreSongsScreen> {
                   _isSelectionMode = false;
                 });
               } else {
-                Navigator.pop(context);
+                context.pop(context);
               }
             },
           ),

@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void initCalls() {
-    songCubit.getSongList(SongsQueryModel(page: currentPage, size: pageSize));
+    songCubit.getRecentSongs();
     getIt<CmsGenreBloc>()
         .add(FetchGenresList(GenresQueryModel(page: 1, size: 100)));
     getIt<PlaylistBloc>()
@@ -54,9 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
-            ),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16)),
             child: Row(
               children: [
                 Icon(Icons.headphones,
@@ -86,9 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 24),
           BlocBuilder<CmsGenreBloc, CmsGenreState>(builder: (context, state) {
             if (state is CmsGenreLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: ThemeColors.primaryColor,
+              return const SizedBox(
+                height: 180,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: ThemeColors.primaryColor,
+                  ),
                 ),
               );
             } else if (state is CmsGenreLoaded) {
@@ -152,6 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         width: 140,
                         margin: const EdgeInsets.only(right: 16),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: Theme.of(context)
                               .colorScheme
@@ -161,6 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(24),
@@ -169,12 +173,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const SizedBox(height: 12),
                             Text(playlist.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurface)),
                             Text(playlist.bio,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -197,16 +205,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           BlocBuilder<SongCubit, SongState>(builder: (context, state) {
-            if (state is SongListSuccess) {
+            if (state.recentSongs != null) {
+              final songs = state.recentSongs ?? [];
               return ListView.builder(
                 shrinkWrap: true,
-                itemCount: state.songsListResponse.songs.length,
+                itemCount: songs.length,
                 itemBuilder: (context, index) {
-                  final songs = state.songsListResponse.songs;
                   return SongListTile(songs: songs, currentIndex: index);
                 },
               );
-            } else if (state is SongListLoading) {
+            } else if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
             return const SizedBox.shrink();

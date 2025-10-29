@@ -52,7 +52,7 @@ class _AddSongsToGenreScreenState extends State<AddSongsToGenreScreen> {
               backgroundColor: ThemeColors.clrGreen,
             ),
           );
-          Navigator.pop(context);
+          context.pop(context);
         } else if (state is AssignSongsToGenreError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -71,10 +71,7 @@ class _AddSongsToGenreScreenState extends State<AddSongsToGenreScreen> {
               foregroundColor: ThemeColors.white,
               elevation: 0,
               centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-              ),
+              leading: const CommonBackButton(),
               actions: [
                 if (_selectedSongIds.isNotEmpty)
                   TextButton(

@@ -42,16 +42,12 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
           ? ThemeColors.darkAppColor
           : ThemeColors.white,
       appBar: AppBar(
-        title: const Text('Add New Artist'),
-        backgroundColor: ThemeColors.primaryColor,
-        foregroundColor: ThemeColors.white,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+          title: const Text('Add New Artist'),
+          backgroundColor: ThemeColors.primaryColor,
+          foregroundColor: ThemeColors.white,
+          elevation: 0,
+          centerTitle: true,
+          leading: const CommonBackButton()),
       body: BlocListener<CmsArtistBloc, CmsArtistState>(
         listener: (context, state) {
           if (state is CreateArtistSuccess) {
@@ -61,7 +57,7 @@ class _CMSAddArtistScreenState extends State<CMSAddArtistScreen> {
                 backgroundColor: ThemeColors.clrGreen,
               ),
             );
-            Navigator.pop(context);
+            context.pop();
           } else if (state is CreateArtistFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

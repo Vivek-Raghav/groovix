@@ -45,7 +45,7 @@ class SongRemoteDataSourceImpl extends SongRemoteDataSource {
   Future<UserSongFlagsResponse> getSongFlags(GetSongFlagParams params) async {
     try {
       final response = await apiService.get(
-          "/flags/user/${params.userId}/song/${params.songId}",
+          ApiUrls.getSongFlags(params.userId, params.songId),
           queryParams: params.toJson());
       if (response.statusCode == 200) {
         return UserSongFlagsResponse.fromJson(response.data);
@@ -55,6 +55,25 @@ class SongRemoteDataSourceImpl extends SongRemoteDataSource {
       }
     } catch (e) {
       debugPrint("Song Flags Get Error: $e");
+      return throw ServerException(
+          error: StringConstants.strSomethingWentWrong);
+    }
+  }
+
+  @override
+  Future<List<SongModel>> getRecentSongs() async {
+    try {
+      final response = await apiService.get(ApiUrls.getRecentSongs);
+      if (response.statusCode == 200) {
+        return (response.data as List)
+            .map((json) => SongModel.fromJson(json))
+            .toList();
+      } else {
+        return throw ServerException(
+            error: StringConstants.strSomethingWentWrong);
+      }
+    } catch (e) {
+      debugPrint("Recent Sngs Error: $e");
       return throw ServerException(
           error: StringConstants.strSomethingWentWrong);
     }

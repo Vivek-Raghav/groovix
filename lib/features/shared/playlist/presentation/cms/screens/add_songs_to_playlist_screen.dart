@@ -48,7 +48,7 @@ class _AddSongsToPlaylistScreenState extends State<AddSongsToPlaylistScreen> {
               backgroundColor: ThemeColors.clrGreen,
             ),
           );
-          Navigator.pop(context);
+          context.pop(context);
         } else if (state is AddSongsToPlaylistError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -67,10 +67,7 @@ class _AddSongsToPlaylistScreenState extends State<AddSongsToPlaylistScreen> {
               foregroundColor: ThemeColors.white,
               elevation: 0,
               centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-              ),
+              leading: const CommonBackButton(),
               actions: [
                 if (_selectedSongIds.isNotEmpty)
                   TextButton(

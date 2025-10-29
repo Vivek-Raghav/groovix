@@ -14,9 +14,8 @@ export 'presentation/widgets/audio_wave.dart';
 export 'presentation/widgets/file_picker.dart';
 
 // Song bloc layer
-export 'bloc/cubit/song_cubit.dart';
-export 'bloc/state/song_state.dart';
-export 'bloc/event/song_event.dart';
+export 'bloc/song_bloc.dart';
+export 'bloc/song_state.dart';
 
 // Injection
 export 'package:groovix/injection_container/injection_initializer.dart';

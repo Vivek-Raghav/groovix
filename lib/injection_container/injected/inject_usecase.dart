@@ -20,6 +20,7 @@ import 'package:groovix/features/shared/playlist/domain/usecase/remove_songs_fro
 import 'package:groovix/features/shared/playlist/domain/usecase/get_playlist_songs_uc.dart';
 import 'package:groovix/features/cms/genres/domain/usecase/get_genre_songs_uc.dart';
 import 'package:groovix/features/song/domain/usecase/get_song_flags_uc.dart';
+import 'package:groovix/features/song/domain/usecase/recent_songs_uc.dart';
 import 'package:groovix/features/song/domain/usecase/update_song_flags_uc.dart';
 import 'package:groovix/features/shared/playlist/playlist_index.dart';
 import 'package:groovix/injection_container/injection_index.dart';
@@ -46,6 +47,8 @@ Future<void> injectUsecases() async {
       () => UpdateSongFlagsUc(songRepository: getIt()));
   getIt.registerFactory<GetSongFlagsUc>(
       () => GetSongFlagsUc(songRepository: getIt()));
+  getIt.registerLazySingleton<RecentSongsUc>(
+      () => RecentSongsUc(songRepository: getIt()));
 
   // Artist UseCases
   getIt.registerLazySingleton<CreateArtistUc>(

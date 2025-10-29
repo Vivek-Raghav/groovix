@@ -6,4 +6,5 @@ abstract class SongRepository {
   EitherDynamic<UserSongFlagsResponse> updateSongFlags(
       UpdateSongFlagParams params);
   EitherDynamic<UserSongFlagsResponse> getSongFlags(GetSongFlagParams params);
+  EitherDynamic<List<SongModel>> getRecentSongs();
 }

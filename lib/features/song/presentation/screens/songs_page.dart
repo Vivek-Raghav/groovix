@@ -2,8 +2,8 @@ import 'package:groovix/core/shared/utils/generic_enums.dart';
 import 'package:groovix/features/cms/cms_index.dart';
 import 'package:groovix/features/home/home_index.dart';
 import 'package:groovix/features/shared/playlist/bloc/playlist_state.dart';
-import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
-import 'package:groovix/features/song/bloc/state/song_state.dart';
+import 'package:groovix/features/song/bloc/song_bloc.dart';
+import 'package:groovix/features/song/bloc/song_state.dart';
 import 'package:groovix/features/song/domain/models/song_query_model.dart';
 import 'package:groovix/features/song/presentation/screens/songs_screen.dart';
 
@@ -40,9 +40,10 @@ class SongsPage extends StatelessWidget {
                     ..getSongList(SongsQueryModel(page: 1, size: 10)),
                   child: BlocBuilder<SongCubit, SongState>(
                       builder: (context, state) {
-                    if (state is SongListSuccess) {
-                      return SongsScreen(songs: state.songsListResponse.songs);
-                    } else if (state is SongListLoading) {
+                    if (state.songsListResponse?.songs != null) {
+                      return SongsScreen(
+                          songs: state.songsListResponse?.songs ?? []);
+                    } else if (state.isLoading) {
                       return const Center(child: CircularProgressIndicator());
                     }
                     return const SizedBox.shrink();

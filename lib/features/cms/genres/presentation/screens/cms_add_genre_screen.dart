@@ -1,9 +1,4 @@
 import 'dart:io';
-import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
-import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_event.dart';
-import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_state.dart';
-import 'package:groovix/features/cms/genres/domain/models/genre_params.dart';
-import 'package:groovix/features/cms/songs/presentation/widgets/file_picker.dart';
 import 'package:groovix/features/cms/cms_index.dart';
 
 class CMSAddGenreScreen extends StatefulWidget {
@@ -41,7 +36,7 @@ class _CMSAddGenreScreenState extends State<CMSAddGenreScreen> {
     return BlocListener<CmsGenreBloc, CmsGenreState>(
       listener: (context, state) {
         if (state is CreateGenreLoaded) {
-          Navigator.pop(context);
+          context.pop(context);
         } else if (state is CreateGenreError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

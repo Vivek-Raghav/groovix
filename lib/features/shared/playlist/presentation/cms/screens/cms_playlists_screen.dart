@@ -83,7 +83,7 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
                       backgroundColor: ThemeColors.clrGreen,
                     ),
                   );
-                  Navigator.pop(context);
+                  context.pop(context);
                   getIt<PlaylistBloc>().add(FetchPlaylistsList(
                       PlaylistsQueryModel(page: 1, size: 100)));
                 } else if (state is UpdatePlaylistLoaded) {
@@ -94,7 +94,7 @@ class _CmsPlaylistsScreenState extends State<CmsPlaylistsScreen> {
                       backgroundColor: ThemeColors.clrGreen,
                     ),
                   );
-                  Navigator.pop(context);
+                  context.pop(context);
                 } else if (state is PlaylistDeletedSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

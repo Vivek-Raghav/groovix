@@ -7,15 +7,22 @@ class GenreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+        width: MediaQuery.of(context).size.width * 0.4,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
+          border: Border.all(
+              color: Theme.of(context).colorScheme.outline, width: 1),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(genre.name,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 16)));
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(genre.coverUrl,
+                width: 40, height: 40, fit: BoxFit.cover),
+          ),
+          const SizedBox(width: 8),
+          Text(genre.name,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16))
+        ]));
   }
 }

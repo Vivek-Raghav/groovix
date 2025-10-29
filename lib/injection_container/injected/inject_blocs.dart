@@ -1,7 +1,7 @@
 import 'package:groovix/features/auth/bloc/auth_bloc.dart';
 import 'package:groovix/features/cms/cms_index.dart';
 import 'package:groovix/features/shared/playlist/playlist_index.dart';
-import 'package:groovix/features/song/bloc/cubit/song_cubit.dart';
+import 'package:groovix/features/song/bloc/song_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -9,7 +9,11 @@ Future<void> injectBlocs() async {
   getIt.registerLazySingleton<AuthBloc>(
       () => AuthBloc(loginUc: getIt(), signupUc: getIt(), logoutUc: getIt()));
   getIt.registerLazySingleton<SongCubit>(
-    () => SongCubit(songListUc: getIt()),
+    () => SongCubit(
+      songListUc: getIt(),
+      searchSongUc: getIt(),
+      recentSongsUc: getIt(),
+    ),
   );
   getIt.registerLazySingleton<MusicPlayerManager>(() => MusicPlayerManager());
   getIt.registerLazySingleton<MusicPlayerBloc>(() => MusicPlayerBloc(

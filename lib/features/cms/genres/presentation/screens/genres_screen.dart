@@ -82,7 +82,7 @@ class _GenresScreenState extends State<GenresScreen> {
                       backgroundColor: ThemeColors.clrGreen,
                     ),
                   );
-                  Navigator.pop(context);
+                  context.pop(context);
                   getIt<CmsGenreBloc>().add(
                       FetchGenresList(GenresQueryModel(page: 1, size: 100)));
                 } else if (state is UpdateGenreLoaded) {
@@ -92,7 +92,7 @@ class _GenresScreenState extends State<GenresScreen> {
                       backgroundColor: ThemeColors.clrGreen,
                     ),
                   );
-                  Navigator.pop(context);
+                  context.pop(context);
                 } else if (state is GenreDeletedSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

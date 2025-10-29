@@ -1,3 +1,4 @@
+import 'package:groovix/core/shared/widgets/common_back_button.dart';
 import 'package:groovix/features/cms/genres/domain/models/genre_update.dart';
 import 'package:groovix/features/cms/genres/domain/models/update_genre_params.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
@@ -45,7 +46,7 @@ class _CMSEditGenreScreenState extends State<CMSEditGenreScreen> {
               backgroundColor: ThemeColors.clrGreen,
             ),
           );
-          Navigator.pop(context);
+          context.pop(context);
         } else if (state is UpdateGenreError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -67,11 +68,7 @@ class _CMSEditGenreScreenState extends State<CMSEditGenreScreen> {
               foregroundColor: ThemeColors.white,
               elevation: 0,
               centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
+              leading: const CommonBackButton()),
             body: Stack(
               children: [
                 SingleChildScrollView(

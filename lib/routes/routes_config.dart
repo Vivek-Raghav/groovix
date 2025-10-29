@@ -10,7 +10,7 @@ import 'package:groovix/features/cms/artists/presentation/screens/cms_add_artist
 import 'package:groovix/features/cms/artists/presentation/screens/cms_edit_artist_screen.dart';
 import 'package:groovix/features/cms/artists/presentation/bloc/artist_bloc.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
-import 'package:groovix/features/cms/songs/presentation/bloc/song_bloc.dart';
+import 'package:groovix/features/cms/songs/presentation/bloc/cms_song_bloc.dart';
 import 'package:groovix/features/cms/genres/presentation/screens/cms_add_genre_screen.dart';
 import 'package:groovix/features/cms/genres/presentation/screens/cms_edit_genre_screen.dart';
 import 'package:groovix/features/cms/genres/presentation/screens/add_songs_to_genre_screen.dart';
