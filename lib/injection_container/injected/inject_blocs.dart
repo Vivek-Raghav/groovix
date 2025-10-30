@@ -13,6 +13,7 @@ Future<void> injectBlocs() async {
       songListUc: getIt(),
       searchSongUc: getIt(),
       recentSongsUc: getIt(),
+      likedSongsUc: getIt()
     ),
   );
   getIt.registerLazySingleton<MusicPlayerManager>(() => MusicPlayerManager());

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:groovix/features/cms/shared/widgets/search_bar.dart' as search;
+import 'package:groovix/features/song/presentation/screens/songs_screen.dart';
 import '../../../routes/routes_index.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -95,11 +96,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         }
                         if (isSearching && state.searchSongs != null) {
                           final songs = state.searchSongs!;
-                          return _buildSongsList(songs);
+                          return SongsScreen(songs: songs);
                         }
                         if (!isSearching && state.songsListResponse != null) {
                           final songs = state.songsListResponse!.songs;
-                          return _buildSongsList(songs);
+                          return SongsScreen(songs: songs);
                         }
                         return const SizedBox.shrink();
                       },
@@ -109,19 +110,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildSongsList(List<SongModel> songs) {
-    if (songs.isEmpty) {
-      return const Center(child: Text('No songs found'));
-    }
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      itemCount: songs.length,
-      itemBuilder: (context, index) {
-        return SongListTile(songs: songs, currentIndex: index);
-      },
     );
   }
 }

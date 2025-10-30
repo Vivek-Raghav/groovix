@@ -6,4 +6,5 @@ abstract class SongRemoteDataSource {
   Future<UserSongFlagsResponse> updateSongFlags(UpdateSongFlagParams params);
   Future<UserSongFlagsResponse> getSongFlags(GetSongFlagParams params);
   Future<List<SongModel>> getRecentSongs();
+  Future<List<SongModel>> getLikedSongs();
 }

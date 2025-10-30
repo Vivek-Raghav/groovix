@@ -1,6 +1,7 @@
 // Project imports:
 
 // Project imports:
+import 'package:groovix/core/theme/theme_mode_extensions.dart';
 import 'package:groovix/features/auth/auth_index.dart';
 import 'package:groovix/gen/assets.gen.dart';
 
@@ -57,23 +58,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Assets.icons.appIconLight.image(height: 120),
-                  ),
+                      padding: EdgeInsets.zero,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: ThemeColors.clrTransparent),
+                      child: context.isDarkMode
+                          ? Assets.icons.appIconDark.image(height: 140)
+                          : Assets.icons.appIconLight.image(height: 140)),
                   const SizedBox(height: 32),
                   Text('Welcome Back!',
                       style: Theme.of(context)

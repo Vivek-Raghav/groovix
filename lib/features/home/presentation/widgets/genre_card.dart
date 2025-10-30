@@ -7,11 +7,12 @@ class GenreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-        width: MediaQuery.of(context).size.width * 0.4,
+        padding: const EdgeInsets.symmetric(horizontal: 1),
+        // width: MediaQuery.of(context).size.width * 0.4,
         decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
           border: Border.all(
-              color: Theme.of(context).colorScheme.outline, width: 1),
+              color: Theme.of(context).scaffoldBackgroundColor, width: 1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -22,7 +23,7 @@ class GenreCard extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(genre.name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16))
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16))
         ]));
   }
 }

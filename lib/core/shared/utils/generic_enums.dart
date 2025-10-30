@@ -4,4 +4,4 @@ enum ThemeModeApp { Light, Dark, Grey, Red, Green, System }
 
 enum Role { cms, user }
 
-enum SongListContext { search, playlist, genre, artist }
+enum SongListContext { search, playlist, genre, artist, liked }

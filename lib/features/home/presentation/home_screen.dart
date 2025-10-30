@@ -104,23 +104,33 @@ class _HomeScreenState extends State<HomeScreen> {
                           .titleLarge
                           ?.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16),
-                  Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
-                    children: state.genres
-                        .map((e) => GestureDetector(
-                            onTap: () {
-                              context.push(AppRoutes.songListScreen,
-                                  extra: SongListContext.genre.name);
-                              Future.delayed(const Duration(milliseconds: 200),
-                                  () {
-                                getIt<CmsGenreBloc>()
-                                    .add(FetchGenreSongs(e.id));
-                              });
-                            },
-                            child: GenreCard(genre: e)))
-                        .toList(),
-                  )
+                  GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: 4,
+                    ),
+                    itemCount: state.genres.length,
+                    itemBuilder: (context, index) {
+                      final genre = state.genres[index];
+                      return GestureDetector(
+                          onTap: () {
+                            context.push(
+                              AppRoutes.songListScreen,
+                              extra: SongListContext.genre.name,
+                            );
+                            Future.delayed(const Duration(milliseconds: 200),
+                                () {
+                              getIt<CmsGenreBloc>()
+                                  .add(FetchGenreSongs(genre.id));
+                            });
+                          },
+                          child: GenreCard(genre: genre));
+                    },
+                  ),
                 ],
               );
             }
@@ -134,65 +144,77 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } else if (state is PlaylistLoaded) {
-              return Container(
-                padding: const EdgeInsets.only(top: 20),
-                height: 180,
-                child: ListView.builder(
-                  itemCount: state.playlists.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final playlist = state.playlists[index];
-                    return GestureDetector(
-                      onTap: () {
-                        context.push(AppRoutes.songListScreen,
-                            extra: SongListContext.playlist.name);
-                        Future.delayed(const Duration(milliseconds: 200), () {
-                          getIt<PlaylistBloc>()
-                              .add(FetchPlaylistSongs(playlist.id));
-                        });
-                      },
-                      child: Container(
-                        width: 140,
-                        margin: const EdgeInsets.only(right: 16),
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: Image.network(playlist.coverUrl,
-                                  height: 48, width: 48, fit: BoxFit.cover),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Text('Playlists',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold)),
+                  Container(
+                    padding: const EdgeInsets.only(top: 10),
+                    height: 180,
+                    child: ListView.builder(
+                      itemCount: state.playlists.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final playlist = state.playlists[index];
+                        return GestureDetector(
+                          onTap: () {
+                            context.push(AppRoutes.songListScreen,
+                                extra: SongListContext.playlist.name);
+                            Future.delayed(const Duration(milliseconds: 200),
+                                () {
+                              getIt<PlaylistBloc>()
+                                  .add(FetchPlaylistSongs(playlist.id));
+                            });
+                          },
+                          child: Container(
+                            width: 140,
+                            margin: const EdgeInsets.only(right: 16),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            const SizedBox(height: 12),
-                            Text(playlist.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface)),
-                            Text(playlist.bio,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant)),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Image.network(playlist.coverUrl,
+                                      height: 48, width: 48, fit: BoxFit.cover),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(playlist.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface)),
+                                Text(playlist.bio,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant)),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             }
             return const SizedBox.shrink();

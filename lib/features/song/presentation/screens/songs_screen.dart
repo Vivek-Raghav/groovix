@@ -8,15 +8,17 @@ class SongsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: songs.length,
-        itemBuilder: (context, index) {
-          return SongListTile(songs: songs, currentIndex: index);
-        },
-      ),
-    );
+    return songs.isEmpty
+        ? const Center(child: Text('No songs found'))
+        : Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: songs.length,
+              itemBuilder: (context, index) {
+                return SongListTile(songs: songs, currentIndex: index);
+              },
+            ),
+          );
   }
 }

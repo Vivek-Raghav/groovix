@@ -1,5 +1,8 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
+import 'package:groovix/core/shared/utils/generic_enums.dart';
+import 'package:groovix/features/home/home_index.dart';
+import 'package:groovix/features/song/bloc/song_bloc.dart';
+import 'package:groovix/injection_container/injected/inject_blocs.dart';
 
 class LibraryScreen extends StatelessWidget {
   const LibraryScreen({super.key});
@@ -40,6 +43,11 @@ class LibraryScreen extends StatelessWidget {
                 ],
               ),
               child: ListTile(
+                onTap: () {
+                  context.push(AppRoutes.songListScreen,
+                      extra: SongListContext.liked.name);
+                  getIt<SongCubit>().getLikedSongs();
+                },
                 leading: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
@@ -58,7 +66,6 @@ class LibraryScreen extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurfaceVariant)),
                 trailing: Icon(Icons.arrow_forward_ios,
                     color: Theme.of(context).colorScheme.primary),
-                onTap: () {},
               ),
             ),
           ],

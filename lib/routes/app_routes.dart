@@ -27,5 +27,4 @@ class AppRoutes {
   static const String playlistSongs = '/playlist-songs';
   static const String genreSongs = '/genre-songs';
   static const String songListScreen = '/songs-list-screen';
-
 }

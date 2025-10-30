@@ -78,6 +78,18 @@ class SongsPage extends StatelessWidget {
                     }
                     return const SizedBox.shrink();
                   }));
+            case SongListContext.liked:
+              return BlocProvider.value(
+                  value: getIt<SongCubit>(),
+                  child: BlocBuilder<SongCubit, SongState>(
+                      builder: (context, state) {
+                    if (state.likedSongs != null) {
+                      return SongsScreen(songs: state.likedSongs ?? []);
+                    } else if (state.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return const SizedBox.shrink();
+                  }));
             case SongListContext.artist:
               return const SizedBox.shrink();
           }

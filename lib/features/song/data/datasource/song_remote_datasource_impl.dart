@@ -78,4 +78,23 @@ class SongRemoteDataSourceImpl extends SongRemoteDataSource {
           error: StringConstants.strSomethingWentWrong);
     }
   }
+
+  @override
+  Future<List<SongModel>> getLikedSongs() async {
+    try {
+      final response = await apiService.get(ApiUrls.getLikedSongs);
+      if (response.statusCode == 200) {
+        return (response.data as List)
+            .map((json) => SongModel.fromJson(json))
+            .toList();
+      } else {
+        return throw ServerException(
+            error: StringConstants.strSomethingWentWrong);
+      }
+    } catch (e) {
+      debugPrint("Liked Songs Error: $e");
+      return throw ServerException(
+          error: StringConstants.strSomethingWentWrong);
+    }
+  }
 }
