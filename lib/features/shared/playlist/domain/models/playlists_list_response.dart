@@ -1,5 +1,6 @@
-import 'package:groovix/core/models/playlist_model.dart';
+// Project imports:
 import 'package:groovix/core/models/pagination_info.dart';
+import 'package:groovix/core/models/playlist_model.dart';
 
 class PlaylistsListResponse {
   final List<PlaylistModel> playlists;

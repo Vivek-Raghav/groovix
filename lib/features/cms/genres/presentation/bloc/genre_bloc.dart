@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:groovix/core/models/genre_model.dart';
 
 abstract class GenreEvent {}

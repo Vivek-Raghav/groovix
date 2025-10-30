@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:groovix/core/models/playlist_model.dart';
 import 'package:groovix/core/models/song_model.dart';
 import 'package:groovix/features/shared/playlist/domain/models/add_songs_response.dart';

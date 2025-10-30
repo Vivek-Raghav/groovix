@@ -1,16 +1,19 @@
+// Package imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:groovix/core/error/failure.dart';
-import 'package:groovix/features/shared/playlist/domain/models/playlists_query_model.dart';
-import 'package:groovix/features/shared/playlist/domain/usecase/create_playlist_uc.dart';
-import 'package:groovix/features/shared/playlist/domain/usecase/get_playlists_list_uc.dart';
-import 'package:groovix/features/shared/playlist/domain/usecase/get_playlist_by_id_uc.dart';
-import 'package:groovix/features/shared/playlist/domain/usecase/update_playlist_uc.dart';
-import 'package:groovix/features/shared/playlist/domain/usecase/delete_playlist_uc.dart';
-import 'package:groovix/features/shared/playlist/domain/usecase/add_songs_to_playlist_uc.dart';
-import 'package:groovix/features/shared/playlist/domain/usecase/remove_songs_from_playlist_uc.dart';
-import 'package:groovix/features/shared/playlist/domain/usecase/get_playlist_songs_uc.dart';
 import 'package:groovix/features/shared/playlist/bloc/playlist_event.dart';
 import 'package:groovix/features/shared/playlist/bloc/playlist_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:groovix/features/shared/playlist/domain/models/playlists_query_model.dart';
+import 'package:groovix/features/shared/playlist/domain/usecase/add_songs_to_playlist_uc.dart';
+import 'package:groovix/features/shared/playlist/domain/usecase/create_playlist_uc.dart';
+import 'package:groovix/features/shared/playlist/domain/usecase/delete_playlist_uc.dart';
+import 'package:groovix/features/shared/playlist/domain/usecase/get_playlist_by_id_uc.dart';
+import 'package:groovix/features/shared/playlist/domain/usecase/get_playlist_songs_uc.dart';
+import 'package:groovix/features/shared/playlist/domain/usecase/get_playlists_list_uc.dart';
+import 'package:groovix/features/shared/playlist/domain/usecase/remove_songs_from_playlist_uc.dart';
+import 'package:groovix/features/shared/playlist/domain/usecase/update_playlist_uc.dart';
 
 class PlaylistBloc extends Bloc<PlaylistEvent, PlaylistState> {
   final CreatePlaylistUc _createPlaylistUc;

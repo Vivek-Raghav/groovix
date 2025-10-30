@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:groovix/core/models/genre_model.dart';
 import 'package:groovix/core/models/song_model.dart';
 import 'package:groovix/features/cms/genres/domain/models/assign_songs_response.dart';

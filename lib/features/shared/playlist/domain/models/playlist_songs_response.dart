@@ -1,6 +1,9 @@
-import 'package:groovix/core/models/song_model.dart';
-import 'package:groovix/core/models/pagination_info.dart';
+// Package imports:
 import 'package:json_annotation/json_annotation.dart';
+
+// Project imports:
+import 'package:groovix/core/models/pagination_info.dart';
+import 'package:groovix/core/models/song_model.dart';
 
 part 'playlist_songs_response.g.dart';
 

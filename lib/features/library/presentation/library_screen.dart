@@ -1,4 +1,4 @@
-// Flutter imports:
+// Project imports:
 import 'package:groovix/core/shared/utils/generic_enums.dart';
 import 'package:groovix/features/home/home_index.dart';
 import 'package:groovix/features/song/bloc/song_bloc.dart';

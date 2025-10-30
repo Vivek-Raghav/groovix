@@ -1,9 +1,11 @@
 import 'package:groovix/features/shared/playlist/playlist_index.dart'
     hide PlaylistModel;
+
+// Project imports:
 import 'package:groovix/core/models/playlist_model.dart';
-import 'package:groovix/routes/app_routes.dart';
-import 'package:groovix/injection_container/injection_initializer.dart';
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/injection_container/injection_initializer.dart';
+import 'package:groovix/routes/app_routes.dart';
 
 class UserPlaylistScreen extends StatefulWidget {
   const UserPlaylistScreen({super.key});

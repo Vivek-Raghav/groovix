@@ -2,8 +2,8 @@
 import 'dart:io';
 
 // Project imports:
-import '../../../cms_index.dart';
 import '../../../../cms/songs/presentation/widgets/file_picker.dart';
+import '../../../cms_index.dart';
 
 class CMSAddArtistScreen extends StatefulWidget {
   const CMSAddArtistScreen({super.key});

@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:groovix/features/home/home_index.dart';
 
 class GenreCard extends StatelessWidget {

@@ -1,16 +1,19 @@
+// Package imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:groovix/core/error/failure.dart';
-import 'package:groovix/features/cms/genres/domain/usecase/create_genre_uc.dart';
-import 'package:groovix/features/cms/genres/domain/usecase/get_genres_list_uc.dart';
-import 'package:groovix/features/cms/genres/domain/usecase/get_genre_by_id_uc.dart';
-import 'package:groovix/features/cms/genres/domain/usecase/update_genre_uc.dart';
-import 'package:groovix/features/cms/genres/domain/usecase/delete_genre_uc.dart';
-import 'package:groovix/features/cms/genres/domain/usecase/assign_songs_to_genre_uc.dart';
-import 'package:groovix/features/cms/genres/domain/usecase/remove_songs_from_genre_uc.dart';
-import 'package:groovix/features/cms/genres/domain/usecase/get_genre_songs_uc.dart';
 import 'package:groovix/features/cms/genres/domain/models/genres_query_model.dart';
+import 'package:groovix/features/cms/genres/domain/usecase/assign_songs_to_genre_uc.dart';
+import 'package:groovix/features/cms/genres/domain/usecase/create_genre_uc.dart';
+import 'package:groovix/features/cms/genres/domain/usecase/delete_genre_uc.dart';
+import 'package:groovix/features/cms/genres/domain/usecase/get_genre_by_id_uc.dart';
+import 'package:groovix/features/cms/genres/domain/usecase/get_genre_songs_uc.dart';
+import 'package:groovix/features/cms/genres/domain/usecase/get_genres_list_uc.dart';
+import 'package:groovix/features/cms/genres/domain/usecase/remove_songs_from_genre_uc.dart';
+import 'package:groovix/features/cms/genres/domain/usecase/update_genre_uc.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_event.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CmsGenreBloc extends Bloc<GenreEvent, CmsGenreState> {
   final CreateGenreUc _createGenreUc;

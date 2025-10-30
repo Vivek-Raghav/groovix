@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:groovix/features/song/song_index.dart';
 
 class SongState extends Equatable {

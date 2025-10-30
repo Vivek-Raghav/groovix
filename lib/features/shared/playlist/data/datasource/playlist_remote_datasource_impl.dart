@@ -1,15 +1,16 @@
+// Project imports:
+import 'package:groovix/core/error/server_exception.dart';
+import 'package:groovix/core/models/delete_response.dart';
 import 'package:groovix/core/models/playlist_model.dart';
 import 'package:groovix/core/services/api/api_service.dart';
 import 'package:groovix/core/services/api/api_urls.dart';
-import 'package:groovix/core/error/server_exception.dart';
-import 'package:groovix/core/models/delete_response.dart';
-import 'package:groovix/features/shared/playlist/domain/models/user_playlist_params.dart';
-import 'package:groovix/features/shared/playlist/domain/models/playlist_update.dart';
-import 'package:groovix/features/shared/playlist/domain/models/playlists_query_model.dart';
-import 'package:groovix/features/shared/playlist/domain/models/playlists_list_response.dart';
-import 'package:groovix/features/shared/playlist/domain/models/add_songs_to_playlist_request.dart';
 import 'package:groovix/features/shared/playlist/domain/models/add_songs_response.dart';
+import 'package:groovix/features/shared/playlist/domain/models/add_songs_to_playlist_request.dart';
 import 'package:groovix/features/shared/playlist/domain/models/playlist_songs_response.dart';
+import 'package:groovix/features/shared/playlist/domain/models/playlist_update.dart';
+import 'package:groovix/features/shared/playlist/domain/models/playlists_list_response.dart';
+import 'package:groovix/features/shared/playlist/domain/models/playlists_query_model.dart';
+import 'package:groovix/features/shared/playlist/domain/models/user_playlist_params.dart';
 import 'package:groovix/injection_container/injection_index.dart';
 import 'playlist_datasource.dart';
 

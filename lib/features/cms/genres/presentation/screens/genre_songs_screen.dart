@@ -1,13 +1,18 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:groovix/core/models/genre_model.dart';
 import 'package:groovix/core/models/song_model.dart';
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/features/cms/genres/domain/models/assign_songs_to_genre_request.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_event.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_state.dart';
-import 'package:groovix/features/cms/genres/domain/models/assign_songs_to_genre_request.dart';
 import 'package:groovix/injection_container/injection_initializer.dart';
 
 class GenreSongsScreen extends StatefulWidget {

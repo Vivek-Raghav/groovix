@@ -1,17 +1,23 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:groovix/core/models/genre_model.dart';
 import 'package:groovix/core/models/song_model.dart';
 import 'package:groovix/core/theme/app_theme.dart';
+import 'package:groovix/features/cms/cms_index.dart' hide SearchBar;
+import 'package:groovix/features/cms/genres/domain/models/assign_songs_to_genre_request.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_event.dart';
 import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_state.dart';
-import 'package:groovix/features/cms/genres/domain/models/assign_songs_to_genre_request.dart';
 import 'package:groovix/features/cms/shared/widgets/loading_overlay.dart';
-import 'package:groovix/features/cms/cms_index.dart' hide SearchBar;
+import 'package:groovix/features/song/domain/models/song_query_model.dart';
+
 import 'package:groovix/features/cms/shared/widgets/search_bar.dart'
     as CmsSearchBar;
-import 'package:groovix/features/song/domain/models/song_query_model.dart';
 
 class AddSongsToGenreScreen extends StatefulWidget {
   final GenreModel genre;

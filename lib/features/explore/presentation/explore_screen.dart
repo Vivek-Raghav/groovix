@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_final_fields
 
+// Project imports:
 import 'package:groovix/features/cms/shared/widgets/search_bar.dart' as search;
 import 'package:groovix/features/song/presentation/screens/songs_screen.dart';
 import '../../../routes/routes_index.dart';

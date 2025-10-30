@@ -1,5 +1,6 @@
-import 'package:groovix/features/cms/cms_index.dart';
+// Project imports:
 import 'package:groovix/core/models/genre_model.dart';
+import 'package:groovix/features/cms/cms_index.dart';
 
 class GenresScreen extends StatefulWidget {
   const GenresScreen({super.key});

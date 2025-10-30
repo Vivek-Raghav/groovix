@@ -1,12 +1,14 @@
+// Project imports:
 import 'package:groovix/core/models/playlist_model.dart';
 import 'package:groovix/features/shared/playlist/bloc/playlist_event.dart';
 import 'package:groovix/features/shared/playlist/bloc/playlist_state.dart';
 import 'package:groovix/features/shared/playlist/domain/models/add_songs_to_playlist_request.dart';
+import 'package:groovix/features/song/domain/models/song_query_model.dart';
+
 import 'package:groovix/features/cms/cms_index.dart'
     hide PlaylistModel, SearchBar;
 import 'package:groovix/features/cms/shared/widgets/search_bar.dart'
     as CmsSearchBar;
-import 'package:groovix/features/song/domain/models/song_query_model.dart';
 
 class AddSongsToPlaylistScreen extends StatefulWidget {
   final PlaylistModel playlist;

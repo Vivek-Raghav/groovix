@@ -1,5 +1,6 @@
-import 'package:groovix/core/models/pagination_info.dart';
+// Project imports:
 import 'package:groovix/core/models/genre_model.dart';
+import 'package:groovix/core/models/pagination_info.dart';
 
 class GenresListResponse {
   final List<GenreModel> genres;

@@ -1,7 +1,8 @@
-import 'package:groovix/features/shared/playlist/domain/models/user_playlist_params.dart';
+// Project imports:
+import 'package:groovix/features/shared/playlist/domain/models/add_songs_to_playlist_request.dart';
 import 'package:groovix/features/shared/playlist/domain/models/playlists_query_model.dart';
 import 'package:groovix/features/shared/playlist/domain/models/update_playlist_params.dart';
-import 'package:groovix/features/shared/playlist/domain/models/add_songs_to_playlist_request.dart';
+import 'package:groovix/features/shared/playlist/domain/models/user_playlist_params.dart';
 
 abstract class PlaylistEvent {}
 

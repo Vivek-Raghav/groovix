@@ -1,23 +1,23 @@
 // Project imports:
 import 'package:groovix/features/auth/auth_index.dart';
+import 'package:groovix/features/cms/artists/presentation/bloc/artist_bloc.dart';
+import 'package:groovix/features/cms/artists/presentation/screens/cms_add_artist_screen.dart';
+import 'package:groovix/features/cms/artists/presentation/screens/cms_edit_artist_screen.dart';
 import 'package:groovix/features/cms/cms_screen.dart';
+import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
+import 'package:groovix/features/cms/genres/presentation/screens/add_songs_to_genre_screen.dart';
+import 'package:groovix/features/cms/genres/presentation/screens/cms_add_genre_screen.dart';
+import 'package:groovix/features/cms/genres/presentation/screens/cms_edit_genre_screen.dart';
+import 'package:groovix/features/cms/genres/presentation/screens/genre_songs_screen.dart';
 import 'package:groovix/features/cms/shared/screens/universal_edit_success_screen.dart';
 import 'package:groovix/features/cms/songs/domain/models/upload_song_response.dart';
+import 'package:groovix/features/cms/songs/presentation/bloc/cms_song_bloc.dart';
 import 'package:groovix/features/cms/songs/presentation/screens/cms_edit_song_screen.dart';
 import 'package:groovix/features/cms/songs/presentation/screens/cms_upload_song.dart';
 import 'package:groovix/features/cms/songs/presentation/screens/song_upload_success_screen.dart';
-import 'package:groovix/features/cms/artists/presentation/screens/cms_add_artist_screen.dart';
-import 'package:groovix/features/cms/artists/presentation/screens/cms_edit_artist_screen.dart';
-import 'package:groovix/features/cms/artists/presentation/bloc/artist_bloc.dart';
-import 'package:groovix/features/cms/genres/presentation/bloc/cms_genre_bloc.dart';
-import 'package:groovix/features/cms/songs/presentation/bloc/cms_song_bloc.dart';
-import 'package:groovix/features/cms/genres/presentation/screens/cms_add_genre_screen.dart';
-import 'package:groovix/features/cms/genres/presentation/screens/cms_edit_genre_screen.dart';
-import 'package:groovix/features/cms/genres/presentation/screens/add_songs_to_genre_screen.dart';
-import 'package:groovix/features/shared/playlist/presentation/cms/screens/cms_edit_playlist_screen.dart';
 import 'package:groovix/features/shared/playlist/presentation/cms/screens/add_songs_to_playlist_screen.dart';
+import 'package:groovix/features/shared/playlist/presentation/cms/screens/cms_edit_playlist_screen.dart';
 import 'package:groovix/features/shared/playlist/presentation/cms/screens/playlist_songs_screen.dart';
-import 'package:groovix/features/cms/genres/presentation/screens/genre_songs_screen.dart';
 import 'package:groovix/features/song/presentation/screens/full_music_screen.dart';
 import 'package:groovix/features/song/presentation/screens/songs_page.dart';
 

@@ -1,7 +1,8 @@
+// Project imports:
+import 'package:groovix/features/cms/genres/domain/models/assign_songs_to_genre_request.dart';
 import 'package:groovix/features/cms/genres/domain/models/genre_params.dart';
 import 'package:groovix/features/cms/genres/domain/models/genres_query_model.dart';
 import 'package:groovix/features/cms/genres/domain/models/update_genre_params.dart';
-import 'package:groovix/features/cms/genres/domain/models/assign_songs_to_genre_request.dart';
 
 abstract class GenreEvent {}
 

@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:groovix/features/navigation_bar/navigation_index.dart';
 
 class ExplorePage extends StatelessWidget {

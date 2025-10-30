@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:groovix/features/cms/genres/domain/models/genre_update.dart';
 
 class UpdateGenreParams {
