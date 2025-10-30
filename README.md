@@ -2,6 +2,31 @@
 
 A modern Flutter music application demonstrating clean architecture, state management, and best practices for beginner developers.
 
+### Standard Practices
+- **Clean Architecture**: The project follows clean architecture principles, separating concerns into distinct layers (presentation, domain, and data).
+- **Dependency Injection**: Utilizes dependency injection for better management of dependencies and easier testing.
+- **State Management**: Implements the BLoC (Business Logic Component) pattern for effective state management, ensuring a clear separation between UI and business logic.
+- **Responsive Design**: Adapts to various screen sizes and orientations, providing a consistent user experience across devices.
+
+### API Call Methods
+- **Service Layer**: The application uses a service layer to handle API calls, encapsulating the logic for making requests and processing responses.
+- **Data Sources**: Implements remote data sources for fetching data from APIs, ensuring that the application can easily switch between local and remote data as needed.
+- **Error Handling**: Centralized error handling to manage API errors and provide user-friendly feedback.
+
+### Functionalities
+- **Music Streaming Interface**: Allows users to stream music from various sources.
+- **User Authentication**: Provides user login and registration functionalities.
+- **Explore Music**: Users can explore new music and playlists.
+- **Library Management**: Users can manage their music library, including liked and recently played songs.
+- **Search Functionality**: Enables users to search for songs, artists, and albums.
+- **Player Controls**: Includes controls for playing, pausing, and skipping tracks.
+
+### Core Functionalities
+- **BLoC Pattern**: Manages the state of the application, ensuring that UI components react to changes in the underlying data.
+- **Data Models**: Defines data models for songs, playlists, and user profiles, ensuring type safety and clarity.
+- **Use Cases**: Implements use cases for various operations, such as fetching songs, updating user preferences, and managing playlists.
+
+
 ## 🚀 Features
 
 - 🎵 Music streaming interface
@@ -32,39 +57,7 @@ cd groovix
 flutter pub get
 ```
 
-### 3. Firebase Setup
-
-#### Create Firebase Project
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project
-3. Add Android and iOS apps
-
-#### Configure Firebase
-1. **Android Setup:**
-   - Download `google-services.json` from Firebase Console
-   - Place it in `android/app/google-services.json`
-
-2. **iOS Setup:**
-   - Download `GoogleService-Info.plist` from Firebase Console
-   - Place it in `ios/Runner/GoogleService-Info.plist`
-
-3. **Generate Firebase Options:**
-   ```bash
-   dart pub global activate flutterfire_cli
-   flutterfire configure
-   ```
-
-### 4. Environment Configuration
-1. Copy template files:
-   ```bash
-   cp lib/firebase_options.template.dart lib/firebase_options.dart
-   cp android/app/google-services.template.json android/app/google-services.json
-   cp ios/Runner/GoogleService-Info.template.plist ios/Runner/GoogleService-Info.plist
-   ```
-
-2. Update the files with your Firebase configuration
-
-### 5. Run the App
+### 4. Run the App
 ```bash
 # Development
 flutter run -t lib/main/main_dev.dart
