@@ -31,11 +31,12 @@ A modern Flutter music application demonstrating clean architecture, state manag
 
 - 🎵 Music streaming interface
 - 🎨 Modern Material Design 3 UI
-- 🏗️ Clean Architecture with dependency injection
+- 🏗️ Clean Architecture with SOLIDS
+- 🏗️ Data - Domain - Presentation
 - 🔄 Multi-flavor support (dev, local, prod)
-- 🔥 Firebase integration
--  Responsive design
+- ⭐️ Responsive design
 - 🎯 Educational codebase for beginners
+- 💉 Dependency Injections
 
 ## 📋 Prerequisites
 
