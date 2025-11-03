@@ -8,7 +8,5 @@ class InitializationManager {
   static Future<void> initialize() async {
     await injectionInit();
     await dotenv.load();
-    // final env = AppEnv();
-    // FastAPI initialization will go here when needed
   }
 }

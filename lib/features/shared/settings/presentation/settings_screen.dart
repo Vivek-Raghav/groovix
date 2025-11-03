@@ -9,8 +9,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final ThemeManager _themeManager = ThemeManager();
-
   @override
   Widget build(BuildContext context) {
     final cache = getIt<LocalCache>();
@@ -27,6 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -194,9 +193,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 child: Column(
                   children: [
-                    AnimatedBuilder(
-                      animation: _themeManager,
-                      builder: (context, child) {
+                    BlocBuilder<ThemeBloc, ThemeState>(
+                      bloc: getIt<ThemeBloc>(),
+                      builder: (context, themeState) {
                         return ListTile(
                           leading: Container(
                             padding: const EdgeInsets.all(8),
@@ -207,7 +206,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   .withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Icon(_themeManager.themeModeIcon,
+                            child: Icon(themeState.themeModeIcon,
                                 color: Theme.of(context).colorScheme.primary,
                                 size: 20),
                           ),
@@ -217,7 +216,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       Theme.of(context).colorScheme.onSurface,
                                   fontWeight: FontWeight.w500)),
                           subtitle: Text(
-                            _themeManager.themeModeDisplayName,
+                            themeState.themeModeDisplayName,
                             style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
@@ -409,11 +408,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ThemeMode mode,
     String subtitle,
   ) {
-    final isSelected = _themeManager.themeMode == mode;
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      bloc: getIt<ThemeBloc>(),
+      builder: (context, themeState) {
+        final isSelected = themeState.themeMode == mode;
 
-    return AnimatedBuilder(
-      animation: _themeManager,
-      builder: (context, child) {
         return ListTile(
           leading: Icon(
             icon,
@@ -447,8 +446,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   size: 20,
                 )
               : null,
-          onTap: () async {
-            await _themeManager.setThemeMode(mode);
+          onTap: () {
+            getIt<ThemeBloc>().add(SetThemeModeEvent(mode));
             Navigator.pop(context);
           },
         );

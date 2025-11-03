@@ -1,4 +1,7 @@
 // Project imports:
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:groovix/core/shared/connectivity/data/connectivity_repository_impl.dart';
+import 'package:groovix/core/shared/connectivity/domain/repositories/connectivity_repository.dart';
 import 'package:groovix/features/cms/cms_index.dart';
 import 'package:groovix/features/shared/playlist/playlist_index.dart';
 
@@ -21,4 +24,8 @@ Future<void> injectRepositories() async {
       () => GenreRepositoryImpl(datasource: getIt()));
   getIt.registerLazySingleton<PlaylistRepository>(
       () => PlaylistRepositoryImpl(datasource: getIt()));
+
+  // Connectivity Repository
+  getIt.registerLazySingleton<ConnectivityRepository>(
+      () => ConnectivityRepositoryImpl(connectivity: Connectivity()));
 }

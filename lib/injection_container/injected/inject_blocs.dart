@@ -1,4 +1,6 @@
 // Project imports:
+import 'package:groovix/core/services/theme/theme_bloc.dart';
+import 'package:groovix/core/shared/connectivity/presentation/bloc/connectivity_bloc.dart';
 import 'package:groovix/features/auth/bloc/auth_bloc.dart';
 import 'package:groovix/features/cms/cms_index.dart';
 import 'package:groovix/features/shared/playlist/playlist_index.dart';
@@ -11,11 +13,10 @@ Future<void> injectBlocs() async {
       () => AuthBloc(loginUc: getIt(), signupUc: getIt(), logoutUc: getIt()));
   getIt.registerLazySingleton<SongCubit>(
     () => SongCubit(
-      songListUc: getIt(),
-      searchSongUc: getIt(),
-      recentSongsUc: getIt(),
-      likedSongsUc: getIt()
-    ),
+        songListUc: getIt(),
+        searchSongUc: getIt(),
+        recentSongsUc: getIt(),
+        likedSongsUc: getIt()),
   );
   getIt.registerLazySingleton<MusicPlayerManager>(() => MusicPlayerManager());
   getIt.registerLazySingleton<MusicPlayerBloc>(() => MusicPlayerBloc(
@@ -56,4 +57,11 @@ Future<void> injectBlocs() async {
       addSongsToPlaylistUc: getIt(),
       removeSongsFromPlaylistUc: getIt(),
       getPlaylistSongsUc: getIt()));
+
+  // Theme Bloc
+  getIt.registerLazySingleton<ThemeBloc>(() => ThemeBloc());
+
+  // Connectivity Bloc
+  getIt.registerLazySingleton<ConnectivityBloc>(
+      () => ConnectivityBloc(repository: getIt()));
 }

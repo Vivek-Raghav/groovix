@@ -91,7 +91,7 @@ export 'shared/widgets/success_screen.dart';
 export 'package:flutter/material.dart' hide SearchBar;
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:groovix/core/theme/app_theme.dart';
-export 'package:groovix/core/services/theme/theme_manager.dart';
+export 'package:groovix/core/services/theme/theme_bloc.dart';
 export 'package:groovix/injection_container/injection_index.dart';
 
 // Shared Models

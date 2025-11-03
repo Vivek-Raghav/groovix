@@ -13,7 +13,7 @@ export 'constants/pref_keys.dart';
 // Core services
 export 'services/api/api_service.dart';
 export 'services/api/api_urls.dart';
-export 'services/theme/theme_manager.dart';
+export 'services/theme/theme_bloc.dart';
 
 // Core error handling
 export 'error/failure.dart';
@@ -37,8 +37,8 @@ export 'utils/generic_typedef.dart';
 export 'initialization/initialization_manager.dart';
 
 // Core config
-export '../main/flavor/flavor_config.dart';
-export '../main/flavor/flavor_init.dart';
+export 'config/flavor_config.dart';
+export '../main/entry/flavor_init.dart';
 
 // Music player services
 export 'services/music_player/bloc/music_player_bloc.dart';
